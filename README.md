@@ -10,6 +10,9 @@
 
 **RPStories** is a lightweight, high-performance web application designed to host and showcase immersive character dossiers for roleplay environments (FiveM, RedM, etc.). Unlike traditional technical sheets, RPStories focuses on atmosphere, visual identity, and storytelling through a refined, game-inspired interface.
 
+> [!NOTE]  
+> **Active Development**: This is a **passion project** currently in its early stages. Many features are still being refined, and the architecture is evolving as new narrative needs arise.
+
 ## 🚀 Key Features
 
 - **Ambient Glow Engine**: A dynamic UI system that synchronizes the background atmosphere with the character's visual identity.
