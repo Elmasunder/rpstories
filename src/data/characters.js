@@ -33,9 +33,9 @@ export const characters = {
       ref: 'DOSSIER REF: AMR-24-LS<br>STATUT: ACTIF · EN SERVICE<br>USAGE: ROLEPLAY EXCLUSIF',
       // Bandeau de 3 photos en haut de fiche
       photos: [
-        '/assets/amari_davis/amari5.png',
-        '/assets/amari_davis/amari4.png',
-        '/assets/amari_davis/amari1.png'
+        'assets/amari_davis/amari5.png',
+        'assets/amari_davis/amari4.png',
+        'assets/amari_davis/amari1.png'
       ]
     },
 
@@ -84,7 +84,7 @@ export const characters = {
       label: 'Chapitre II',
       titleLines: ['Les', 'Origines', 'text-accent-alt'],
       photo: {
-        url: '/assets/amari_davis/amari3.png',
+        url: 'assets/amari_davis/amari3.png',
         alt: 'Northwood, Liberty City',
         caption: '// Northwood, Liberty City — Quartier d\'origine'
       },
@@ -105,7 +105,7 @@ export const characters = {
       label: 'Chapitre III',
       titleLines: ['La Route vers', 'Los Santos', 'text-accent'],
       photo: {
-        url: '/assets/amari_davis/amari1.png',
+        url: 'assets/amari_davis/amari1.png',
         alt: 'Los Santos',
         caption: '// Los Santos — Destination finale'
       },
@@ -125,7 +125,7 @@ export const characters = {
       label: 'Chapitre IV',
       titleLines: ['Spécialité &', 'Compétences', 'text-accent'],
       photo: {
-        url: '/assets/amari_davis/amari4.png',
+        url: 'assets/amari_davis/amari4.png',
         alt: 'Sanchez',
         caption: '// Sanchez custom — dernier modèle'
       },
@@ -214,9 +214,9 @@ export const characters = {
       ],
       ref: 'DOSSIER REF: JAY-27-LS<br>STATUT: DEAD<br>USAGE: ROLEPLAY EXCLUSIF',
       photos: [
-        '/assets/jason_pils/jason2.png',
-        '/assets/jason_pils/jason3.png',
-        '/assets/jason_pils/jason1.png'
+        'assets/jason_pils/jason2.png',
+        'assets/jason_pils/jason3.png',
+        'assets/jason_pils/jason1.png'
       ]
     },
 
@@ -261,7 +261,7 @@ export const characters = {
       label: 'Chapitre II',
       titleLines: ['Les', 'Origines', 'text-accent-alt'],
       photo: {
-        url: '/assets/jason_pils/jason1.png',
+        url: 'assets/jason_pils/jason1.png',
         alt: 'Little Seoul, Los Santos',
         caption: '// Little Seoul, Los Santos — Quartier d\'origine'
       },
@@ -281,7 +281,7 @@ export const characters = {
       label: 'Chapitre III',
       titleLines: ['La Vie à', 'Los Santos', 'text-accent'],
       photo: {
-        url: '/assets/jason_pils/jason2.png',
+        url: 'assets/jason_pils/jason2.png',
         alt: 'Los Santos',
         caption: '// Los Santos — Terrain de jeu et tombeau'
       },
@@ -300,7 +300,7 @@ export const characters = {
       label: 'Chapitre IV',
       titleLines: ['Spécialité &', 'Compétences', 'text-accent'],
       photo: {
-        url: '/assets/jason_pils/jason3.png',
+        url: 'assets/jason_pils/jason3.png',
         alt: 'Futo',
         caption: '// Futo — La bagnole qui refuse de mourir'
       },
@@ -388,9 +388,9 @@ export const characters = {
       ],
       ref: 'DOSSIER REF: WONS-02-LS<br>STATUT: ALIVE UNKNOWN LOCATION<br>USAGE: ROLEPLAY EXCLUSIF',
       photos: [
-        '/assets/wonsu_park/wonsu1.webp',
-        '/assets/wonsu_park/wonsu2.webp',
-        '/assets/wonsu_park/wonsu3.webp'
+        'assets/wonsu_park/wonsu1.webp',
+        'assets/wonsu_park/wonsu2.webp',
+        'assets/wonsu_park/wonsu3.webp'
       ]
     },
 
@@ -435,7 +435,7 @@ export const characters = {
       label: 'Chapitre II',
       titleLines: ['Les', 'Origines', 'text-accent-alt'],
       photo: {
-        url: '/assets/wonsu_park/wonsu1.webp',
+        url: 'assets/wonsu_park/wonsu1.webp',
         alt: 'Seoul, Corée du Sud',
         caption: '// Seoul, Corée du Sud — Quartier d\'origine'
       },
@@ -455,7 +455,7 @@ export const characters = {
       label: 'Chapitre III',
       titleLines: ['La Vie à', 'Los Santos', 'text-accent'],
       photo: {
-        url: '/assets/wonsu_park/wonsu2.webp',
+        url: 'assets/wonsu_park/wonsu2.webp',
         alt: 'Los Santos',
         caption: '// Los Santos — La Jungle'
       },
@@ -474,7 +474,7 @@ export const characters = {
       label: 'Chapitre IV',
       titleLines: ['Spécialité &', 'Compétences', 'text-accent'],
       photo: {
-        url: '/assets/wonsu_park/wonsu3.webp',
+        url: 'assets/wonsu_park/wonsu3.webp',
         alt: 'Los Santos',
         caption: '// Los Santos — La Jungle'
       },
