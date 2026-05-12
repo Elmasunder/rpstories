@@ -28,8 +28,8 @@ export function getCharColors(id) {
     hash = id.charCodeAt(i) + ((hash << 5) - hash)
   }
 
-  // Sélection de la couleur primaire
-  const idx1 = Math.abs(hash) % charPalette.length
+  // Sélection de la couleur primaire avec un hachage plus dispersé
+  const idx1 = Math.abs(hash + id.length * 7) % charPalette.length
   // Sélection de la couleur secondaire (différente de la première)
   const idx2 = Math.abs(hash * 31 + 7) % charPalette.length
   const finalIdx2 = idx1 === idx2 ? (idx2 + 1) % charPalette.length : idx2

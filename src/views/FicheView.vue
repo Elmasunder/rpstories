@@ -174,12 +174,12 @@ watch(char, updateAtmosphere)
           </div>
         </div>
 
-        <!-- Note sur les signes particuliers (ex: Tatouages) -->
-        <aside v-if="char.chapter1.tattooNote" class="tattoo-note">
-          <div class="tattoo-icon">{{ char.chapter1.tattooNote.icon }}</div>
-          <div class="tattoo-text">
-            <strong>{{ char.chapter1.tattooNote.title }}</strong><br>
-            {{ char.chapter1.tattooNote.text }}
+        <!-- Note de terrain (ex: Tatouages, cicatrices, etc.) -->
+        <aside v-if="char.chapter1.specialInfo" class="field-note">
+          <div class="field-note-icon">{{ char.chapter1.specialInfo.icon }}</div>
+          <div class="field-note-content">
+            <strong>{{ char.chapter1.specialInfo.title }}</strong><br>
+            {{ char.chapter1.specialInfo.text }}
           </div>
         </aside>
       </section>

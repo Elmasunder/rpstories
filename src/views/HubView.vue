@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted } from 'vue'
 import { characters } from '@/data/characters.js'
+import { getCharColors } from '@/utils/colors.js'
 import HubCard from '@/components/HubCard.vue'
 
 const charList = Object.values(characters).sort((a, b) => {
@@ -8,6 +9,9 @@ const charList = Object.values(characters).sort((a, b) => {
   if (a.cover.status !== 'alive' && b.cover.status === 'alive') return 1
   return 0
 })
+
+// Génération d'une couleur aléatoire pour le Hub à chaque chargement
+const hubColors = getCharColors('hub-' + Date.now())
 
 onMounted(() => {
   document.title = 'RP/STORIES | Hub'
@@ -17,13 +21,12 @@ onMounted(() => {
 <template>
   <div>
     <header class="hub-header">
-      <div class="hub-tag">[ ALPHA — v0.1 ]</div>
+      <div class="hub-tag" :style="{ color: hubColors.accent }">[ ALPHA — v0.1 ]</div>
       <h1 class="hub-title">RP/STORIES</h1>
       <p class="hub-description">
-        // ARCHIVE NARRATIVE & TECHNIQUE // <br>
-        Centralisation des dossiers de personnages évoluant dans l'écosystème Five M. 
-        Ce répertoire documente les parcours, les expertises et les moments clés qui forgent chaque identité 
-        au sein de votre histoire collective.
+        <span :style="{ color: hubColors.accent }">// ÉCOSYSTÈME NARRATIF FIVE M //</span> <br>
+        Optimisez vos <strong>White-lists</strong>, archivez vos <strong>héritages RP</strong> et forgez des backgrounds d'exception. 
+        RP/STORIES centralise vos parcours et expertises pour devenir le standard de votre identité numérique.
       </p>
     </header>
 
