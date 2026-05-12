@@ -374,8 +374,8 @@ export const characters = {
       status: 'alive',
       serverDomain: 'spirit-rp.fr',
       eyebrow: '// Dossier Roleplay — Five M // Los Santos //',
-      firstName: 'Wonsu',
-      lastName: 'Park',
+      firstName: 'WON-SUH',
+      lastName: 'PARK',
       alias: 'Oyabun',
       subtitle: '32 ans — Little Seoul',
       destination: 'Los Santos',
@@ -399,8 +399,8 @@ export const characters = {
       titleLines: ['Présentation du', 'Personnage'],
       identityPanels: [
         [
-          { key: 'Nom', value: 'Park' },
-          { key: 'Prénom', value: 'Wonsu' },
+          { key: 'Nom', value: 'PARK' },
+          { key: 'Prénom', value: 'WON-SUH' },
           { key: 'Surnom', value: '"Oyabun"', class: 'text-accent' },
           { key: 'Date de naissance', value: '24 / 11 / 1993' },
           { key: 'Lieu de naissance', value: 'Seoul, Corée du Sud' },
@@ -440,7 +440,7 @@ export const characters = {
         caption: '// Seoul, Corée du Sud — Quartier d\'origine'
       },
       story1: [
-        'Wonsu Park est né à Séoul, Corée du Sud, dans une famille aisée. Fils d\'une mère absente et d\'un père fantôme, il a grandi entre les mains du personnel de maison et les couloirs d\'établissements scolaires.',
+        'WON-SUH PARK est né à Séoul, Corée du Sud, dans une famille aisée. Fils d\'une mère absente et d\'un père fantôme, il a grandi entre les mains du personnel de maison et les couloirs d\'établissements scolaires.',
         'Son père était un homme d\'affaires influent, mais il était rarement présent. Sa mère était une femme styliste, mais elle était rarement présente. C\'est sa grand mère et sa gouvernante qui lui a appris à tenir dans la rue, à reconnaître les arnaques et à en pratiquer quelques-unes lui-même.'
       ],
       story2: [
@@ -460,11 +460,11 @@ export const characters = {
         caption: '// Los Santos — La Jungle'
       },
       story1: [
-        'Wonsu n\'est pas un homme compliqué. Il veut juste du cash, du respect, et assez de pouvoir pour que personne ne vienne lui chercher des noises.',
+        'WON-SUH n\'est pas un homme compliqué. Il veut juste du cash, du respect, et assez de pouvoir pour que personne ne vienne lui chercher des noises.',
         'Il a monté son business pièce par pièce : quelques bars clandestins, des tables de poker cachées, des systèmes de prêts rapides pour ceux qui n\'ont pas accès aux banques. La loi ? Il la contourne. Les problèmes ? Il les règle.'
       ],
       story2: [
-        'Les flics le savent, les gangs le savent, les politiciens aussi. Tout le monde sait qui est Wonsu Park à Little Seoul. Et la plupart préfèrent le laisser tranquille.',
+        'Les flics le savent, les gangs le savent, les politiciens aussi. Tout le monde sait qui est WON-SUH PARK à Little Seoul. Et la plupart préfèrent le laisser tranquille.',
         'Sa méthode : il ne cherche jamais la guerre ouverte. Il préfère acheter, négocier ou intimider. C\'est plus propre, et ça rapporte plus.'
       ],
       quote: '"Je fais juste des affaires. Si les gens veulent jouer avec moi, ils savent à quoi s\'attendre."'
@@ -479,7 +479,7 @@ export const characters = {
         caption: '// Los Santos — La Jungle'
       },
       story1: [
-        "Wonsu Park n'est pas un soldat, c'est un architecte de l'ombre. Là où d'autres utilisent la force pour s'imposer, lui utilise les chiffres, les contrats et une compréhension chirurgicale de la psychologie humaine. Son passage par les études économiques à Séoul n'a pas été vain : il traite la rue comme un marché boursier, identifiant les failles et capitalisant sur les opportunités avant même que la concurrence ne s'en aperçoive.",
+        "WON-SUH PARK n'est pas un soldat, c'est un architecte de l'ombre. Là où d'autres utilisent la force pour s'imposer, lui utilise les chiffres, les contrats et une compréhension chirurgicale de la psychologie humaine. Son passage par les études économiques à Séoul n'a pas été vain : il traite la rue comme un marché boursier, identifiant les failles et capitalisant sur les opportunités avant même que la concurrence ne s'en aperçoive.",
         "Son véritable talent réside dans sa capacité à fédérer. Dans le tumulte de Little Seoul, il est devenu le pivot central, celui que l'on vient voir pour résoudre un conflit sans verser de sang, ou pour monter une affaire que personne n'oserait financer. Il ne dirige pas par la peur, mais par la nécessité : il se rend indispensable à l'écosystème local."
       ],
       skillsGroups: [
@@ -528,12 +528,12 @@ export const characters = {
         ]
       },
       finaleStory: [
-        'Wonsu ne se voyait pas forcément à la tête du clan de Little Seoul au départ.',
+        'WON-SUH ne se voyait pas forcément à la tête du clan de Little Seoul au départ.',
         'Mais par sa rigueur et son intelligence, il a su s\'imposer et devenir un leader respecté par toute la population locale.'
       ],
       finaleQuote: '"Oyabun. C\'est comme ça qu\'on m\'appelle maintenant. Et j\'en suis fier."'
     },
 
-    footer: 'DOSSIER RP — Wonsu "Oyabun" Park · Los Santos · REF: WONS-02-LS · STATUT: ALIVE<br>Document créé par RPStories — Five M · Personnage fictif · v2.0'
+    footer: 'DOSSIER RP — WON-SUH "Oyabun" PARK · Los Santos · REF: WONS-02-LS · STATUT: ALIVE<br>Document créé par RPStories — Five M · Personnage fictif · v2.0'
   }
 }
