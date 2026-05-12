@@ -1,65 +1,65 @@
-# 🎭 RPStories — Immersive Character Archive
+# RPStories
+### High-End Immersive Character Archive for Roleplay Communities
 
-![RPStories Preview](public/assets/og-preview.png)
-
-> **"Parce que chaque personnage mérite une archive à la hauteur de sa légende."**
-
-RPStories est une plateforme de narration immersive conçue pour centraliser et sublimer les dossiers de personnages de Roleplay (FiveM, RedM, etc.). Oubliez les fiches techniques froides : ici, chaque dossier est une expérience visuelle et atmosphérique.
-
----
-
-## ✨ Points Forts (Features)
-
-*   **🌈 Ambient Glow System** : L'interface s'adapte dynamiquement à l'identité visuelle de chaque personnage grâce à un système de lueur interactive.
-*   **💀 Status-Aware Design** : Un thème visuel distinctif pour les personnages décédés (CK), rendant hommage à leur histoire passée.
-*   **📱 Architecture Modulaire** : Construit avec **Vue.js 3** et **Vite**, le projet est ultra-rapide et facile à faire évoluer.
-*   **🎨 Design Premium** : Typographies soignées, effets de grain, et mise en page inspirée des interfaces de jeux AAA.
+[![Vue.js](https://img.shields.io/badge/vuejs-%2335495e.svg?style=flat-square&logo=vuedotjs&logoColor=%234FC08D)](https://vuejs.org/)
+[![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=flat-square&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
 ---
 
-## 🛠️ Stack Technique
+**RPStories** is a lightweight, high-performance web application designed to host and showcase immersive character dossiers for roleplay environments (FiveM, RedM, etc.). Unlike traditional technical sheets, RPStories focuses on atmosphere, visual identity, and storytelling through a refined, game-inspired interface.
 
-![Vue.js](https://img.shields.io/badge/vuejs-%2335495e.svg?style=for-the-badge&logo=vuedotjs&logoColor=%234FC08D)
-![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
-![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
-![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
+## 🚀 Key Features
 
----
+- **Ambient Glow Engine**: A dynamic UI system that synchronizes the background atmosphere with the character's visual identity.
+- **Status-Aware Theming**: Distinct visual processing for active vs. deceased characters (grain effects, grayscale filters, and specific UI badges).
+- **Modular Architecture**: Built with **Vue 3** and **Vite**, featuring a clean separation between core logic, UI components, and character data.
+- **Responsive & Performance-First**: Optimized for all viewports with a focus on fluid transitions and minimal load times.
 
-## 🚀 Installation & Lancement
+## 🛠️ Tech Stack
 
-Si vous souhaitez héberger votre propre archive :
+- **Framework**: Vue.js 3 (Composition API)
+- **Build Tool**: Vite
+- **Styling**: Tailwind CSS 4 + Custom CSS Variables
+- **State Management**: Global Reactive Store (Modular)
 
-1. **Cloner le dépôt**
+## 📦 Getting Started
+
+### Prerequisites
+- Node.js (v20 or higher)
+- npm or yarn
+
+### Installation
+
+1. Clone the repository:
    ```bash
    git clone https://github.com/Elmasunder/rpstories.git
    ```
 
-2. **Installer les dépendances**
+2. Install dependencies:
    ```bash
    npm install
    ```
 
-3. **Lancer en local**
+3. Run the development server:
    ```bash
    npm run dev
    ```
 
----
+## 📖 Adding Characters
 
-## 📖 Comment ajouter un personnage ?
+To expand the archive, simply update the centralized data store:
 
-C'est très simple ! Tout se passe dans un seul fichier de données :
-
-1. Ouvrez `src/data/characters.js`.
-2. Ajoutez un nouvel objet dans `characters` en suivant le modèle existant.
-3. Déposez vos images dans `public/assets/votre_nom/`.
-4. Le site générera automatiquement les couleurs d'ambiance et la page dédiée.
+1. Navigate to `src/data/characters.js`.
+2. Append a new character object following the established schema.
+3. Assets should be placed in `public/assets/your_character_id/`.
+4. The engine will automatically handle color generation, routing, and rendering.
 
 ---
 
-## ⭐ Crédits & Support
+## ⭐ Support
 
-Ce projet a été réalisé avec passion pour la communauté Roleplay. Si le concept vous plaît, n'hésitez pas à **laisser une petite étoile ⭐** sur ce dépôt, ça fait toujours plaisir et ça aide à faire connaître le projet !
+If you find this project useful or inspiring, please consider giving it a **star** on GitHub!
 
-**Développé par [Elma Sunder](https://github.com/Elmasunder)**
+**Developed by [Elma Sunder](https://github.com/Elmasunder)**
