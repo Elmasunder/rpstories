@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 /**
  * HUBCARD COMPONENT
  * 
@@ -9,13 +9,13 @@
  * - Un style spécifique pour les personnages décédés (N&B, grain prononcé, ruban)
  */
 import { computed, ref, onMounted, onUnmounted } from 'vue'
-import { getCharColors } from '@/utils/colors'
-import { uiState } from '@/store/ui'
+import { getCharColors } from '@/utils/colors.ts'
+import { uiState } from '@/store/ui.ts'
+import type { Character } from '@/types/character'
 
-const props = defineProps({
-  // Données complètes du personnage provenant de characters.js
-  char: { type: Object, required: true }
-})
+const props = defineProps<{
+  char: Character
+}>()
 
 // Déclenche l'effet de couleur global au survol
 const handleMouseEnter = () => {
@@ -27,14 +27,16 @@ const handleMouseLeave = () => uiState.resetAccent()
 // Récupération des couleurs d'accent calculées dynamiquement
 // Si le personnage est mort, on ne surcharge pas les variables (le CSS global prend le relais)
 const charColors = computed(() => {
-  if (props.char.cover.status === 'dead') return {}
+  if (props.char.cover.status === 'dead') {
+    return { accent: '', accent2: '', accentRgb: '', accent2Rgb: '' }
+  }
   return getCharColors(props.char.id)
 })
 
 const photos = computed(() => props.char.cover.photos || [])
 const currentPhotoIndex = ref(0)
-let intervalId = null
-let timeoutId = null
+let intervalId: ReturnType<typeof setInterval> | null = null
+let timeoutId: ReturnType<typeof setTimeout> | null = null
 
 onMounted(() => {
   // Logique du carrousel d'images
@@ -59,8 +61,11 @@ onUnmounted(() => {
 /**
  * Fallback en cas d'image introuvable (Imgur down ou lien mort)
  */
-const handleImgError = (event) => {
-  event.target.src = 'https://via.placeholder.com/400x600/1a1a1a/ffffff?text=Image+Error'
+const handleImgError = (event: Event) => {
+  const target = event.target as HTMLImageElement
+  if (target) {
+    target.src = 'https://via.placeholder.com/400x600/1a1a1a/ffffff?text=Image+Error'
+  }
 }
 
 // Extraction rapide des métadonnées pour l'affichage synthétique

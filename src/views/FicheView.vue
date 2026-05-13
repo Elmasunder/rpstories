@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 /**
  * FICHEVIEW - MOTEUR DE RENDU DES DOSSIERS
  * 
@@ -11,18 +11,18 @@
  * - Mise à jour dynamique du titre de la page (SEO/Navigation).
  * - Mise en page complexe (Floatting images, Grilles de compétences, Objectifs tri-colonnes).
  */
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { characters } from '@/data/characters.js'
-import { getCharColors } from '@/utils/colors'
-import { uiState } from '@/store/ui'
+import { characters } from '@/data/index.ts'
+import { getCharColors } from '@/utils/colors.ts'
+import { uiState } from '@/store/ui.ts'
 import ChapterHeader from '@/components/ChapterHeader.vue'
 import SkillGroup from '@/components/SkillGroup.vue'
 
 const route = useRoute()
 
 // Récupération du personnage via le paramètre :id de l'URL
-const char = computed(() => characters[route.params.id])
+const char = computed(() => characters[route.params.id as string])
 
 /**
  * CALCUL DES COULEURS D'ACCENT
@@ -31,7 +31,9 @@ const char = computed(() => characters[route.params.id])
  * gérer les couleurs sombres.
  */
 const charColors = computed(() => {
-  if (!char.value || char.value.cover.status === 'dead') return {}
+  if (!char.value || char.value.cover.status === 'dead') {
+    return { accent: '', accent2: '', accentRgb: '', accent2Rgb: '' }
+  }
   return getCharColors(char.value.id)
 })
 
@@ -46,6 +48,21 @@ const updateAtmosphere = () => {
     // Couleur du Glow global
     const color = char.value.cover.status === 'dead' ? '231, 76, 60' : charColors.value.accentRgb
     uiState.setAccent(color)
+  }
+}
+
+// Handlers typés pour les erreurs de chargement d'image
+const handleComplexImgError = (event: Event) => {
+  const target = event.target as HTMLElement | null
+  if (target && target.parentElement && target.parentElement.parentElement) {
+    target.parentElement.parentElement.style.display = 'none'
+  }
+}
+
+const handleSimpleImgError = (event: Event) => {
+  const target = event.target as HTMLElement | null
+  if (target) {
+    target.style.display = 'none'
   }
 }
 
@@ -193,11 +210,11 @@ watch(char, updateAtmosphere)
         <ChapterHeader :char="{ label: char.chapter2.label, titleLines: char.chapter2.titleLines }" />
         <article class="story clearfix">
           <!-- Image flottante avec légende -->
-          <aside class="photo-inset">
+          <aside v-if="char.chapter2.photo" class="photo-inset">
             <figure class="photo-frame">
               <img :src="char.chapter2.photo.url" :alt="char.chapter2.photo.alt"
                 :key="char.chapter2.photo.url"
-                @error="$event.target.parentElement.parentElement.style.display='none'">
+                @error="handleComplexImgError">
               <figcaption class="photo-caption">{{ char.chapter2.photo.caption }}</figcaption>
             </figure>
           </aside>
@@ -212,10 +229,10 @@ watch(char, updateAtmosphere)
       <section class="page">
         <ChapterHeader :char="{ label: char.chapter3.label, titleLines: char.chapter3.titleLines }" />
         <article class="story clearfix">
-          <aside class="photo-inset">
+          <aside v-if="char.chapter3.photo" class="photo-inset">
             <figure class="photo-frame">
               <img :src="char.chapter3.photo.url" :alt="char.chapter3.photo.alt"
-                @error="$event.target.parentElement.parentElement.style.display='none'">
+                @error="handleComplexImgError">
               <figcaption class="photo-caption">{{ char.chapter3.photo.caption }}</figcaption>
             </figure>
           </aside>
@@ -231,10 +248,10 @@ watch(char, updateAtmosphere)
       <section class="page">
         <ChapterHeader :char="{ label: char.chapter4.label, titleLines: char.chapter4.titleLines }" />
         <article class="story clearfix mb-20">
-          <aside class="photo-inset">
+          <aside v-if="char.chapter4.photo" class="photo-inset">
             <figure class="photo-frame">
               <img :src="char.chapter4.photo.url" :alt="char.chapter4.photo.alt"
-                @error="$event.target.style.display='none'">
+                @error="handleSimpleImgError">
               <figcaption class="photo-caption">{{ char.chapter4.photo.caption }}</figcaption>
             </figure>
           </aside>

@@ -13,7 +13,7 @@ export const uiState = reactive({
    * Définit une nouvelle couleur d'accentuation
    * @param {string} rgbStr - Format "r, g, b"
    */
-  setAccent(rgbStr) {
+  setAccent(rgbStr: string) {
     this.activeAccentRgb = rgbStr
   },
   
