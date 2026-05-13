@@ -174,7 +174,9 @@ export const jason_pils: Character = {
 
     family: [
       { id: 'larry_pils', name: 'Larry Pils', relation: 'Cousin', status: 'alive' },
-      { name: 'Mère de Jason', relation: 'Mère', status: 'dead' }
+      { name: 'Mère de Jason', relation: 'Mère', status: 'dead' },
+      { name: 'Frank Miller', relation: 'Ancien Partenaire', status: 'alive' },
+      { name: 'Sarah Thompson', relation: 'Indic / Contact', status: 'alive' }
     ],
 
     footer: 'DOSSIER RP — JASON "JAY" PILS · LOS SANTOS · REF: JAY-27-LS · STATUT: DEAD<br>Document créé par RPStories — Five M · Personnage fictif · Archivé'

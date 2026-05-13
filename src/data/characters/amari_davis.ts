@@ -182,5 +182,9 @@ export const amari_davis: Character = {
       finaleQuote: '"Amari. J\'arrive de Liberty City. Et j\'ouvre ce qui est fermé."'
     },
 
+    family: [
+      { name: 'Elena Davis', relation: 'Mère', status: 'dead' },
+      { name: '"Zero-Day"', relation: 'Mentor / Hacker', status: 'missing' }
+    ],
     footer: 'DOSSIER RP — AMARI "LOCKER" DAVIS · LOS SANTOS · NORTHWOOD (LC) → LS · 24 ANS · REF: AMR-24-LS<br>Document créé par RPStories — Five M · Personnage fictif · v2.0'
   }

@@ -163,6 +163,8 @@ export const larry_pils: Character = {
     { id: 'jason_pils', name: 'Jason Pils', relation: 'Cousin', status: 'dead' },
     { id: 'wonsu_park', name: 'Won-suh Park', relation: 'Beau-père', status: 'alive' },
     { name: 'Mary Stroks', relation: 'Femme', status: 'alive' },
+    { name: 'Viktor Pils', relation: 'Frère Jumeau', status: 'dead' },
+    { name: '"Old Joe"', relation: 'Mentor / Propriétaire Bar', status: 'alive' },
   ],
 
   footer:

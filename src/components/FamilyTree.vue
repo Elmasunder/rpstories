@@ -30,6 +30,11 @@ const statusLabel = (status: string) => {
     default: return status.toUpperCase()
   }
 }
+
+const truncateRelation = (text: string) => {
+  if (text.length <= 20) return text
+  return text.substring(0, 17) + '...'
+}
 </script>
 
 <template>
@@ -49,7 +54,7 @@ const statusLabel = (status: string) => {
             :class="[`status-${member.status}`, { 'is-link': member.id }]"
           >
             <div class="node-header">
-              <span class="node-relation">{{ member.relation }}</span>
+              <span class="node-relation">{{ truncateRelation(member.relation) }}</span>
               <span class="node-dot"></span>
             </div>
             
@@ -88,10 +93,13 @@ const statusLabel = (status: string) => {
 }
 
 .tree-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 30px;
+  display: grid;
+  /* On définit des colonnes de 240px (la largeur de tes cartes) */
+  grid-template-columns: repeat(auto-fit, 240px);
+  gap: 40px 30px; /* On augmente un peu l'espace vertical */
   justify-content: center;
+  width: 100%;
+  max-width: 1100px; /* Pour éviter que ça s'étale trop sur très grand écran */
   position: relative;
 }
 

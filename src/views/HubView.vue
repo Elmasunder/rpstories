@@ -24,9 +24,10 @@ onMounted(() => {
       <div class="hub-tag" :style="{ color: hubColors.accent }">[ ALPHA — v0.1 ]</div>
       <h1 class="hub-title">RP/STORIES</h1>
       <p class="hub-description">
-        <span :style="{ color: hubColors.accent }">// ÉCOSYSTÈME NARRATIF FIVE M //</span> <br>
-        Optimisez vos <strong>White-lists</strong>, archivez vos <strong>héritages RP</strong> et forgez des backgrounds d'exception. 
-        RP/STORIES centralise vos parcours et expertises pour devenir le standard de votre identité numérique.
+        <span :style="{ color: hubColors.accent }">// ÉCOSYSTÈME NARRATIF ROLEPLAY //</span> <br />
+        Optimisez vos <strong>whitelists</strong>, archivez vos <strong>héritages RP</strong> et
+        forgez des backgrounds d'exception. RP/STORIES centralise vos parcours et expertises pour
+        devenir le standard de votre identité numérique.
       </p>
     </header>
 
@@ -34,8 +35,6 @@ onMounted(() => {
       <HubCard v-for="char in charList" :key="char.id" :char="char" />
     </main>
 
-    <footer class="footnote">
-      HUB RP · RPSTORIES · v1.0
-    </footer>
+    <footer class="footnote">HUB RP · RPSTORIES · v1.0</footer>
   </div>
 </template>

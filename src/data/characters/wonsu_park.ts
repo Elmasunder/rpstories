@@ -170,7 +170,9 @@ export const wonsu_park: Character = {
     },
 
     family: [
-      { id: 'larry_pils', name: 'Larry Pils', relation: 'Beau-fils', status: 'alive' }
+      { id: 'larry_pils', name: 'Larry Pils', relation: 'Gendre', status: 'alive' },
+      { name: 'Ji-Sung Park', relation: 'Père', status: 'dead' },
+      { name: 'Ji-soo Park', relation: 'Petite Sœur', status: 'alive' }
     ],
 
     footer: 'DOSSIER RP — WON-SUH "Oyabun" PARK · Los Santos · REF: WONS-02-LS · STATUT: ALIVE<br>Document créé par RPStories — Five M · Personnage fictif · v2.0'
