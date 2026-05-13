@@ -1,9 +1,9 @@
 <template>
-  <div 
+  <div
     class="ambient-glow"
     :style="{
       '--mx': `${mouse.x}px`,
-      '--my': `${mouse.y}px`
+      '--my': `${mouse.y}px`,
     }"
   ></div>
 </template>

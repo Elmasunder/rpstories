@@ -169,5 +169,9 @@ export const wonsu_park: Character = {
       finaleQuote: '"Oyabun. C\'est comme ça qu\'on m\'appelle maintenant. Et j\'en suis fier."'
     },
 
+    family: [
+      { id: 'larry_pils', name: 'Larry Pils', relation: 'Beau-fils', status: 'alive' }
+    ],
+
     footer: 'DOSSIER RP — WON-SUH "Oyabun" PARK · Los Santos · REF: WONS-02-LS · STATUT: ALIVE<br>Document créé par RPStories — Five M · Personnage fictif · v2.0'
   }

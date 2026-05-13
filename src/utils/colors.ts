@@ -7,14 +7,13 @@ export const charPalette = [
   '#3b82f6', // Bleu Électrique
   '#10b981', // Émeraude
   '#f59e0b', // Ambre
-  '#ef4444', // Rouge Ardent
   '#06b6d4', // Cyan Profond
   '#8b5cf6', // Indigo
   '#ec4899', // Rose Fuchsia
   '#14b8a6', // Teal
   '#f97316', // Orange Brûlé
   '#6366f1', // Bleu Royal
-  '#d946ef'  // Magenta
+  '#d946ef', // Magenta
 ]
 
 /**
@@ -49,6 +48,6 @@ export function getCharColors(id: string) {
     accent: hex1,
     accent2: hex2,
     accentRgb: hexToRgb(hex1),
-    accent2Rgb: hexToRgb(hex2)
+    accent2Rgb: hexToRgb(hex2),
   }
 }

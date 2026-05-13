@@ -18,6 +18,7 @@ import { getCharColors } from '@/utils/colors.ts'
 import { uiState } from '@/store/ui.ts'
 import ChapterHeader from '@/components/ChapterHeader.vue'
 import SkillGroup from '@/components/SkillGroup.vue'
+import FamilyTree from '@/components/FamilyTree.vue'
 
 const route = useRoute()
 
@@ -264,6 +265,9 @@ watch(char, updateAtmosphere)
         </div>
         <aside v-if="char.chapter4.callout" class="callout"><p>{{ char.chapter4.callout }}</p></aside>
       </section>
+
+      <!-- Section optionnelle : Arbre généalogique / Proches -->
+      <FamilyTree :family="char.family" />
 
       <!-- ══════════════════════════════════════════════════
            CHAPITRE VI : AMBITIONS & FINALE
