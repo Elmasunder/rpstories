@@ -75,6 +75,7 @@ export interface Chapter4 {
   titleLines: string[];
   photo?: PhotoData;
   story1: string[];
+  story2?: string[];
   skillsGroups: SkillsGroup[];
   callout: string;
 }
@@ -118,4 +119,5 @@ export interface Character {
   chapter5?: StoryChapter;
   chapter6: Chapter6; // Les objectifs et conclusion
   family?: FamilyMember[]; // Optionnel : Arbre généalogique / Proches
+  footer: string;
 }

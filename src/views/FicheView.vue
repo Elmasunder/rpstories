@@ -2,7 +2,7 @@
 /**
  * FICHEVIEW - MOTEUR DE RENDU DES DOSSIERS (Version Utility-First)
  */
-import { computed, onMounted, onUnmounted, watch } from 'vue'
+import { computed, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { characters } from '@/data/index.ts'
 import { getCharColors } from '@/utils/colors.ts'
@@ -207,7 +207,7 @@ watch(char, updateAtmosphere)
       </section>
 
       <!-- APTITUDES -->
-      <section id="aptitudes" class="py-10 scroll-mt-24">
+      <section v-if="char.chapter4" id="aptitudes" class="py-10 scroll-mt-24">
         <ChapterHeader :char="{ label: char.chapter4.label, titleLines: char.chapter4.titleLines }" />
         <article class="bg-panel border border-border p-8 relative rounded-lg mb-10 overflow-hidden group">
           <!-- Gradient Side Strip -->
