@@ -14,51 +14,26 @@ const titleHTML = computed(() => {
 </script>
 
 <template>
-  <div>
-    <div class="page-rule"></div>
-    <div class="chapter-label">{{ char.label }}</div>
-    <h1 class="chapter-title" v-html="titleHTML"></h1>
+  <div class="mb-10 group">
+    <div class="font-mono text-[10px] text-accent tracking-[5px] uppercase mb-2 flex items-center gap-4">
+      <span class="flex-none">{{ char.label }}</span>
+      <div class="flex-1 h-px bg-gradient-to-r from-accent/40 to-transparent"></div>
+    </div>
+    
+    <h1 class="font-display font-extrabold text-4xl md:text-5xl uppercase leading-[0.95] tracking-tighter text-white" 
+        v-html="titleHTML">
+    </h1>
   </div>
 </template>
 
 <style scoped>
-.chapter-label {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--accent);
-  letter-spacing: 5px;
-  text-transform: uppercase;
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
+@reference "../assets/main.css";
 
-.chapter-label::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: linear-gradient(90deg, var(--accent), transparent);
-  opacity: 0.3;
+/* On garde uniquement les injections dynamiques qui ne peuvent pas être en Tailwind pur facilement sans plugin complexe */
+:deep(.text-accent) {
+  @apply text-accent;
 }
-
-.chapter-title {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: clamp(32px, 5vw, 54px);
-  text-transform: uppercase;
-  color: var(--color-white);
-  line-height: 1;
-  letter-spacing: -1px;
-  margin-bottom: 24px;
-}
-
-/* Les classes text-accent/text-accent-alt sont injectées dynamiquement via v-html */
-.chapter-title :deep(.text-accent) {
-  color: var(--accent);
-}
-
-.chapter-title :deep(.text-accent-alt) {
-  color: var(--accent2);
+:deep(.text-accent-alt) {
+  @apply text-accent-alt;
 }
 </style>

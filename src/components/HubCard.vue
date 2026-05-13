@@ -1,166 +1,103 @@
 <script setup lang="ts">
-/**
- * HUBCARD COMPONENT
- *
- * Carte interactive dans le Hub avec :
- * - Carrousel automatique d'images
- * - Thème dynamique basé sur l'identifiant du personnage
- * - Style spécifique pour les personnages décédés (N&B, grain, ruban)
- */
-import { computed, ref, onMounted, onUnmounted } from 'vue'
+import { ref, computed } from 'vue'
 import { getCharColors } from '@/utils/colors.ts'
-import { uiState } from '@/store/ui.ts'
-import type { Character } from '@/types/character'
 
-const props = defineProps<{
-  char: Character
-}>()
-
-// Déclenche l'effet de couleur global au survol
-const handleMouseEnter = () => {
-  const color = props.char.cover.status === 'dead' ? '231, 76, 60' : charColors.value.accentRgb
-  uiState.setAccent(color)
-}
-const handleMouseLeave = () => uiState.resetAccent()
-
-const charColors = computed(() => {
-  if (props.char.cover.status === 'dead') {
-    return { accent: '', accent2: '', accentRgb: '', accent2Rgb: '' }
-  }
-  return getCharColors(props.char.id)
+const props = defineProps({
+  char: { type: Object, required: true }
 })
 
-const photos = computed(() => props.char.cover.photos || [])
-const currentPhotoIndex = ref(0)
-let intervalId: ReturnType<typeof setInterval> | null = null
-let timeoutId: ReturnType<typeof setTimeout> | null = null
-
-onMounted(() => {
-  if (photos.value.length > 1) {
-    const delay = Math.random() * 2000
-    timeoutId = setTimeout(() => {
-      intervalId = setInterval(() => {
-        currentPhotoIndex.value = (currentPhotoIndex.value + 1) % photos.value.length
-      }, 3500)
-    }, delay)
-  }
+const charColors = getCharColors(props.char.id)
+const currentImg = ref(0)
+const isDead = computed(() => {
+  const status = props.char.cover.status?.toLowerCase()
+  return status === 'dead' || status === 'disparu'
 })
 
-onUnmounted(() => {
-  if (timeoutId) clearTimeout(timeoutId)
-  if (intervalId) clearInterval(intervalId)
-})
-
-const handleImgError = (event: Event) => {
-  const target = event.target as HTMLImageElement
-  if (target) {
-    target.src = 'https://via.placeholder.com/400x600/1a1a1a/ffffff?text=Image+Error'
-  }
+const fixPath = (path: string) => {
+  if (!path || path.startsWith('http') || path.startsWith('data:')) return path
+  const cleanPath = path.startsWith('/') ? path.slice(1) : path
+  return `${import.meta.env.BASE_URL}${cleanPath}`
 }
 
-const ageMeta = computed(() => props.char.cover.meta.find(m => m.key.toLowerCase().includes('âge'))?.value || '?')
-const origineMeta = computed(() => props.char.cover.meta.find(m => m.key.toLowerCase().includes('origine'))?.value || '?')
+// Cycle d'images au survol (optionnel si on veut garder du dynamisme)
+let cycleInterval: any = null
+const startCycle = () => {
+  cycleInterval = setInterval(() => {
+    currentImg.value = (currentImg.value + 1) % Math.min(props.char.cover.photos.length, 3)
+  }, 1500)
+}
+const stopCycle = () => {
+  clearInterval(cycleInterval)
+  currentImg.value = 0
+}
 </script>
 
 <template>
-  <RouterLink
-    :to="`/fiche/${char.id}`"
-    class="hub-card"
-    :class="{ 'hub-card--dead': char.cover.status === 'dead' }"
-    :style="char.cover.status !== 'dead' ? {
-      '--accent': charColors.accent,
-      '--accent2': charColors.accent2,
-      '--accent-rgb': charColors.accentRgb
-    } : {}"
-    @mouseenter="handleMouseEnter"
-    @mouseleave="handleMouseLeave"
+  <router-link
+    :to="{ name: 'fiche', params: { id: char.id } }"
+    class="group relative flex flex-col transition-all duration-500 hover:-translate-y-2"
   >
-    <div class="hub-card-img-wrapper">
-      <!-- CARROUSEL D'IMAGES -->
-      <template v-if="photos.length > 0">
+    <div 
+      class="flex flex-col h-full bg-panel border border-border border-t-2 rounded-lg overflow-hidden transition-all duration-500 hover:-translate-y-2"
+      :style="!isDead ? { 
+        '--color-accent': charColors.accent, 
+        '--color-accent-alt': charColors.accent2, 
+        '--accent-rgb': charColors.accentRgb 
+      } : { 
+        '--color-accent': '#e74c3c',
+        '--color-accent-alt': '#e74c3c',
+        '--accent-rgb': '231, 76, 60'
+      }"
+      :class="[
+        'hover:border-accent hover:shadow-[0_20px_50px_rgba(0,0,0,0.5),0_0_20px_rgba(var(--accent-rgb),0.3)] shadow-xl'
+      ]"
+      @mouseenter="startCycle"
+      @mouseleave="stopCycle"
+    >
+      <!-- Image Area -->
+      <div class="relative h-64 overflow-hidden noise-overlay">
+        <div class="absolute inset-0 z-10 bg-gradient-to-t from-bg via-transparent to-transparent opacity-80"></div>
         <img
-          v-for="(photo, index) in photos"
-          :key="photo"
-          :src="photo"
-          :alt="char.cover.firstName"
-          class="hub-card-img fade-img"
-          :class="{ 'is-active': currentPhotoIndex === index }"
-          @error="handleImgError"
+          v-for="(img, idx) in char.cover.photos.slice(0, 3)"
+          :key="img"
+          :src="fixPath(img)"
+          class="absolute -inset-[1%] w-[102%] h-[102%] object-cover transition-all duration-700"
+          :class="[
+            idx === currentImg ? 'opacity-100 scale-105' : 'opacity-0',
+            isDead 
+              ? 'grayscale contrast-125 brightness-50 group-hover:brightness-75' 
+              : 'saturate-[0.9] group-hover:saturate-100 group-hover:brightness-110'
+          ]"
+          alt=""
         />
-      </template>
-      <div v-else class="hub-card-img-placeholder"></div>
-
-      <!-- Ruban "DECEASED" -->
-      <div v-if="char.cover.status === 'dead'" class="status-overlay">DECEASED</div>
-
-      <!-- LOGO DU SERVEUR -->
-      <a
-        v-if="char.cover.serverDomain"
-        :href="`https://${char.cover.serverDomain}`"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="absolute top-3 right-3 z-10"
-        @click.stop
-      >
-        <img
-          :src="`https://www.google.com/s2/favicons?domain=${char.cover.serverDomain}&sz=128`"
-          class="size-8 object-contain transition-all duration-300 drop-shadow-[0_0_5px_rgba(0,0,0,0.5)] hover:scale-110"
-          :alt="`Logo ${char.cover.serverDomain}`"
-        />
-      </a>
-    </div>
-
-    <!-- CONTENU TEXTUEL -->
-    <div class="p-6 flex-1">
-      <div class="font-display font-[800] text-[32px] text-white">
-        <span>{{ char.cover.firstName }} {{ char.cover.lastName }}</span>
-      </div>
-      <div
-        class="font-mono text-[11px] text-[var(--accent)] uppercase mt-1"
-        :class="{ 'hub-card-alias--dead': char.cover.status === 'dead' }"
-      >
-        AKA "{{ char.cover.alias }}"
-      </div>
-
-      <div class="flex gap-5 mt-4 border-t border-border pt-4">
-        <div class="font-mono text-[10px] text-muted uppercase">
-          Âge <span class="text-white block text-base font-display mt-1">{{ ageMeta }}</span>
-        </div>
-        <div class="font-mono text-[10px] text-muted uppercase">
-          Origines <span class="text-white block text-base font-display mt-1">{{ origineMeta }}</span>
+        
+        <!-- Badges -->
+        <div class="absolute top-4 left-4 z-20 flex flex-col gap-2">
+          <div class="bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/10 flex items-center gap-2">
+            <span class="size-1.5 rounded-full" :class="char.cover.status === 'alive' ? 'bg-positive animate-pulse' : 'bg-dead'"></span>
+            <span class="font-mono text-[9px] text-white tracking-widest uppercase font-bold">{{ char.cover.status }}</span>
+          </div>
         </div>
       </div>
+
+      <!-- Content Area -->
+      <div class="p-6 relative z-20">
+        <div class="font-mono text-[9px] text-accent tracking-[3px] uppercase mb-1 opacity-70">{{ char.cover.eyebrow }}</div>
+        <h3 class="font-display font-black text-2xl text-white uppercase leading-none mb-4 group-hover:text-accent transition-colors tracking-tighter">
+          {{ char.cover.firstName }} <span class="text-accent">{{ char.cover.lastName }}</span>
+        </h3>
+        
+        <p class="font-mono text-[11px] text-muted leading-relaxed line-clamp-2 mb-6 h-8">
+          {{ char.cover.subtitle }}
+        </p>
+
+        <div class="flex justify-between items-center pt-4 border-t border-white/5">
+          <span class="font-mono text-[10px] text-accent font-bold uppercase tracking-widest">Voir le dossier</span>
+          <span class="size-6 flex items-center justify-center rounded-full bg-accent/10 border border-accent/20 group-hover:bg-accent group-hover:text-black transition-all">
+            <span class="text-xs">→</span>
+          </span>
+        </div>
+      </div>
     </div>
-  </RouterLink>
+  </router-link>
 </template>
-
-<style scoped>
-/* Carrousel fade-in/fade-out — trop complexe pour Tailwind */
-.fade-img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  opacity: 0;
-  transition: opacity 1.2s ease-in-out, transform 0.5s ease;
-}
-.fade-img.is-active {
-  opacity: 1;
-}
-
-/* Effet de grain analogique (bruit dynamique) */
-.hub-card-img-wrapper::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 5;
-  pointer-events: none;
-  opacity: 0.03;
-  background-image: url('https://www.ui-layouts.com/noise.gif');
-  transition: opacity 0.3s ease;
-}
-
-/* Accentuation du bruit pour les morts */
-.hub-card--dead .hub-card-img-wrapper::after {
-  opacity: 0.12;
-}
-</style>

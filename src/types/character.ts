@@ -1,4 +1,4 @@
-export type CharacterStatus = 'alive' | 'dead';
+export type CharacterStatus = 'alive' | 'dead' | 'disparu';
 
 export interface MetaItem {
   key: string;
@@ -103,7 +103,7 @@ export interface FamilyMember {
   id?: string; // ID pour faire un lien vers une autre fiche si elle existe
   name: string;
   relation: string;
-  status: 'alive' | 'dead' | 'missing' | 'unknown';
+  status: 'alive' | 'dead' | 'missing' | 'disparu' | 'unknown';
 }
 
 export interface Character {
@@ -114,8 +114,8 @@ export interface Character {
   chapter1: Chapter1;
   chapter2: StoryChapter;
   chapter3: StoryChapter;
-  chapter4: Chapter4;
+  chapter4?: Chapter4;
+  chapter5?: StoryChapter;
   chapter6: Chapter6; // Les objectifs et conclusion
   family?: FamilyMember[]; // Optionnel : Arbre généalogique / Proches
-  footer: string;
 }

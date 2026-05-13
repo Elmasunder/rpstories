@@ -2,25 +2,34 @@ import { reactive } from 'vue'
 
 /**
  * GESTION DE L'ÉTAT UI GLOBAL
- * Centralise les états partagés comme la couleur d'accentuation active
- * pour les effets atmosphériques (Ambient Glow).
+ * Centralise les couleurs d'accentuation et les injecte directement dans le DOM
+ * pour une réactivité totale avec Tailwind v4.
  */
 export const uiState = reactive({
-  // Gris neutre par défaut (correspond à main.css)
-  activeAccentRgb: '120, 120, 120',
+  // Valeurs par défaut (Neutre/Violet)
+  activeAccentRgb: '131, 61, 221',
+  activeAccentHex: '#833ddd',
+  activeAccent2Hex: '#e48328',
 
   /**
-   * Définit une nouvelle couleur d'accentuation
-   * @param {string} rgbStr - Format "r, g, b"
+   * Met à jour les couleurs globales du site
    */
-  setAccent(rgbStr: string) {
-    this.activeAccentRgb = rgbStr
+  setColors(hex: string, hex2: string, rgb: string) {
+    this.activeAccentHex = hex
+    this.activeAccent2Hex = hex2
+    this.activeAccentRgb = rgb
+
+    // Injection directe dans le DOM pour forcer la priorité CSS
+    const root = document.documentElement
+    root.style.setProperty('--accent', hex)
+    root.style.setProperty('--accent2', hex2)
+    root.style.setProperty('--accent-rgb', rgb)
   },
 
   /**
-   * Réinitialise la couleur à son état neutre
+   * Réinitialise les couleurs à l'état par défaut (Violet/Orange)
    */
-  resetAccent() {
-    this.activeAccentRgb = '120, 120, 120'
+  resetColors() {
+    this.setColors('#833ddd', '#e48328', '131, 61, 221')
   },
 })
