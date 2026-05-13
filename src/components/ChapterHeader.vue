@@ -50,7 +50,7 @@ const titleHTML = computed(() => {
   color: var(--color-white);
   line-height: 1;
   letter-spacing: -1px;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
 }
 
 /* Les classes text-accent/text-accent-alt sont injectées dynamiquement via v-html */

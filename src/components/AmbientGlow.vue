@@ -36,7 +36,7 @@ onUnmounted(() => {
   pointer-events: none;
   background: radial-gradient(
     2000px circle at var(--mx) var(--my),
-    rgba(v-bind('uiState.activeAccentRgb'), 0.07),
+    rgba(v-bind('uiState.activeAccentRgb'), 0.04),
     transparent 100%
   );
   transition: background 1.2s ease;
@@ -49,6 +49,6 @@ onUnmounted(() => {
   inset: 0;
   background: inherit;
   filter: blur(250px);
-  opacity: 0.4;
+  opacity: 0.2;
 }
 </style>

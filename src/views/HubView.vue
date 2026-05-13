@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, onUnmounted } from 'vue'
 import { characters } from '@/data/index.ts'
 import { getCharColors } from '@/utils/colors.ts'
+import { uiState } from '@/store/ui.ts'
 import HubCard from '@/components/HubCard.vue'
 
 const charList = Object.values(characters).sort((a, b) => {
@@ -15,22 +16,27 @@ const hubColors = getCharColors('hub-' + Date.now())
 
 onMounted(() => {
   document.title = 'RP/STORIES | Hub'
+  uiState.setAccent(hubColors.accentRgb)
+})
+
+onUnmounted(() => {
+  uiState.resetAccent()
 })
 </script>
 
 <template>
   <div>
-    <header class="pt-20 px-5 pb-15 text-center">
+    <header class="pt-24 px-5 pb-16 text-center">
       <div
-        class="font-mono text-[10px] tracking-[4px] uppercase mb-2 opacity-80"
+        class="font-mono text-[10px] tracking-[5px] uppercase mb-3 opacity-80"
         :style="{ color: hubColors.accent }"
       >
-        [ ALPHA — v0.1 ]
+        [ ALPHA — v1.0 ]
       </div>
-      <h1 class="font-display font-[800] text-white uppercase mb-6 hub-title">
+      <h1 class="font-display font-[900] text-white uppercase mb-6 hub-title tracking-[-3px]">
         RP/STORIES
       </h1>
-      <p class="font-mono text-[13px] text-white max-w-[600px] mx-auto leading-[1.8] tracking-[0.5px]">
+      <p class="font-mono text-[13px] text-white/90 max-w-[650px] mx-auto leading-[1.8] tracking-[0.5px]">
         <span :style="{ color: hubColors.accent }">// ÉCOSYSTÈME NARRATIF ROLEPLAY //</span> <br />
         Optimisez vos <strong>whitelists</strong>, archivez vos <strong>héritages RP</strong> et
         forgez des backgrounds d'exception. RP/STORIES centralise vos parcours et expertises pour
@@ -51,8 +57,7 @@ onMounted(() => {
 <style scoped>
 /* Le titre utilise clamp() qui n'a pas d'équivalent natif Tailwind */
 .hub-title {
-  font-size: clamp(34px, 5vw, 56px);
-  letter-spacing: -1px;
-  line-height: 1;
+  font-size: clamp(42px, 6vw, 72px);
+  line-height: 0.9;
 }
 </style>

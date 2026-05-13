@@ -36,7 +36,7 @@ const truncateRelation = (text: string) => {
 </script>
 
 <template>
-  <section v-if="family && family.length > 0" class="page mt-10">
+  <section v-if="family && family.length > 0" class="page">
     <ChapterHeader :char="{ label: 'Entourage', titleLines: ['Relations &', 'Proches'] }" />
     
     <div class="flex justify-center py-10">
@@ -112,7 +112,7 @@ const truncateRelation = (text: string) => {
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 15px;
-  border-radius: 4px;
+  border-radius: 8px;
   position: relative;
   overflow: hidden;
   transition: all 0.3s ease;
@@ -143,7 +143,7 @@ const truncateRelation = (text: string) => {
   width: 45px;
   height: 45px;
   border-radius: 50%;
-  border: 1px solid var(--accent, rgba(255,255,255,0.2));
+  border: 2px solid var(--accent, rgba(255,255,255,0.2));
   overflow: hidden;
   flex-shrink: 0;
   background: #111;

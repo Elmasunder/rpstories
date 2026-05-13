@@ -52,6 +52,10 @@
 
 /* ═══════════ LAYER BASE ═══════════ */
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
   :root {
     --accent: #833ddd;
     --accent2: #e48328;
@@ -211,7 +215,7 @@
     font-weight: bold;
     letter-spacing: 2px;
     margin-top: 12px;
-    border-radius: 2px;
+    border-radius: 4px;
   }
 
   .cover-alias-row {
@@ -275,7 +279,7 @@
   .page {
     max-width: 1080px;
     margin: 0 auto;
-    padding: 40px 52px;
+    padding: 20px 52px;
     position: relative;
   }
 
@@ -286,8 +290,8 @@
     background: var(--color-panel);
     border: 1px solid var(--color-border);
     border-top: 2px solid var(--accent);
-    padding: 24px 28px;
-    border-radius: 6px;
+    padding: 28px;
+    border-radius: 8px;
   }
 
   .identity-row {
@@ -337,11 +341,11 @@
   .story {
     background: var(--color-panel);
     border: 1px solid var(--color-border);
-    padding: 28px 32px;
-    margin-bottom: 20px;
+    padding: 28px;
+    margin-bottom: 24px;
     position: relative;
     display: flow-root;
-    border-radius: 6px;
+    border-radius: 8px;
     overflow: hidden;
   }
 
@@ -371,7 +375,7 @@
     border-left: 4px solid var(--accent);
     padding: 18px 24px;
     margin: 32px 0;
-    border-radius: 6px;
+    border-radius: 8px;
   }
 
   .callout p {
@@ -391,7 +395,7 @@
     overflow: hidden;
     position: relative;
     height: 360px;
-    border-radius: 6px;
+    border-radius: 8px;
   }
 
   .photo-frame::after {
@@ -442,14 +446,14 @@
   .objective-card {
     background: var(--color-panel);
     border-left: 2px solid var(--color-border);
-    padding: 12px;
+    padding: 16px;
     font-size: 13px;
-    margin-bottom: 8px;
-    border-radius: 6px;
+    margin-bottom: 12px;
+    border-radius: 8px;
   }
 
   /* ——— DIVIDER ——— */
-  .divider { display: flex; align-items: center; gap: 16px; margin: 24px 0; }
+  .divider { display: flex; align-items: center; gap: 16px; margin: 16px 0; }
   .divider-line { flex: 1; height: 1px; background: linear-gradient(90deg, var(--accent), transparent); opacity: 0.25; }
   .divider-line--right { background: linear-gradient(270deg, var(--accent), transparent); }
   .divider-label {
@@ -481,7 +485,7 @@
     text-decoration: none;
     display: flex;
     flex-direction: column;
-    border-radius: 6px;
+    border-radius: 8px;
     overflow: hidden;
   }
 

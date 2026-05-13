@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
-import AmbientGlow from '@/components/AmbientGlow.vue'
+import AmbientGlow from './components/AmbientGlow.vue'
 </script>
 
 <template>
