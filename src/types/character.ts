@@ -99,6 +99,13 @@ export interface CharacterLocation {
   area: string;
 }
 
+export interface FamilyMember {
+  id?: string; // ID pour faire un lien vers une autre fiche si elle existe
+  name: string;
+  relation: string;
+  status: 'alive' | 'dead' | 'missing' | 'unknown';
+}
+
 export interface Character {
   id: string;
   pageTitle: string;
@@ -109,5 +116,6 @@ export interface Character {
   chapter3: StoryChapter;
   chapter4: Chapter4;
   chapter6: Chapter6; // Les objectifs et conclusion
+  family?: FamilyMember[]; // Optionnel : Arbre généalogique / Proches
   footer: string;
 }

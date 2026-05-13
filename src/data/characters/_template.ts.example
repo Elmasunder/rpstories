@@ -1,0 +1,167 @@
+import type { Character } from '@/types/character'
+
+/**
+ * 📝 MODÈLE DE CRÉATION DE FICHE PERSONNAGE
+ * 
+ * Instructions :
+ * 1. Copiez ce fichier et renommez-le en 'nom_du_perso.ts'
+ * 2. Remplissez les champs ci-dessous
+ * 3. Le personnage apparaîtra automatiquement sur le Hub
+ */
+
+export const template_character: Character = {
+    // ID unique utilisé pour l'URL (ex: 'jason_pils')
+    id: 'id_du_personnage',
+    
+    // Titre de l'onglet du navigateur
+    pageTitle: 'Dossier RP – Prénom Nom',
+
+    cover: {
+      status: 'alive', // 'alive' ou 'dead'
+      serverDomain: 'nom-du-serveur.fr',
+      eyebrow: '// Dossier Roleplay — Five M //',
+      firstName: 'PRÉNOM',
+      lastName: 'NOM',
+      alias: 'Surnom',
+      subtitle: 'Âge — Métier ou Quartier',
+      destination: 'Los Santos',
+      
+      // Informations rapides (panneau de gauche sur la fiche)
+      meta: [
+        { key: 'Âge', value: 'XX' },
+        { key: 'Taille', value: 'XXX cm' },
+        { key: 'Poids', value: 'XX kg' },
+        { key: 'Origines', value: '...' },
+        { key: 'Véhicule', value: '...' }
+      ],
+      
+      ref: 'DOSSIER REF: XXX-00-LS<br>STATUT: ACTIF<br>USAGE: ROLEPLAY EXCLUSIF',
+      
+      // Liens vers les images (mettre les fichiers dans public/assets/nom_du_perso/)
+      photos: [
+        'assets/folder/photo1.webp',
+        'assets/folder/photo2.webp',
+        'assets/folder/photo3.webp'
+      ]
+    },
+
+    chapter1: {
+      label: 'Chapitre I',
+      titleLines: ['Présentation du', 'Personnage'],
+      
+      // Panneaux d'identité (Grille détaillée)
+      identityPanels: [
+        [
+          { key: 'Nom', value: 'Nom' },
+          { key: 'Prénom', value: 'Prénom' },
+          { key: 'Surnom', value: '"..."', class: 'text-accent' }
+        ],
+        [
+          { key: 'Père', value: '...' },
+          { key: 'Mère', value: '...' },
+          { key: 'Spécialité', value: '...', class: 'text-accent' }
+        ]
+      ],
+      
+      profile: {
+        qualities: ['Qualité 1', 'Qualité 2'],
+        flaws: ['Défaut 1', 'Défaut 2']
+      },
+      
+      // Bloc spécial (ex: Tatouage, Cicatrice, Objet fétiche)
+      specialInfo: {
+        icon: '💎',
+        title: 'Titre du bloc',
+        text: 'Texte explicatif sur cet élément particulier...'
+      }
+    },
+
+    chapter2: {
+      label: 'Chapitre II',
+      titleLines: ['Les', 'Origines'],
+      photo: {
+        url: 'assets/folder/photo_chapitre2.webp',
+        alt: 'Description image',
+        caption: '// Légende de l\'image'
+      },
+      story1: [
+        'Paragraphe 1 de l\'histoire...',
+        'Paragraphe 2 de l\'histoire...'
+      ],
+      story2: [
+        'Paragraphe 3 de l\'histoire...'
+      ],
+      quote: '"Une citation marquante du personnage."',
+      callout: '// Une petite note de bas de chapitre (optionnel) //'
+    },
+
+    chapter3: {
+      label: 'Chapitre III',
+      titleLines: ['La Vie à', 'Los Santos'],
+      photo: {
+        url: 'assets/folder/photo_chapitre3.webp',
+        alt: 'Description image',
+        caption: '// Légende de l\'image'
+      },
+      story1: [
+        'Contenu de la suite de l\'histoire...'
+      ],
+      quote: '"Deuxième citation."'
+    },
+
+    chapter4: {
+      label: 'Chapitre IV',
+      titleLines: ['Expertise &', 'Compétences'],
+      photo: {
+        url: 'assets/folder/photo_chapitre4.webp',
+        alt: 'Description image',
+        caption: '// Légende de l\'image'
+      },
+      story1: [
+        'Description des talents et du savoir-faire du personnage.'
+      ],
+      
+      // Groupes de barres de progression
+      skillsGroups: [
+        {
+          title: '// GROUPE 1',
+          skills: [
+            { name: 'Compétence 1', percent: 85 },
+            { name: 'Compétence 2', percent: 60 }
+          ]
+        },
+        {
+          title: '// GROUPE 2',
+          skills: [
+            { name: 'Compétence 3', percent: 90 }
+          ]
+        }
+      ],
+      callout: '// Note technique sur les compétences //'
+    },
+
+    chapter6: {
+      label: 'Épilogue',
+      titleLines: ['Objectifs &', 'Futur'],
+      
+      // Liste tri-colonnes
+      objectives: {
+        shortTerm: ['But 1', 'But 2'],
+        mediumTerm: ['Projet 1', 'Projet 2'],
+        longTerm: ['Rêve 1']
+      },
+      
+      finaleStory: [
+        'Conclusion de la fiche narrative.'
+      ],
+      finaleQuote: '"Dernière parole."'
+    },
+
+    // 🌳 ARBRE GÉNÉALOGIQUE (Optionnel)
+    family: [
+      { id: 'id_autre_perso', name: 'Nom Prénom', relation: 'Cousin', status: 'alive' },
+      { name: 'Nom Inconnu', relation: 'Père', status: 'unknown' }
+    ],
+
+    footer: 'DOSSIER RP — NOM DU PERSO · LOS SANTOS · REF: XXX-00-LS · STATUT: XXX'
+  }
