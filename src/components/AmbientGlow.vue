@@ -8,13 +8,13 @@
   ></div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { reactive, onMounted, onUnmounted } from 'vue'
-import { uiState } from '@/store/ui'
+import { uiState } from '@/store/ui.ts'
 
 const mouse = reactive({ x: 0, y: 0 })
 
-const handleMouseMove = (e) => {
+const handleMouseMove = (e: MouseEvent) => {
   mouse.x = e.clientX
   mouse.y = e.clientY
 }

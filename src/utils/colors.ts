@@ -22,7 +22,7 @@ export const charPalette = [
  * @param {string} id - L'identifiant unique du personnage
  * @returns {object} - Un objet contenant les couleurs d'accent en Hex et RGB
  */
-export function getCharColors(id) {
+export function getCharColors(id: string) {
   let hash = 0
   for (let i = 0; i < id.length; i++) {
     hash = id.charCodeAt(i) + ((hash << 5) - hash)
@@ -38,7 +38,7 @@ export function getCharColors(id) {
   const hex2 = charPalette[finalIdx2]
 
   // Fonction utilitaire pour convertir Hex en RGB "r, g, b"
-  const hexToRgb = (hex) => {
+  const hexToRgb = (hex: string) => {
     const r = parseInt(hex.slice(1, 3), 16)
     const g = parseInt(hex.slice(3, 5), 16)
     const b = parseInt(hex.slice(5, 7), 16)

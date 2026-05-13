@@ -1,7 +1,7 @@
-<script setup>
+<script setup lang="ts">
 import { onMounted } from 'vue'
-import { characters } from '@/data/characters.js'
-import { getCharColors } from '@/utils/colors.js'
+import { characters } from '@/data/index.ts'
+import { getCharColors } from '@/utils/colors.ts'
 import HubCard from '@/components/HubCard.vue'
 
 const charList = Object.values(characters).sort((a, b) => {
