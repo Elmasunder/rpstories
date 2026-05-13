@@ -6,15 +6,20 @@ defineProps({
 
 <template>
   <section>
-    <h2 class="skills-section-title">{{ group.title }}</h2>
-    <ul class="skills-list">
-      <li v-for="skill in group.skills" :key="skill.name" class="skill-item">
-        <div class="skill-header">
-          <span class="skill-name">{{ skill.name }}</span>
-          <span class="skill-percentage">{{ skill.percent }}%</span>
+    <h2 class="font-mono text-[11px] text-[var(--accent)] mb-6 tracking-[2px]">
+      {{ group.title }}
+    </h2>
+    <ul class="list-none">
+      <li v-for="skill in group.skills" :key="skill.name" class="mb-4">
+        <div class="flex justify-between mb-1">
+          <span class="font-display font-bold text-sm text-white uppercase">{{ skill.name }}</span>
+          <span class="font-mono text-[11px] text-[var(--accent)]">{{ skill.percent }}%</span>
         </div>
-        <div class="skill-bar">
-          <div class="skill-fill" :style="{ width: skill.percent + '%' }"></div>
+        <div class="h-1 bg-border">
+          <div
+            class="h-full transition-[width] duration-1000 ease-out"
+            :style="{ width: skill.percent + '%', background: `linear-gradient(90deg, var(--accent2), var(--accent))` }"
+          ></div>
         </div>
       </li>
     </ul>

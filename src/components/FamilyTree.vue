@@ -9,10 +9,8 @@ defineProps<{
 
 const getMemberPhoto = (member: FamilyMember) => {
   if (member.id && characters[member.id]) {
-    // On prend la première photo de la liste de couverture
     return characters[member.id].cover.photos[0]
   }
-  // Chemin vers ton futur placeholder
   return 'assets/placeholder_user.webp'
 }
 
@@ -38,13 +36,13 @@ const truncateRelation = (text: string) => {
 </script>
 
 <template>
-  <section v-if="family && family.length > 0" class="page family-section">
+  <section v-if="family && family.length > 0" class="page mt-10">
     <ChapterHeader :char="{ label: 'Entourage', titleLines: ['Relations &', 'Proches'] }" />
     
-    <div class="family-tree-container">
+    <div class="flex justify-center py-10">
       <div class="tree-grid">
-        <div v-for="member in family" :key="member.name" class="node-wrapper">
-          <!-- La ligne de connexion (décorative) -->
+        <div v-for="member in family" :key="member.name" class="relative flex flex-col items-center">
+          <!-- Ligne de connexion décorative -->
           <div class="tree-line"></div>
           
           <component 
@@ -53,21 +51,25 @@ const truncateRelation = (text: string) => {
             class="family-node"
             :class="[`status-${member.status}`, { 'is-link': member.id }]"
           >
-            <div class="node-header">
-              <span class="node-relation">{{ truncateRelation(member.relation) }}</span>
-              <span class="node-dot"></span>
+            <div class="flex justify-between items-center mb-3">
+              <span class="font-heading text-[0.7rem] tracking-[2px] uppercase text-[var(--accent)]">
+                {{ truncateRelation(member.relation) }}
+              </span>
+              <span class="size-1 rounded-full bg-[var(--accent)]"></span>
             </div>
             
-            <div class="node-body">
-              <div class="node-info">
-                <div class="node-name">{{ member.name }}</div>
+            <div class="flex justify-between items-center gap-2.5 mb-3">
+              <div class="flex-1">
+                <div class="font-heading text-[1.1rem] font-semibold text-white tracking-[1px]">
+                  {{ member.name }}
+                </div>
               </div>
               <div class="node-avatar">
                 <img :src="getMemberPhoto(member)" :alt="member.name" @error="handleImgError">
               </div>
             </div>
             
-            <div class="node-footer">
+            <div class="flex items-center gap-2 border-t border-white/5 pt-2.5">
               <span class="status-indicator"></span>
               <span class="status-text">{{ statusLabel(member.status) }}</span>
             </div>
@@ -82,35 +84,18 @@ const truncateRelation = (text: string) => {
 </template>
 
 <style scoped>
-.family-section {
-  margin-top: 40px;
-}
-
-.family-tree-container {
-  padding: 40px 0;
-  display: flex;
-  justify-content: center;
-}
-
+/* Grille — CSS Grid avec colonnes fixes pour un alignement parfait */
 .tree-grid {
   display: grid;
-  /* On définit des colonnes de 240px (la largeur de tes cartes) */
   grid-template-columns: repeat(auto-fit, 240px);
-  gap: 40px 30px; /* On augmente un peu l'espace vertical */
+  gap: 40px 30px;
   justify-content: center;
   width: 100%;
-  max-width: 1100px; /* Pour éviter que ça s'étale trop sur très grand écran */
+  max-width: 1100px;
   position: relative;
 }
 
-.node-wrapper {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/* Ligne de connexion style "Dossier" */
+/* Ligne de connexion décorative */
 .tree-line {
   position: absolute;
   top: -20px;
@@ -120,6 +105,7 @@ const truncateRelation = (text: string) => {
   opacity: 0.5;
 }
 
+/* Carte de relation */
 .family-node {
   width: 240px;
   background: rgba(255, 255, 255, 0.03);
@@ -152,48 +138,7 @@ const truncateRelation = (text: string) => {
   cursor: default;
 }
 
-.node-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-}
-
-.node-relation {
-  font-family: 'Oswald', sans-serif;
-  font-size: 0.7rem;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--accent, #aaa);
-}
-
-.node-dot {
-  width: 4px;
-  height: 4px;
-  background: var(--accent, #666);
-  border-radius: 50%;
-}
-
-.node-body {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 12px;
-}
-
-.node-info {
-  flex: 1;
-}
-
-.node-name {
-  font-family: 'Oswald', sans-serif;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #fff;
-  letter-spacing: 1px;
-}
-
+/* Avatar */
 .node-avatar {
   width: 45px;
   height: 45px;
@@ -211,14 +156,7 @@ const truncateRelation = (text: string) => {
   object-fit: cover;
 }
 
-.node-footer {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  border-top: 1px solid rgba(255,255,255,0.05);
-  padding-top: 10px;
-}
-
+/* Status indicators */
 .status-indicator {
   width: 6px;
   height: 6px;
@@ -246,16 +184,11 @@ const truncateRelation = (text: string) => {
 .status-dead .status-indicator { background: var(--status-color); box-shadow: 0 0 10px var(--status-color); }
 .status-dead .status-text { color: var(--status-color); }
 .status-dead { border-color: rgba(231, 76, 60, 0.4) !important; }
-.status-dead .node-name, 
-.status-dead .node-relation,
-.status-dead .status-text { color: var(--status-color) !important; }
 .status-dead .node-avatar { border-color: var(--status-color); box-shadow: 0 0 15px rgba(231, 76, 60, 0.3); }
 
 .status-missing .status-indicator { background: var(--status-color); box-shadow: 0 0 10px var(--status-color); }
 .status-missing .status-text { color: var(--status-color); }
 .status-missing { border-color: rgba(241, 196, 15, 0.4) !important; }
-.status-missing .node-name, 
-.status-missing .node-relation { color: var(--status-color) !important; }
 .status-missing .node-avatar { border-color: var(--status-color); }
 
 /* Avatar en noir et blanc pour les morts/disparus */
