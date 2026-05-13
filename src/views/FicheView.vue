@@ -65,7 +65,7 @@ watch(char, updateAtmosphere)
     <TheNavbar />
 
     <!-- SECTION 1 : COVER -->
-    <header class="relative h-[85vh] flex flex-col justify-end overflow-hidden">
+    <header class="relative h-screen flex flex-col justify-end overflow-hidden">
       <!-- Background & Photos -->
       <div class="absolute inset-0 z-0">
         <div class="absolute inset-0 bg-gradient-to-t from-bg via-bg/70 to-transparent z-10"></div>
@@ -84,25 +84,45 @@ watch(char, updateAtmosphere)
         <div class="font-mono text-xs tracking-[5px] text-accent uppercase mb-3 opacity-80">
           {{ char.cover.eyebrow }}
         </div>
-        <h1 class="font-display font-black text-6xl md:text-8xl lg:text-9xl uppercase leading-[0.85] tracking-tighter mb-6">
+        <h1 class="font-display font-black text-6xl md:text-8xl lg:text-9xl uppercase leading-[0.85] tracking-tighter">
           {{ char.cover.firstName }}<br>
           <span class="text-accent">{{ char.cover.lastName }}</span>
         </h1>
+
+        <!-- Codename Badge -->
+        <div class="mt-6 flex items-center gap-4 animate-fade-in delay-200">
+          <div class="px-2 py-0.5 bg-accent text-bg font-black text-[10px] uppercase tracking-widest">Codename</div>
+          <div class="font-display font-black text-2xl lg:text-3xl text-white uppercase tracking-tighter italic">
+            "{{ char.cover.alias }}"
+          </div>
+        </div>
         
-        <div v-if="char.cover.status === 'dead'" class="inline-block bg-dead text-white px-4 py-1.5 font-mono text-xs font-bold tracking-widest uppercase mb-6 rounded">
+        <div v-if="char.cover.status === 'dead'" class="mt-6 inline-block bg-dead text-white px-4 py-1.5 font-mono text-xs font-bold tracking-widest uppercase rounded">
           DECEASED // CK
         </div>
         
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 border-t border-white/10 pt-8 mt-4">
-          <div class="font-mono text-sm tracking-[3px] uppercase">
-            AKA <span class="text-accent2 font-bold">"{{ char.cover.alias }}"</span> 
-            — {{ char.cover.subtitle }} <span class="text-accent2 opacity-80">{{ char.cover.destination }}</span>
+        <!-- Bottom Content Bar (Rebalanced) -->
+        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-12 border-t border-white/10 pt-8 mt-12">
+          <!-- Administrative Ref -->
+          <div class="flex flex-col gap-2">
+            <div class="font-mono text-[10px] text-accent font-bold uppercase tracking-[3px]">Dossier Reference</div>
+            <div class="font-mono text-[11px] text-white/60 leading-relaxed uppercase tracking-widest" v-html="char.cover.ref"></div>
           </div>
-          
-          <div class="flex gap-10">
-            <div v-for="m in char.cover.meta" :key="m.key" class="flex flex-col">
-              <span class="font-display font-bold text-2xl leading-none">{{ m.value }}</span>
-              <span class="font-mono text-[10px] text-muted tracking-widest uppercase mt-1">{{ m.key }}</span>
+
+          <!-- Quick Meta Data Unites -->
+          <div class="flex flex-wrap items-center gap-x-10 gap-y-6">
+            <div 
+              v-for="m in char.cover.meta" 
+              :key="m.key" 
+              class="group relative flex flex-col border-l-2 border-accent/40 pl-5 py-1 transition-all duration-500 hover:border-accent cursor-default select-none"
+            >
+              <div class="absolute inset-0 bg-accent/5 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 -z-10"></div>
+              <span class="font-mono text-[9px] text-accent uppercase tracking-[4px] mb-1.5 opacity-70">
+                {{ m.key }}
+              </span>
+              <span class="font-display font-black text-2xl lg:text-3xl text-white uppercase leading-none tracking-tighter whitespace-nowrap">
+                {{ m.value }}
+              </span>
             </div>
           </div>
         </div>
@@ -135,24 +155,24 @@ watch(char, updateAtmosphere)
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-10">
           <div class="bg-panel border border-border p-7 rounded-lg">
-            <span class="font-mono text-[10px] text-muted uppercase block mb-4">Points Forts</span>
+            <span class="font-mono text-[10px] text-muted uppercase block mb-4">Qualités</span>
             <div class="flex flex-wrap gap-2">
-              <span v-for="q in char.chapter1.profile.qualities" :key="q" class="font-mono text-[10px] px-3 py-1 border border-positive/40 text-positive uppercase tracking-wider bg-positive/5 rounded">{{ q }}</span>
+              <span v-for="q in char.chapter1.profile.qualités" :key="q" class="font-mono text-[10px] px-3 py-1 border border-positive/40 text-positive uppercase tracking-wider bg-positive/5 rounded">{{ q }}</span>
             </div>
           </div>
           <div class="bg-panel border border-border p-7 rounded-lg">
-            <span class="font-mono text-[10px] text-muted uppercase block mb-4">Points Faibles</span>
+            <span class="font-mono text-[10px] text-muted uppercase block mb-4">Défauts</span>
             <div class="flex flex-wrap gap-2">
-              <span v-for="f in char.chapter1.profile.flaws" :key="f" class="font-mono text-[10px] px-3 py-1 border border-negative/40 text-negative uppercase tracking-wider bg-negative/5 rounded">{{ f }}</span>
+              <span v-for="f in char.chapter1.profile.défauts" :key="f" class="font-mono text-[10px] px-3 py-1 border border-negative/40 text-negative uppercase tracking-wider bg-negative/5 rounded">{{ f }}</span>
             </div>
           </div>
         </div>
 
-        <aside v-if="char.chapter1.specialInfo" class="bg-black/40 border border-accent border-l-4 border-l-accent p-6 rounded-r-lg flex gap-4 items-start shadow-inner">
-          <div class="text-2xl">{{ char.chapter1.specialInfo.icon }}</div>
+        <aside v-if="char.chapter1.infoPlus" class="bg-black/40 border border-accent border-l-4 border-l-accent p-6 rounded-r-lg flex gap-4 items-start shadow-inner">
+          <div class="text-2xl">{{ char.chapter1.infoPlus.icon }}</div>
           <div class="font-mono text-xs leading-relaxed">
-            <strong class="text-accent uppercase block mb-1">{{ char.chapter1.specialInfo.title }}</strong>
-            {{ char.chapter1.specialInfo.text }}
+            <strong class="text-accent uppercase block mb-1">{{ char.chapter1.infoPlus.title }}</strong>
+            {{ char.chapter1.infoPlus.text }}
           </div>
         </aside>
       </section>
@@ -229,22 +249,14 @@ watch(char, updateAtmosphere)
         </div>
       </section>
       
-      <!-- CHAPITRE V (Final Point) -->
-      <section v-if="char.chapter5" id="final-point" class="py-10 scroll-mt-24">
-        <ChapterHeader :char="{ label: char.chapter5.label, titleLines: char.chapter5.titleLines }" />
-        <article class="bg-panel border border-border p-8 relative rounded-lg overflow-hidden group">
-          <div class="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-accent to-accent-alt opacity-80"></div>
-          <div class="prose prose-invert max-w-none font-display text-[15px] leading-relaxed text-white/80 space-y-4">
-            <p v-for="(p, i) in char.chapter5.story1" :key="i">{{ p }}</p>
-          </div>
-          <blockquote v-if="char.chapter5.quote" class="border-l-2 border-accent-alt pl-6 my-10 font-display font-black text-xl text-accent uppercase tracking-tighter leading-[1.1] shadow-accent/20 drop-shadow-sm">
-            "{{ char.chapter5.quote }}"
-          </blockquote>
-        </article>
-      </section>
-
       <!-- ENTOURAGE -->
-      <FamilyTree id="entourage" :family="char.family" class="scroll-mt-24" />
+      <FamilyTree 
+        id="entourage" 
+        :label="char.chapter5?.label" 
+        :titleLines="char.chapter5?.titleLines" 
+        :family="char.family" 
+        class="scroll-mt-24" 
+      />
 
       <!-- OBJECTIFS -->
       <section id="objectifs" class="py-10 scroll-mt-24">

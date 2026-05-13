@@ -32,8 +32,8 @@ export const elena_volkov: Character = {
     },
 
     chapter1: {
-      label: 'Chapitre I',
-      titleLines: ['Présentation du', 'Personnage'],
+      label: 'Présentation du personnage',
+      titleLines: ['Profil &', 'Identité'],
       
       identityPanels: [
         // Panneau de gauche (Données administratives)
@@ -44,29 +44,29 @@ export const elena_volkov: Character = {
           { key: 'Date de naissance', value: '22 / 09 / 1994' },
           { key: 'Lieu de naissance', value: 'Saint-Pétersbourg, Russie' },
           { key: 'Ville actuelle', value: 'Los Santos (Disparue)', class: 'text-accent-alt' },
-          { key: 'Origines', value: 'Russe' },
-          { key: 'Taille / Poids', value: '172 cm / 62 kg' },
-          { key: 'Signes particuliers', value: 'Cicatrice fine à l\'arcade gauche', class: 'text-accent' }
+          { key: 'Origine(s)', value: 'Russe' },
+          { key: 'Taille', value: '172 cm' },
+          { key: 'Poids', value: '62 kg' }
         ],
         // Panneau de droite (Lore & Passé)
         [
+          { key: 'Signe particulier', value: 'Cicatrice fine à l\'arcade gauche', class: 'text-accent' },
           { key: 'Père', value: 'Sergueï Volkov (Décédé, 2012)', class: 'text-dead' },
           { key: 'Mère', value: 'Natalia Volkov', class: 'text-accent-alt' },
           { key: 'Famille proche', value: 'Aucune (Exilée)' },
           { key: 'Passé', value: 'Journaliste de guerre · Infiltration' },
-          { key: 'Passion #1', value: 'Cryptographie & Échecs Blitz' },
-          { key: 'Monture', value: 'Albany Prima — Noir Mat', class: 'text-accent' },
-          { key: 'Spécialité', value: 'Infiltration / Recherche OSINT', class: 'text-accent' },
-          { key: 'Info +', value: 'Paranoïaque. Ne dort jamais deux fois au même endroit.' }
+          { key: 'Passion(s)', value: 'Cryptographie & Échecs Blitz' },
+          { key: 'Véhicule', value: 'Albany Prima — Noir Mat', class: 'text-accent' },
+          { key: 'Spécialité', value: 'Infiltration / Recherche OSINT', class: 'text-accent' }
         ]
       ],
       
       profile: {
-        qualities: ['Persévérante', 'Analytique', 'Polyglotte', 'Discrète', 'Obsessive', 'Intuitive'],
-        flaws: ['Méfiance paranoïaque', 'Prise de risque excessive', 'Froideur', 'Insomniaque', 'Perfectionniste', 'Solitaire']
+        qualités: ['Persévérante', 'Analytique', 'Polyglotte', 'Discrète', 'Obsessive', 'Intuitive'],
+        défauts: ['Méfiance paranoïaque', 'Prise de risque excessive', 'Froideur', 'Insomniaque', 'Perfectionniste', 'Solitaire']
       },
       
-      specialInfo: {
+      infoPlus: {
         icon: '🕵️‍♀️',
         title: 'Dernier article non publié',
         text: 'Une enquête intitulée "Les Ombres du Port". Elle y mentionne des visages connus de la police de Los Santos et des transactions illégales impliquant des personnalités influentes.'

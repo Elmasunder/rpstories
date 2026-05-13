@@ -30,8 +30,8 @@ export const wonsu_park: Character = {
     },
 
     chapter1: {
-      label: 'Chapitre I',
-      titleLines: ['Présentation du', 'Personnage'],
+      label: 'Présentation du personnage',
+      titleLines: ['Profil &', 'Identité'],
       identityPanels: [
         [
           { key: 'Nom', value: 'PARK' },
@@ -40,26 +40,26 @@ export const wonsu_park: Character = {
           { key: 'Date de naissance', value: '24 / 11 / 1993' },
           { key: 'Lieu de naissance', value: 'Seoul, Corée du Sud' },
           { key: 'Ville actuelle', value: 'Los Santos', class: 'text-accent-alt' },
-          { key: 'Origines', value: 'Asiatique' },
-          { key: 'Taille / Poids', value: '167 cm / 57 kg' },
-          { key: 'Signes particuliers', value: 'lunette jaune fumée, cicatrice tempe gauche', class: 'text-accent' }
+          { key: 'Origine(s)', value: 'Asiatique' },
+          { key: 'Taille', value: '167 cm' },
+          { key: 'Poids', value: '57 kg' }
         ],
         [
-          { key: 'Père', value: 'Ji-Sung Park (Mort)', class: 'text-muted' },
+          { key: 'Signe particulier', value: 'lunettes jaune fumé, cicatrice tempe gauche', class: 'text-accent' },
+          { key: 'Père', value: 'Ji-Sung Park (Décédé)', class: 'text-muted' },
           { key: 'Mère', value: 'Mi-Ran Park', class: 'text-accent-alt' },
-          { key: 'Famille proche', value: 'Communauté Sud-Coréenne de Little Seoul' },
+          { key: 'Famille proche', value: 'Communauté Sud-Coréenne (Little Seoul)' },
           { key: 'Passé', value: 'Études économiques, Devenu Khangpae' },
-          { key: 'Passion #1', value: '—' },
-          { key: 'Monture', value: 'Ocelot Jackal', class: 'text-accent' },
-          { key: 'Spécialité', value: 'Comptabilité, Poker' },
-          { key: 'Info +', value: 'Travailleur, manipulateur, calculateur' }
+          { key: 'Passion(s)', value: '—' },
+          { key: 'Véhicule', value: 'Ocelot Jackal', class: 'text-accent' },
+          { key: 'Spécialité', value: 'Comptabilité, Poker', class: 'text-accent' }
         ]
       ],
       profile: {
-        qualities: ['Drôle', 'Calme', 'Déterminé'],
-        flaws: ['Fourbe', 'Manipulateur', 'Tricheur', 'Sexiste', 'Misogyne']
+        qualités: ['Drôle', 'Calme', 'Déterminé'],
+        défauts: ['Fourbe', 'Manipulateur', 'Tricheur', 'Sexiste', 'Misogyne']
       },
-      specialInfo: {
+      infoPlus: {
         icon: '🐉',
         title: 'Tatouage — Asian Dragon',
         text: 'Wonsu s\'est fait tatouer un dragon asiatique sur le ventre à 25 ans, lors de son entrée chez les Khangpae, en l\'honneur de son fils décédé.'

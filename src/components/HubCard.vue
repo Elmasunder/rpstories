@@ -93,8 +93,11 @@ const stopCycle = () => {
 
         <div class="flex justify-between items-center pt-4 border-t border-white/5">
           <span class="font-mono text-[10px] text-accent font-bold uppercase tracking-widest">Voir le dossier</span>
-          <span class="size-6 flex items-center justify-center rounded-full bg-accent/10 border border-accent/20 group-hover:bg-accent group-hover:text-black transition-all">
-            <span class="text-xs">→</span>
+          <span class="size-6 flex-none flex items-center justify-center rounded-full bg-accent/10 border border-accent/20 text-accent group-hover:bg-accent group-hover:text-black transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
           </span>
         </div>
       </div>

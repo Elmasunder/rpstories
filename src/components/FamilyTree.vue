@@ -4,6 +4,8 @@ import { characters } from '@/data/index'
 import ChapterHeader from '@/components/ChapterHeader.vue'
 
 defineProps<{
+  label?: string
+  titleLines?: string[]
   family?: FamilyMember[]
 }>()
 
@@ -54,7 +56,7 @@ const getStatusColor = (status: string) => {
 
 <template>
   <section v-if="family && family.length > 0" class="py-10">
-    <ChapterHeader :char="{ label: 'Entourage', titleLines: ['Relations &', 'Proches'] }" />
+    <ChapterHeader :char="{ label: label || 'Entourage', titleLines: titleLines || ['Relations &', 'proches'] }" />
 
     <div class="flex justify-center py-10">
       <div

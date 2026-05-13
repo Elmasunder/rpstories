@@ -26,8 +26,8 @@ export interface IdentityPanelItem {
 }
 
 export interface Profile {
-  qualities: string[];
-  flaws: string[];
+  qualités: string[];
+  défauts: string[];
 }
 
 export interface SpecialInfo {
@@ -41,7 +41,7 @@ export interface Chapter1 {
   titleLines: string[];
   identityPanels: IdentityPanelItem[][];
   profile: Profile;
-  specialInfo?: SpecialInfo; // Optionnel (Jason n'en a pas)
+  infoPlus?: SpecialInfo; // Optionnel
 }
 
 export interface PhotoData {

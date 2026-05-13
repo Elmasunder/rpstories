@@ -28,32 +28,37 @@ export const larry_pils: Character = {
     ],
   },
 
-  chapter1: {
-    label: 'Chapitre I',
-    titleLines: ['Profil &', 'Identité'],
-    identityPanels: [
-      [
-        { key: 'Nom', value: 'Pils' },
-        { key: 'Prénom', value: 'Larry' },
-        { key: 'Code', value: '"The Mechanic"', class: 'text-accent' },
-        { key: 'Né en', value: '1992' },
-        { key: 'Signe', value: 'Taureau' },
-        { key: 'Taille', value: '185 cm' },
-        { key: 'Poids', value: '92 kg' },
+    chapter1: {
+      label: 'Présentation du personnage',
+      titleLines: ['Profil &', 'Identité'],
+      identityPanels: [
+        [
+          { key: 'Nom', value: 'Pils' },
+          { key: 'Prénom', value: 'Larry' },
+          { key: 'Surnom', value: '"Old Larry"', class: 'text-accent' },
+          { key: 'Date de naissance', value: '?? / ?? / 1992' },
+          { key: 'Lieu de naissance', value: 'Inconnu' },
+          { key: 'Ville actuelle', value: 'Los Santos', class: 'text-accent-alt' },
+          { key: 'Origine(s)', value: 'Caucasien' },
+          { key: 'Taille', value: '185 cm' },
+          { key: 'Poids', value: '92 kg' }
+        ],
+        [
+          { key: 'Signe particulier', value: 'Signe du Taureau', class: 'text-accent' },
+          { key: 'Père', value: 'Inconnu', class: 'text-muted' },
+          { key: 'Mère', value: 'Inconnu', class: 'text-muted' },
+          { key: 'Famille proche', value: 'Jason Pils (Cousin - Défunt)', class: 'text-accent-alt' },
+          { key: 'Passé', value: 'Ancien de l\'Armée (Logistique)' },
+          { key: 'Passion(s)', value: 'Mécanique de précision' },
+          { key: 'Véhicule', value: 'Bison Noir Mat', class: 'text-accent' },
+          { key: 'Spécialité', value: 'Mécanique & Logistique', class: 'text-accent' }
+        ]
       ],
-      [
-        { key: 'Famille', value: 'Jason Pils (Cousin - Défunt)', class: 'text-accent-alt' },
-        { key: 'Passé', value: "Ancien de l'Armée (Logistique)" },
-        { key: 'Affiliation', value: 'Indépendant' },
-        { key: 'Recherché pour', value: 'Recels divers & Modifs illégales' },
-        { key: 'Loyauté', value: 'Sang & Famille uniquement', class: 'text-accent' },
-      ],
-    ],
     profile: {
-      qualities: ['Méthodique', 'Froid', 'Technicien hors pair', 'Protecteur'],
-      flaws: ['Alcoolique mondain', 'Paranoïaque', 'Violent si provoqué'],
+      qualités: ['Méthodique', 'Froid', 'Technicien hors pair', 'Protecteur'],
+      défauts: ['Alcoolique mondain', 'Paranoïaque', 'Violent si provoqué'],
     },
-    specialInfo: {
+    infoPlus: {
       icon: '🔧',
       title: 'Le Poids du Sang',
       text: "Depuis la mort de son cousin Jason, Larry s'est refermé sur lui-même. Il porte désormais la bague de Jason autour du cou. Il ne cherche pas la vengeance, il cherche à ne plus jamais perdre de membres de son clan.",

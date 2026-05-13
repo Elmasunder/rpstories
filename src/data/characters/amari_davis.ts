@@ -9,7 +9,7 @@ export const amari_davis: Character = {
     cover: {
       status: 'alive', // 'alive' ou 'dead' (détermine le thème visuel)
       serverDomain: 'glife.fr', // Utilisé pour générer le favicon automatiquement
-      eyebrow: '// Dossier Roleplay — Five M // Los Santos //',
+      eyebrow: '// DOSSIER RP #26AD0001',
       firstName: 'AMARI',
       lastName: 'DAVIS',
       alias: 'Locker',
@@ -34,8 +34,8 @@ export const amari_davis: Character = {
 
     // --- CHAPITRE I : IDENTITÉ & PROFIL ---
     chapter1: {
-      label: 'Chapitre I',
-      titleLines: ['Présentation du', 'Personnage'], // Supporte plusieurs lignes de titre
+      label: 'Présentation du personnage',
+      titleLines: ['Profil &', 'Identité'], // Supporte plusieurs lignes de titre
       identityPanels: [
         // Panneau de gauche (Données administratives)
         [
@@ -45,37 +45,37 @@ export const amari_davis: Character = {
           { key: 'Date de naissance', value: '14 / 03 / 2001' },
           { key: 'Lieu de naissance', value: 'Northwood, Liberty City' },
           { key: 'Ville actuelle', value: 'Los Santos', class: 'text-accent-alt' },
-          { key: 'Origines', value: 'Afro-Américain' },
-          { key: 'Taille / Poids', value: '186 cm / 78 kg' },
-          { key: 'Signes particuliers', value: 'Corps quasi-entièrement tatoué', class: 'text-accent' }
+          { key: 'Origine(s)', value: 'Afro-Américain' },
+          { key: 'Taille', value: '186 cm' },
+          { key: 'Poids', value: '78 kg' }
         ],
         // Panneau de droite (Lore & Passé)
         [
+          { key: 'Signe particulier', value: 'Corps quasi-entièrement tatoué', class: 'text-accent' },
           { key: 'Père', value: 'Inconnu', class: 'text-muted' },
           { key: 'Mère', value: 'Décédée (OD fentanyl, 2018)', class: 'text-accent-alt' },
           { key: 'Famille proche', value: 'Aucune' },
           { key: 'Passé', value: 'Foyers de l\'État (8–17 ans)' },
-          { key: 'Passion #1', value: 'Motocross · Rodéo Urbain' },
-          { key: 'Monture', value: 'Sanchez — Dernier Modèle', class: 'text-accent' },
-          { key: 'Spécialité', value: 'Vol de véhicules / Entrée par effraction' },
-          { key: 'Info +', value: 'Fume. Peu bavard. Observe.' }
+          { key: 'Passion(s)', value: 'Motocross · Rodéo Urbain' },
+          { key: 'Véhicule', value: 'Sanchez — Dernier Modèle', class: 'text-accent' },
+          { key: 'Spécialité', value: 'Vol de véhicules / Entrée par effraction', class: 'text-accent' }
         ]
       ],
       profile: {
-        qualities: ['Loyal', 'Discret', 'Débrouillard', 'Sangfroid', 'Endurant', 'Empathique'],
-        flaws: ['Méfiant', 'Impulsif (Moto)', 'Rancunier', 'Solitaire excessif', 'Orgueil caché']
+        qualités: ['Loyal', 'Discret', 'Débrouillard', 'Sangfroid', 'Endurant', 'Empathique'],
+        défauts: ['Méfiant', 'Impulsif (Moto)', 'Rancunier', 'Solitaire excessif', 'Orgueil caché']
       },
-      specialInfo: {
+      infoPlus: {
         icon: '🖤',
         title: 'Corps tatoué — un livre ouvert',
         text: 'Amari a commencé ses premiers tatouages à 17 ans, le jour de la mort de sa mère. Depuis, il ne s\'est plus arrêté. Bras, mains, cou, torse, jambes — la quasi-totalité de son corps est couverte. Chaque pièce a une raison, même si il ne l\'explique jamais. Pour ceux qui savent lire, c\'est toute sa vie gravée dans la peau.'
       }
     },
 
-    // --- CHAPITRE II : ORIGINES ---
+    // --- CHAPITRE II : HISTOIRE ---
     chapter2: {
-      label: 'Chapitre II',
-      titleLines: ['Les', 'Origines', 'text-accent-alt'],
+      label: 'Histoire',
+      titleLines: ['Les', 'origines', 'text-accent-alt'],
       photo: {
         url: 'assets/amari_davis/amari3.webp',
         alt: 'Northwood, Liberty City',
@@ -93,10 +93,10 @@ export const amari_davis: Character = {
       callout: '// Émancipé à 18 ans. Aucun héritage, aucun réseau familial, aucun plan. Survit grâce à ses mains et à ses yeux. Premier salaire réel — intégralement investi dans une Sanchez dernier modèle. Premier tatouage à 17 ans. Dernier tatouage : hier. //'
     },
 
-    // --- CHAPITRE III : LA ROUTE ---
+    // --- CHAPITRE III : HISTOIRE ---
     chapter3: {
-      label: 'Chapitre III',
-      titleLines: ['La Route vers', 'Los Santos', 'text-accent'],
+      label: 'Histoire',
+      titleLines: ['La vie', "d'adulte", 'text-accent'],
       photo: {
         url: 'assets/amari_davis/amari1.webp',
         alt: 'Los Santos',
@@ -113,10 +113,10 @@ export const amari_davis: Character = {
       quote: '"J\'avais rien qui me retenait là-bas. J\'ai rien qui me pousse ici non plus. C\'est ça la liberté."'
     },
 
-    // --- CHAPITRE IV : COMPÉTENCES ---
+    // --- CHAPITRE IV : APTITUDES ---
     chapter4: {
-      label: 'Chapitre IV',
-      titleLines: ['Spécialité &', 'Compétences', 'text-accent'],
+      label: 'Aptitudes',
+      titleLines: ['Spécialités &', 'compétences', 'text-accent'],
       photo: {
         url: 'assets/amari_davis/amari4.webp',
         alt: 'Sanchez',
@@ -128,33 +128,33 @@ export const amari_davis: Character = {
       ],
       skillsGroups: [
         {
-          title: '// EXPERTISE TECHNIQUE',
+          title: '// Aptitudes sociales',
           skills: [
-            { name: "Effraction non-destructive (Lockpicking)", percent: 98 },
-            { name: "Bypass de systèmes d'alarme", percent: 85 },
-            { name: "Démarrage sans clé (Hotwiring)", percent: 92 },
-            { name: "Mécanique de précision (Moto/Auto)", percent: 74 },
-            { name: "Électronique embarquée", percent: 60 }
+            { name: "Analyse comportementale & Observation", percent: 85 },
+            { name: "Discrétion & Infiltration", percent: 92 },
+            { name: "Empathie & Écoute", percent: 78 },
+            { name: "Sang-froid en situation de crise", percent: 74 },
+            { name: "Sens de l'orientation & Topographie", percent: 88 }
           ]
         },
         {
-          title: '// APTITUDES DE TERRAIN',
+          title: '// Expertise technique',
           skills: [
-            { name: "Pilotage Enduro / Urbain", percent: 95 },
-            { name: "Fuite & Évasion en milieu dense", percent: 88 },
-            { name: "Analyse d'environnement & Surveillance", percent: 82 },
-            { name: "Sang-froid en situation critique", percent: 75 },
-            { name: "Discrétion & Infiltration", percent: 70 }
+            { name: "Effraction non-destructive (Lockpicking)", percent: 91 },
+            { name: "Bypass de systèmes de sécurité", percent: 84 },
+            { name: "Mécanique (Moto & Tout-terrain)", percent: 86 },
+            { name: "Maintenance & Ajustements de précision", percent: 79 },
+            { name: "Logistique & Gestion de stocks", percent: 82 }
           ]
         }
       ],
       callout: "// PROFIL : Expert en infiltration et récupération de véhicules. Approche chirurgicale et silencieuse. Capacité de fuite exceptionnelle en deux-roues. Ne laisse aucune trace de passage. //"
     },
 
-    // --- CHAPITRE VI : AMBITIONS ---
+    // --- CHAPITRE VI : LE FUTUR ---
     chapter6: {
-      label: 'Chapitre VI',
-      titleLines: ['Objectifs &', 'Ambitions', 'text-accent'],
+      label: 'Le futur',
+      titleLines: ['Objectifs &', 'ambitions', 'text-accent'],
       objectives: {
         shortTerm: [
           'Trouver un squat ou une planque stable à Los Santos — enfin un espace à lui.',
@@ -180,6 +180,12 @@ export const amari_davis: Character = {
         'Los Santos est une chance. Peut-être la première vraie. Il n\'en parle pas. Mais ça se voit dans la façon dont il regarde la ville depuis le toit d\'un parking, le soir, une clope aux lèvres et la Sanchez garée en bas.'
       ],
       finaleQuote: '"Amari. J\'arrive de Liberty City. Et j\'ouvre ce qui est fermé."'
+    },
+
+    // --- CHAPITRE V : ENTOURAGE ---
+    chapter5: {
+      label: 'Entourage',
+      titleLines: ['Relations &', 'proches']
     },
 
     family: [

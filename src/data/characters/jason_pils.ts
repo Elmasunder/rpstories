@@ -30,8 +30,8 @@ export const jason_pils: Character = {
     },
 
     chapter1: {
-      label: 'Chapitre I',
-      titleLines: ['Présentation du', 'Personnage'],
+      label: 'Présentation du personnage',
+      titleLines: ['Profil &', 'Identité'],
       identityPanels: [
         [
           { key: 'Nom', value: 'Pils' },
@@ -40,26 +40,26 @@ export const jason_pils: Character = {
           { key: 'Date de naissance', value: '02 / 02 / 2000' },
           { key: 'Lieu de naissance', value: 'Los Santos' },
           { key: 'Ville actuelle', value: 'Los Santos', class: 'text-accent-alt' },
-          { key: 'Origines', value: 'Caucasien' },
-          { key: 'Taille / Poids', value: '179 cm / 56 kg' },
-          { key: 'Signes particuliers', value: 'Cicatrice arcade gauche & tatouage bras droit', class: 'text-accent' }
+          { key: 'Origine(s)', value: 'Caucasien' },
+          { key: 'Taille', value: '179 cm' },
+          { key: 'Poids', value: '56 kg' }
         ],
         [
+          { key: 'Signe particulier', value: 'Cicatrice arcade gauche & tatouage bras droit', class: 'text-accent' },
           { key: 'Père', value: 'Inconnu', class: 'text-muted' },
           { key: 'Mère', value: 'Décédée', class: 'text-accent-alt' },
           { key: 'Famille proche', value: 'Larry (Cousin)' },
           { key: 'Passé', value: 'Famille d\'accueil' },
-          { key: 'Passion #1', value: '—' },
-          { key: 'Monture', value: 'Futo cabossée', class: 'text-accent' },
-          { key: 'Spécialité', value: 'Triche / Drogues' },
-          { key: 'Info +', value: 'Fume. Bavard. Parle beaucoup.' }
+          { key: 'Passion(s)', value: '—' },
+          { key: 'Véhicule', value: 'Futo cabossée', class: 'text-accent' },
+          { key: 'Spécialité', value: 'Triche / Drogues', class: 'text-accent' }
         ]
       ],
       profile: {
-        qualities: ['Sympathique', 'Drôle', 'Empathique', 'Débrouillard'],
-        flaws: ['Alcoolique', 'Drogué', 'Tricheur', 'Imprudent']
+        qualités: ['Sympathique', 'Drôle', 'Empathique', 'Débrouillard'],
+        défauts: ['Alcoolique', 'Drogué', 'Tricheur', 'Imprudent']
       },
-      specialInfo: {
+      infoPlus: {
         icon: '💔',
         title: 'Tatouage — "Lover"',
         text: 'Jason a eu "Lover" tatoué sur son bras gauche à 19 ans, après avoir rencontré sa copine, une fille qu\'il considérait comme la femme de sa vie. Malheureusement, elle est décédée tragiquement quelques mois plus tard, des suites d\'un accident de voiture.'
