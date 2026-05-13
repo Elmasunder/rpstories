@@ -1,37 +1,32 @@
-# RPStories
-### High-End Immersive Character Archive for Roleplay Communities
+# RPStories 🏛️✨
+### The Ultimate Immersive Character Archive for Roleplay Communities
 
 [![Vue.js](https://img.shields.io/badge/vuejs-%2335495e.svg?style=flat-square&logo=vuedotjs&logoColor=%234FC08D)](https://vuejs.org/)
 [![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev/)
-[![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=flat-square&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![TailwindCSS v4](https://img.shields.io/badge/tailwindcss_v4-%2338B2AC.svg?style=flat-square&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg?style=flat-square)](https://www.gnu.org/licenses/gpl-3.0)
 
 ---
 
-**RPStories** is a lightweight, high-performance web application designed to host and showcase immersive character dossiers for roleplay environments (FiveM, RedM, etc.). Unlike traditional technical sheets, RPStories focuses on atmosphere, visual identity, and storytelling through a refined, game-inspired interface.
-
-> [!NOTE]  
-> **Active Development**: This is a **passion project** currently in its early stages. Many features are still being refined, and the architecture is evolving as new narrative needs arise.
+**RPStories** is a state-of-the-art web application designed to host and showcase immersive character dossiers for roleplay environments (FiveM, RedM, etc.). Built with a "story-first" philosophy, it transforms technical data into a refined, high-end visual experience.
 
 ## 🚀 Key Features
 
-- **Ambient Glow Engine**: A dynamic UI system that synchronizes the background atmosphere with the character's visual identity.
-- **Status-Aware Theming**: Distinct visual processing for active vs. deceased characters (grain effects, grayscale filters, and specific UI badges).
-- **Modular Architecture**: Built with **Vue 3** and **Vite**, featuring a clean separation between core logic, UI components, and character data.
-- **Responsive & Performance-First**: Optimized for all viewports with a focus on fluid transitions and minimal load times.
+- **Genealogy Hub**: A centralized portal to explore characters through their relationships and lineages.
+- **Reactive Atmosphere Engine**: A dynamic UI system built on **Tailwind CSS v4** that synchronizes the entire site's atmosphere with the character's visual identity using CSS variables.
+- **Status-Aware Theming**: Automatic visual processing for **Missing** or **Deceased** characters, featuring grayscale filters, red-alert themes, and atmospheric noise overlays.
+- **Premium Aesthetics**: Focused on high-end typography (Outfit, JetBrains Mono), smooth transitions, and game-inspired UI elements.
+- **Template-Driven Architecture**: Easily add new characters by following the standardized documentation and automated data indexing.
 
 ## 🛠️ Tech Stack
 
 - **Framework**: Vue.js 3 (Composition API)
-- **Build Tool**: Vite
-- **Styling**: Tailwind CSS 4 + Custom CSS Variables
-- **State Management**: Global Reactive Store (Modular)
+- **Build Tool**: Vite 8
+- **Styling**: Tailwind CSS v4 (Full Utility-First)
+- **Typings**: TypeScript (Strict Mode)
+- **Deployment**: Optimized for GitHub Pages
 
 ## 📦 Getting Started
-
-### Prerequisites
-- Node.js (v20 or higher)
-- npm or yarn
 
 ### Installation
 
@@ -52,14 +47,18 @@
 
 ## 📖 Adding Characters
 
-To expand the archive, simply update the centralized data store:
+RPStories is designed to be easily extensible. To add a new character:
 
-1. Navigate to `src/data/characters.js`.
-2. Append a new character object following the established schema.
-3. Assets should be placed in `public/assets/your_character_id/`.
-4. The engine will automatically handle color generation, routing, and rendering.
+1. **Copy the Template**: Use `src/data/characters/_template.ts.example` as a starting point.
+2. **Rename & Fill**: Rename it to `your_character_id.ts` and fill in the lore, skills, and photos.
+3. **Automatic Indexing**: The engine automatically detects and adds the new character to the Hub.
+4. **Assets**: Place images in `public/assets/your_character_id/`.
 
 ---
+
+## 🤝 Contributing
+
+We believe every story matters! Whether you want to improve the UI, add a new feature, or fix a bug, all contributions are welcome. See our [CONTRIBUTING.md](CONTRIBUTING.md) for more details.
 
 ## ⭐ Support
 
