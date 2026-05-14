@@ -72,11 +72,27 @@ const stopCycle = () => {
         />
         
         <!-- Badges -->
-        <div class="absolute top-4 left-4 z-20 flex flex-col gap-2">
+        <div class="absolute inset-x-4 top-4 z-20 flex justify-between items-start">
+          <!-- Status Badge -->
           <div class="bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/10 flex items-center gap-2">
             <span class="size-1.5 rounded-full" :class="char.cover.status === 'alive' ? 'bg-positive animate-pulse' : 'bg-dead'"></span>
             <span class="font-mono text-[9px] text-white tracking-widest uppercase font-bold">{{ char.cover.status }}</span>
           </div>
+
+          <!-- Server Logo Link -->
+          <a 
+            v-if="char.cover.serverDomain && char.cover.serverDomain !== 'nom-du-serveur.fr'"
+            :href="`https://${char.cover.serverDomain}`" 
+            target="_blank" 
+            class="size-8 bg-black/60 backdrop-blur-md rounded-full border border-white/10 p-1.5 hover:bg-accent/20 hover:border-accent/50 transition-all group/logo"
+            @click.stop
+          >
+            <img 
+              :src="`https://www.google.com/s2/favicons?domain=${char.cover.serverDomain}&sz=64`" 
+              class="w-full h-full object-contain filter grayscale group-hover/logo:grayscale-0 transition-all"
+              :alt="char.cover.serverDomain"
+            />
+          </a>
         </div>
       </div>
 

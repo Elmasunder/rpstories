@@ -61,11 +61,11 @@ watch(char, updateAtmosphere)
 </script>
 
 <template>
-  <div v-if="char" class="relative min-h-screen bg-bg text-white">
+  <div v-if="char" class="relative min-h-screen text-white">
     <TheNavbar />
 
     <!-- SECTION 1 : COVER -->
-    <header class="relative h-screen flex flex-col justify-end overflow-hidden">
+    <header class="relative z-10 h-screen flex flex-col justify-end overflow-hidden">
       <!-- Background & Photos -->
       <div class="absolute inset-0 z-0">
         <div class="absolute inset-0 bg-gradient-to-t from-bg via-bg/70 to-transparent z-10"></div>
@@ -89,12 +89,56 @@ watch(char, updateAtmosphere)
           <span class="text-accent">{{ char.cover.lastName }}</span>
         </h1>
 
-        <!-- Codename Badge -->
-        <div class="mt-6 flex items-center gap-4 animate-fade-in delay-200">
-          <div class="px-2 py-0.5 bg-accent text-bg font-black text-[10px] uppercase tracking-widest">Codename</div>
-          <div class="font-display font-black text-2xl lg:text-3xl text-white uppercase tracking-tighter italic">
-            "{{ char.cover.alias }}"
+        <!-- Codename & Server Badge -->
+        <div class="mt-6 flex items-center gap-6 animate-fade-in delay-200">
+          <div class="flex items-center gap-4">
+            <div class="px-2 py-0.5 bg-accent text-bg font-black text-[10px] uppercase tracking-widest">Codename</div>
+            <div class="font-display font-black text-2xl lg:text-3xl text-white uppercase tracking-tighter italic">
+              "{{ char.cover.alias }}"
+            </div>
           </div>
+
+          <div v-if="char.cover.serverDomain && char.cover.serverDomain !== 'nom-du-serveur.fr'" class="h-8 w-px bg-white/10 mx-2"></div>
+
+          <!-- Server Link -->
+          <a 
+            v-if="char.cover.serverDomain && char.cover.serverDomain !== 'nom-du-serveur.fr'"
+            :href="`https://${char.cover.serverDomain}`" 
+            target="_blank" 
+            class="flex items-center gap-3 group/server"
+          >
+            <div class="size-8 bg-white/5 backdrop-blur-md rounded-lg border border-white/10 p-1.5 group-hover/server:border-accent/50 group-hover/server:bg-accent/10 transition-all">
+              <img 
+                :src="`https://www.google.com/s2/favicons?domain=${char.cover.serverDomain}&sz=64`" 
+                class="w-full h-full object-contain filter grayscale group-hover/server:grayscale-0 transition-all"
+                :alt="char.cover.serverDomain"
+              />
+            </div>
+            <div class="flex flex-col">
+              <span class="font-mono text-[9px] text-muted uppercase tracking-[2px]">Portal</span>
+              <span class="font-mono text-[10px] text-white/80 group-hover/server:text-accent transition-colors">{{ char.cover.serverDomain }}</span>
+            </div>
+          </a>
+
+          <!-- Discord Link (Optional) -->
+          <a 
+            v-if="char.cover.discordUrl"
+            :href="char.cover.discordUrl" 
+            target="_blank" 
+            class="flex items-center gap-3 group/discord"
+          >
+            <div class="size-8 bg-white/5 backdrop-blur-md rounded-lg border border-white/10 flex items-center justify-center group-hover/discord:border-[#5865F2]/50 group-hover/discord:bg-[#5865F2]/10 transition-all">
+              <svg viewBox="0 0 24 24" class="size-5 fill-white/60 group-hover/discord:fill-[#5865F2] transition-all">
+                <g transform="scale(0.9)" transform-origin="center">
+                  <path d="M19.27 4.51a19.93 19.93 0 00-4.83-1.51.07.07 0 00-.07.03 12.63 12.63 0 00-.56 1.15 18.33 18.33 0 00-5.63 0 12.63 12.63 0 00-.56-1.15.07.07 0 00-.07-.03 19.93 19.93 0 00-4.83 1.51.07.07 0 00-.03.03C-.24 10.09-.67 15.42.5 18.06a.07.07 0 00.03.05 19.9 19.9 0 005.98 3.03.07.07 0 00.08-.03c.46-.63.87-1.3 1.22-2a.07.07 0 00-.04-.1 13.11 13.11 0 01-1.87-.89.07.07 0 01-.01-.12c.12-.09.25-.19.37-.29a.07.07 0 01.07-.01 16.52 16.52 0 0011.29 0 .07.07 0 01.07.01c.12.1.25.2.37.29a.07.07 0 01-.01.12 13.11 13.11 0 01-1.87.89.07.07 0 00-.04.1c.36.7.76 1.37 1.22 2a.07.07 0 00.08.03 19.9 19.9 0 005.98-3.03.07.07 0 00.03-.05c1.4-4.54.3-9.87-2.3-13.52a.07.07 0 00-.03-.03zM8.02 15.33c-1.18 0-2.15-1.08-2.15-2.42s.97-2.42 2.15-2.42 2.15 1.08 2.15 2.42-.97 2.42-2.15 2.42zm7.97 0c-1.18 0-2.15-1.08-2.15-2.42s.97-2.42 2.15-2.42 2.15 1.08 2.15 2.42-.97 2.42-2.15 2.42z"/>
+                </g>
+              </svg>
+            </div>
+            <div class="flex flex-col">
+              <span class="font-mono text-[9px] text-muted uppercase tracking-[2px]">Community</span>
+              <span class="font-mono text-[10px] text-white/80 group-hover/discord:text-[#5865F2] transition-colors">Join Discord</span>
+            </div>
+          </a>
         </div>
         
         <div v-if="char.cover.status === 'dead'" class="mt-6 inline-block bg-dead text-white px-4 py-1.5 font-mono text-xs font-bold tracking-widest uppercase rounded">
@@ -129,7 +173,7 @@ watch(char, updateAtmosphere)
       </div>
     </header>
 
-    <main class="max-w-[1080px] mx-auto px-8 md:px-12">
+    <main class="relative z-10 max-w-[1080px] mx-auto px-8 md:px-12">
       <!-- CHAPITRE I : IDENTITÉ -->
       <section id="identite" class="py-10 scroll-mt-24 pt-14">
         <ChapterHeader :char="{ label: char.chapter1.label, titleLines: char.chapter1.titleLines }" />
@@ -187,9 +231,9 @@ watch(char, updateAtmosphere)
             <div class="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-accent to-accent-alt opacity-80"></div>
 
             <aside v-if="char.chapter2.photo" class="lg:float-right lg:ml-8 lg:mb-6 w-full lg:w-[280px] mb-6">
-              <figure class="border border-border rounded-lg overflow-hidden h-[360px] relative noise-overlay shadow-2xl">
+              <figure class="border border-border rounded-xl overflow-hidden h-[360px] relative noise-overlay shadow-2xl">
                 <img :src="fixPath(char.chapter2.photo.url)" class="w-full h-full object-cover saturate-[0.6] contrast-125 brightness-75 transition-all duration-700 group-hover:opacity-100 transition-all duration-700" :alt="char.chapter2.photo.alt" @error="handleImgError">
-                <figcaption class="absolute bottom-0 left-0 right-0 bg-black/80 backdrop-blur-sm p-3 font-mono text-[10px] text-muted uppercase border-t border-white/10">{{ char.chapter2.photo.caption }}</figcaption>
+                <figcaption class="absolute bottom-0 left-0 right-0 bg-black/80 backdrop-blur-sm p-3 font-mono text-[10px] text-muted uppercase border-t border-white/10 rounded-b-xl">{{ char.chapter2.photo.caption }}</figcaption>
               </figure>
             </aside>
             <div class="prose prose-invert max-w-none font-display text-[15px] leading-relaxed text-white/80 space-y-4">
@@ -210,9 +254,9 @@ watch(char, updateAtmosphere)
             <div class="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-accent to-accent-alt opacity-80"></div>
 
             <aside v-if="char.chapter3.photo" class="lg:float-right lg:ml-8 lg:mb-6 w-full lg:w-[280px] mb-6">
-              <figure class="border border-border rounded-lg overflow-hidden h-[360px] relative noise-overlay shadow-2xl">
+              <figure class="border border-border rounded-xl overflow-hidden h-[360px] relative noise-overlay shadow-2xl">
                 <img :src="fixPath(char.chapter3.photo.url)" class="w-full h-full object-cover saturate-[0.6] contrast-125 brightness-75 transition-all duration-700 group-hover:opacity-100 transition-all duration-700" :alt="char.chapter3.photo.alt" @error="handleImgError">
-                <figcaption class="absolute bottom-0 left-0 right-0 bg-black/80 backdrop-blur-sm p-3 font-mono text-[10px] text-muted uppercase border-t border-white/10">{{ char.chapter3.photo.caption }}</figcaption>
+                <figcaption class="absolute bottom-0 left-0 right-0 bg-black/80 backdrop-blur-sm p-3 font-mono text-[10px] text-muted uppercase border-t border-white/10 rounded-b-xl">{{ char.chapter3.photo.caption }}</figcaption>
               </figure>
             </aside>
             <div class="prose prose-invert max-w-none font-display text-[15px] leading-relaxed text-white/80 space-y-4">
@@ -234,9 +278,9 @@ watch(char, updateAtmosphere)
           <div class="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-accent to-accent-alt opacity-80"></div>
 
           <aside v-if="char.chapter4.photo" class="lg:float-right lg:ml-8 lg:mb-6 w-full lg:w-[280px] mb-6">
-            <figure class="border border-border rounded-lg overflow-hidden h-[360px] relative noise-overlay shadow-2xl">
+            <figure class="border border-border rounded-xl overflow-hidden h-[360px] relative noise-overlay shadow-2xl">
               <img :src="fixPath(char.chapter4.photo.url)" class="w-full h-full object-cover saturate-[0.6] contrast-125 brightness-75 transition-all duration-700 group-hover:opacity-100 transition-all duration-700" :alt="char.chapter4.photo.alt" @error="handleImgError">
-              <figcaption class="absolute bottom-0 left-0 right-0 bg-black/80 backdrop-blur-sm p-3 font-mono text-[10px] text-muted uppercase border-t border-white/10">{{ char.chapter4.photo.caption }}</figcaption>
+              <figcaption class="absolute bottom-0 left-0 right-0 bg-black/80 backdrop-blur-sm p-3 font-mono text-[10px] text-muted uppercase border-t border-white/10 rounded-b-xl">{{ char.chapter4.photo.caption }}</figcaption>
             </figure>
           </aside>
           <div class="prose prose-invert max-w-none font-display text-[15px] leading-relaxed text-white/80">

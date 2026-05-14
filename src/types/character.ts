@@ -17,6 +17,7 @@ export interface CharacterCover {
   meta: MetaItem[];
   ref: string;
   photos: string[];
+  discordUrl?: string; // Optionnel : Lien vers le Discord du serveur
 }
 
 export interface IdentityPanelItem {

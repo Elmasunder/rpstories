@@ -19,7 +19,8 @@ export const template_character: Character = {
     // --- SECTION COVER (Entête de la fiche) ---
     cover: {
       status: 'alive', // 'alive' (thème couleur) ou 'dead' (thème rouge/sombre)
-      serverDomain: 'nom-du-serveur.fr', // Utilisé pour le favicon
+      serverDomain: 'nom-du-serveur.fr', // Utilisé pour le logo et le lien portail
+      discordUrl: 'https://discord.gg/votre-lien', // Optionnel : Lien vers le Discord
       eyebrow: '// DOSSIER RP #26XX0000 // Los Santos //',
       firstName: 'PRÉNOM',
       lastName: 'NOM',
