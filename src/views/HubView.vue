@@ -4,6 +4,7 @@ import { characters } from '@/data/index.ts'
 import { getCharColors } from '@/utils/colors.ts'
 import { uiState } from '@/store/ui.ts'
 import HubCard from '@/components/HubCard.vue'
+import CreateCard from '@/components/CreateCard.vue'
 
 const charList = computed(() => {
   return Object.values(characters).sort((a, b) => {
@@ -22,7 +23,7 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  uiState.resetColors()
+  // On ne réinitialise plus ici pour éviter le flash violet pendant la transition vers une fiche
 })
 </script>
 
@@ -71,7 +72,7 @@ onUnmounted(() => {
           <br />
           <br />
           <span class="font-bold text-[10px] tracking-[8px] text-white"
-            >COMPATIBLE FIVEM & REDM</span
+            >COMPATIBLE <span :style="{ color: hubColors.accent }">FIVEM</span> & <span :style="{ color: hubColors.accent }">REDM</span></span
           >
         </p>
       </div>
@@ -80,7 +81,8 @@ onUnmounted(() => {
     <!-- Main Grid -->
     <main class="relative z-10 max-w-[1400px] mx-auto px-8 pb-32">
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-        <HubCard v-for="char in charList" :key="char.id" :char="char" />
+        <HubCard v-for="(char, idx) in charList" :key="char.id" :char="char" :index="idx" />
+        <CreateCard @create="console.log('Action: Créer un personnage')" />
       </div>
     </main>
 

@@ -26,9 +26,9 @@ export const amari_davis: Character = {
     ref: 'DOSSIER REF: AMR-24-LS<br>STATUT: ACTIF · EN SERVICE<br>USAGE: ROLEPLAY EXCLUSIF',
     // Bandeau de 3 photos en haut de fiche
     photos: [
-      'assets/amari_davis/amari5.webp',
-      'assets/amari_davis/amari4.webp',
       'assets/amari_davis/amari1.webp',
+      'assets/amari_davis/amari2.webp',
+      'assets/amari_davis/amari3.webp',
     ],
   },
 
@@ -124,7 +124,7 @@ export const amari_davis: Character = {
     label: 'Aptitudes',
     titleLines: ['Spécialités &', 'compétences', 'text-accent'],
     photo: {
-      url: 'assets/amari_davis/amari4.webp',
+      url: 'assets/amari_davis/amari2.webp',
       alt: 'Sanchez',
       caption: '// Sanchez custom — dernier modèle',
     },

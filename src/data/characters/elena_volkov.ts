@@ -1,28 +1,33 @@
 import type { Character } from '@/types/character'
 
 export const elena_volkov: Character = {
+  // ID unique utilisé pour l'URL
   id: 'elena_volkov',
+
+  // Titre de l'onglet du navigateur
   pageTitle: 'Dossier RP – Elena Volkov',
 
+  // --- SECTION COVER (Entête de la fiche) ---
   cover: {
-    status: 'disparu',
-    serverDomain: 'gta.world',
-    eyebrow: '// Dossier Classé Confidentiel // Interpol //',
+    status: 'alive',
+    serverDomain: 'glife.fr',
+    discordUrl: 'https://discord.gg/glife',
+    eyebrow: '// DOSSIER RP #26EV0003',
     firstName: 'ELENA',
     lastName: 'VOLKOV',
     alias: 'The Ghost',
-    subtitle: "32 ans — Journaliste d'investigation",
+    subtitle: '28 ans — Vinewood Hills, Los Santos',
     destination: 'Los Santos',
 
     meta: [
-      { key: 'Âge', value: '32' },
+      { key: 'Âge', value: '28' },
       { key: 'Taille', value: '172 cm' },
-      { key: 'Poids', value: '62 kg' },
+      { key: 'Poids', value: '58 kg' },
       { key: 'Origines', value: 'Russe' },
-      { key: 'Véhicule', value: 'Albany Prima — Noir Mat' },
+      { key: 'Véhicule', value: 'Neon — Blanc Nacré' },
     ],
 
-    ref: 'DOSSIER REF: EV-332-LS<br>STATUT: DISPARUE<br>USAGE: INVESTIGATION PRIORITAIRE',
+    ref: 'DOSSIER REF: 26-EV-03<br>STATUT: ACTIF<br>USAGE: ROLEPLAY EXCLUSIF',
 
     photos: [
       'assets/elena_volkov/elena1.webp',
@@ -31,6 +36,7 @@ export const elena_volkov: Character = {
     ],
   },
 
+  // --- CHAPITRE I : IDENTITÉ & PROFIL ---
   chapter1: {
     label: 'Présentation du personnage',
     titleLines: ['Profil &', 'Identité'],
@@ -41,173 +47,156 @@ export const elena_volkov: Character = {
         { key: 'Nom', value: 'Volkov' },
         { key: 'Prénom', value: 'Elena' },
         { key: 'Surnom', value: '"The Ghost"', class: 'text-accent' },
-        { key: 'Date de naissance', value: '22 / 09 / 1994' },
-        { key: 'Lieu de naissance', value: 'Saint-Pétersbourg, Russie' },
-        { key: 'Ville actuelle', value: 'Los Santos (Disparue)', class: 'text-accent-alt' },
+        { key: 'Date de naissance', value: '15 / 05 / 1996' },
+        { key: 'Lieu de naissance', value: 'Saint-Pétersbourg' },
+        { key: 'Ville actuelle', value: 'Los Santos' },
         { key: 'Origine(s)', value: 'Russe' },
         { key: 'Taille', value: '172 cm' },
-        { key: 'Poids', value: '62 kg' },
+        { key: 'Poids', value: '58 kg' },
       ],
       // Panneau de droite (Lore & Passé)
       [
-        {
-          key: 'Signe particulier',
-          value: "Cicatrice fine à l'arcade gauche",
-          class: 'text-accent',
-        },
-        { key: 'Père', value: 'Sergueï Volkov (Décédé, 2012)', class: 'text-dead' },
-        { key: 'Mère', value: 'Natalia Volkov', class: 'text-accent-alt' },
-        { key: 'Famille proche', value: 'Aucune (Exilée)' },
-        { key: 'Passé', value: 'Journaliste de guerre · Infiltration' },
-        { key: 'Passion(s)', value: 'Cryptographie & Échecs Blitz' },
-        { key: 'Véhicule', value: 'Albany Prima — Noir Mat', class: 'text-accent' },
-        { key: 'Spécialité', value: 'Infiltration / Recherche OSINT', class: 'text-accent' },
+        { key: 'Signe particulier', value: 'Tatouage discret nuque' },
+        { key: 'Père', value: 'Yuri Volkov (Inconnu)' },
+        { key: 'Mère', value: 'Svetlana Volkov (Inconnu)' },
+        { key: 'Famille proche', value: 'Aucune' },
+        { key: 'Passé', value: 'Ex-Analyste de données' },
+        { key: 'Passion(s)', value: 'Échecs & Cyber-sécurité' },
+        { key: 'Véhicule', value: 'Neon', class: 'text-accent' },
+        { key: 'Spécialité', value: 'Infiltration Numérique', class: 'text-accent' },
       ],
     ],
 
     profile: {
-      qualités: ['Persévérante', 'Analytique', 'Polyglotte', 'Discrète', 'Obsessive', 'Intuitive'],
-      défauts: [
-        'Méfiance paranoïaque',
-        'Prise de risque excessive',
-        'Froideur',
-        'Insomniaque',
-        'Perfectionniste',
-        'Solitaire',
-      ],
+      qualités: ['Analytique', 'Silencieuse', 'Perfectionniste', 'Réactive'],
+      défauts: ['Froide', 'Manipulatrice', 'Insomniaque', 'Méfiance extrême'],
     },
 
     infoPlus: {
-      icon: '🕵️‍♀️',
-      title: 'Dernier article non publié',
-      text: 'Une enquête intitulée "Les Ombres du Port". Elle y mentionne des visages connus de la police de Los Santos et des transactions illégales impliquant des personnalités influentes.',
+      icon: '👻',
+      title: 'Le Spectre de la Toile',
+      text: "Elena n'utilise jamais son vrai nom sur le réseau. Elle laisse derrière elle une signature numérique unique : un cavalier d'échecs blanc.",
     },
   },
 
+  // --- CHAPITRE II : HISTOIRE (Origines) ---
   chapter2: {
-    label: 'Chapitre II',
-    titleLines: ['Les', 'Origines'],
+    label: 'Histoire',
+    titleLines: ['Les', 'origines', 'text-accent-alt'],
     photo: {
       url: 'assets/elena_volkov/elena2.webp',
-      alt: 'Elena à Saint-Pétersbourg',
-      caption: '// Archives – Saint-Pétersbourg, Russie',
+      alt: 'Saint-Pétersbourg',
+      caption: '// Saint-Pétersbourg — Hiver 2005',
     },
     story1: [
-      "Elena est arrivée à Los Santos avec un seul objectif : faire tomber les masques. Connue à Moscou pour avoir dénoncé des oligarques, elle pensait être à l'abri sous le soleil de San Andreas. Elle se trompait.",
-      "Ses premiers mois ont été consacrés à l'observation. Elle ne fréquentait aucun club, ne parlait à personne, sauf pour poser des questions dérangeantes sur le trafic d'armes au port.",
+      "Elena est née dans le froid de Saint-Pétersbourg. Fille d'un ingénieur en informatique et d'une musicienne, elle a très vite montré des capacités cognitives hors normes, notamment pour les mathématiques et la logique pure.",
+      "À 16 ans, elle a hacké les serveurs de son université pour le plaisir, attirant l'attention de groupes peu recommandables qui ont vu en elle un atout stratégique pour l'espionnage industriel.",
     ],
     story2: [
-      "Le soir de sa disparition, elle avait rendez-vous avec un informateur anonyme. Les caméras de surveillance montrent sa voiture quittant son garage à 23h12. Elle n'est jamais revenue.",
+      "Après avoir travaillé quelques années pour des intérêts privés en Europe, elle a décidé de disparaître pour échapper à un contrat qui tournait mal. Elle a effacé sa propre existence des registres civils russes avant de s'envoler pour San Andreas.",
     ],
-    quote: '"La vérité est une arme que peu de gens savent manier sans se blesser."',
-    callout: '// Signalée pour la dernière fois près des docks de Los Santos le 12 Avril 2026 //',
+    quote: "\"La meilleure façon de garder un secret, c'est d'oublier qu'il existe.\"",
+    callout: '// ARCHIVE N°404 — Identité purgée //',
   },
 
+  // --- CHAPITRE III : HISTOIRE (Vie Adulte) ---
   chapter3: {
-    label: 'Chapitre III',
-    titleLines: ['Traces &', 'Hypothèses'],
+    label: 'Histoire',
+    titleLines: ['La vie', "d'adulte", 'text-accent'],
     photo: {
       url: 'assets/elena_volkov/elena3.webp',
-      alt: "Appartement d'Elena",
-      caption: '// Little Seoul – Scène de crime',
+      alt: 'Los Santos Skyline',
+      caption: '// Los Santos — Première nuit',
     },
     story1: [
-      "Plusieurs témoins affirment avoir vu une femme correspondant à son signalement dans le désert de Blaine County, près de Grapeseed. Un gérant de station-service aurait vu une femme blonde avec une cicatrice à l'arcade gauche monter dans un van noir non immatriculé. Le FBI suit la piste d'un enlèvement par une cellule politique étrangère, mais les preuves restent floues.",
-      'Pour ses confrères du Daily Globe, elle est "partie trop loin" dans son enquête sur les circuits de blanchiment d\'argent. Mais pour ceux qui la connaissaient vraiment, Elena ne s\'arrêterait jamais de son plein gré. Elle était sur le point de livrer un nom, LE nom qui aurait tout fait basculer à Los Santos.',
+      "Arrivée à Los Santos avec seulement une clé USB et un faux passeport, Elena a commencé par le bas de l'échelle. Elle s'est installée dans un petit appartement à Mirror Park, travaillant comme consultante en sécurité free-lance pour des petites entreprises locales.",
+      'Mais sa nature l\'a vite rattrapée. En quelques mois, elle a infiltré les réseaux les plus sécurisés de la ville, se faisant un nom dans le milieu criminel sous le pseudonyme "The Ghost".',
     ],
     story2: [
-      "Le rapport de police mentionne une odeur de désinfectant industriel dans son appartement, suggérant un nettoyage méticuleux après sa disparition. Aucun signe de lutte, aucune trace de sang. C'est le travail de professionnels. Soit Elena a été extraite de force, soit elle a activé son protocole de disparition d'urgence, un plan qu'elle gardait prêt depuis des années.",
+      "Elle est aujourd'hui une ressource inestimable pour quiconque a besoin d'informations confidentielles ou d'un accès privilégié à des systèmes restreints. Elle ne prend jamais part à la violence directe, préférant la subtilité d'un code bien écrit.",
     ],
-    quote: '"Si je disparais, ne cherchez pas mon corps. Cherchez mes fichiers."',
+    quote: '"Le monde est une base de données. Il suffit de trouver la clé primaire."',
   },
 
+  // --- CHAPITRE IV : APTITUDES ---
   chapter4: {
-    label: 'Chapitre IV',
-    titleLines: ['Expertise &', 'Compétences'],
+    label: 'Aptitudes',
+    titleLines: ['Spécialités &', 'compétences', 'text-accent'],
     photo: {
       url: 'assets/elena_volkov/elena1.webp',
-      alt: 'Elena en intervention',
-      caption: '// Photo prise par un collaborateur anonyme',
+      alt: 'Hacker station',
+      caption: '// Station de travail cryptée',
     },
     story1: [
-      "Elena n'est pas qu'une simple journaliste. Formée à Saint-Pétersbourg dans les cercles de l'OSINT (Open Source Intelligence), elle est une experte en recueil d'informations et en protection de données. Elle sait disparaître quand il le faut et réapparaître là où on l'attend le moins.",
-      "Sa méthodologie repose sur une infiltration lente et une analyse quasi-chirurgicale des métadonnées. Elle est capable de remonter un réseau financier complexe à partir d'une simple photo floue prise sur un quai de déchargement.",
-    ],
-    story2: [
-      "Sur le terrain, Elena privilégie la discrétion absolue. Elle utilise des outils de cryptographie de niveau militaire pour protéger ses sources. Ses collaborateurs disent d'elle qu'elle possède une \"mémoire photographique\" pour les visages et les numéros de plaque, une compétence qui l'a sauvée plus d'une fois lors de ses enquêtes dans les zones de conflit.",
+      "Elena Volkov est une prédatrice numérique dont l'expertise dépasse largement le simple piratage de serveurs. Elle opère principalement dans les zones d'ombre de l'OSINT (Open Source Intelligence), capable de corréler des milliers de données fragmentaires pour reconstituer la vie entière d'une cible avec une précision chirurgicale. Son approche est celle d'une architecte : elle n'attaque pas les systèmes de front, elle en identifie les failles structurelles et les exploite avec une discrétion absolue, ne laissant derrière elle que des journaux de connexion vides ou des signatures cryptées indéchiffrables.",
+      "Sa véritable force réside toutefois dans l'ingénierie sociale. Dotée d'un calme olympien et d'une capacité d'analyse comportementale hors du commun, elle sait manipuler les flux d'information et les individus pour obtenir les accès dont elle a besoin. Qu'il s'agisse de bypasser une sécurité biométrique ou d'infiltrer une infrastructure réseau critique, Elena traite chaque mission comme une partie d'échecs complexe où elle a déjà anticipé les dix prochains coups de son adversaire. Pour elle, le code n'est qu'un langage, et le monde, une base de données qu'elle a appris à réécrire à sa guise.",
     ],
 
     skillsGroups: [
       {
-        title: '// INVESTIGATION',
+        title: '// Aptitudes sociales',
         skills: [
-          { name: 'Infiltration', percent: 85 },
-          { name: 'Cryptographie', percent: 70 },
-          { name: 'Recherche OSINT', percent: 95 },
-          { name: 'Analyse de données', percent: 90 },
-          { name: "Photographie d'espionnage", percent: 75 },
-          { name: 'Social Engineering', percent: 80 },
+          { name: 'Ingénierie Sociale', percent: 92 },
+          { name: 'Persuasion & Charisme', percent: 78 },
+          { name: 'Observation & Détection', percent: 85 },
+          { name: 'Sang-froid (Under Pressure)', percent: 88 },
+          { name: 'Discrétion Comportementale', percent: 90 },
         ],
       },
       {
-        title: '// SURVIE & TERRAIN',
+        title: '// Expertise technique',
         skills: [
-          { name: 'Discrétion', percent: 90 },
-          { name: 'Contre-filature', percent: 95 },
-          { name: 'Conduite évasive', percent: 60 },
-          { name: 'Résistance au stress', percent: 85 },
-          { name: 'Self-Défense', percent: 45 },
-          { name: 'Premiers soins', percent: 40 },
+          { name: 'Piratage de Systèmes', percent: 96 },
+          { name: 'OSINT & Renseignement', percent: 94 },
+          { name: 'Cryptographie Avancée', percent: 82 },
+          { name: 'Maintenance Réseau', percent: 75 },
+          { name: 'Électronique de Terrain', percent: 80 },
         ],
       },
     ],
-    callout: '// Expertise reconnue par ses pairs – Niveau : Consultant Expert //',
+    callout: '// Spécialisation : Ghosting & Extraction de données //',
   },
 
+  // --- CHAPITRE V : ENTOURAGE ---
+  chapter5: {
+    label: 'Entourage',
+    titleLines: ['Relations &', 'proches'],
+  },
+
+  family: [
+    { id: 'amari_davis', name: 'Amari Davis', relation: 'Associé', status: 'alive' },
+    { id: 'larry_pils', name: 'Larry Pils', relation: 'Contact Technique', status: 'alive' },
+    { name: '"The Bishop"', relation: 'Mentor (Dark Web)', status: 'unknown' },
+  ],
+
+  // --- CHAPITRE VI : LE FUTUR ---
   chapter6: {
-    label: 'Épilogue',
-    titleLines: ['Objectifs &', 'Futur'],
+    label: 'Le futur',
+    titleLines: ['Algorithmes &', 'Destin', 'text-accent'],
 
     objectives: {
       shortTerm: [
-        "Identifier l'informateur du port",
-        "Sécuriser les copies de sauvegarde de l'enquête",
-        'Effacer ses traces numériques récentes',
-        'Trouver une planque hors de la ville',
-        'Contacter son avocat à Londres',
-        "Récupérer son matériel à l'aéroport",
+        'Sécuriser sa position à Vinewood',
+        'Améliorer son serveur proxy',
+        'Recruter un homme de main',
       ],
       mediumTerm: [
-        'Exposer le réseau de corruption au grand jour',
-        'Obtenir un asile politique définitif',
-        "Renouer contact avec ses sources à l'Est",
-        "Changer d'identité officiellement",
-        'Infiltrer le conseil municipal',
-        'Démanteler les opérations des docks',
+        'Infiltrer le FIB local',
+        'Lancer sa propre plateforme chiffrée',
+        'Acheter une villa sécurisée',
       ],
       longTerm: [
-        'Démanteler les opérations du cartel à Los Santos',
-        'Retrouver une vie anonyme et paisible',
-        'Écrire un livre sur son passage à Los Santos',
-        'Disparaître définitivement des radars',
-        'Assurer la protection de sa mère Natalia',
-        'Faire tomber le maire de Los Santos',
+        'Devenir la reine du Dark Web de LS',
+        'Prendre le contrôle des données de la ville',
+        'Disparaître définitivement',
       ],
     },
 
     finaleStory: [
-      "Si ce dossier est ouvert, c'est que ma couverture a sauté ou que je ne suis plus en mesure de répondre. Ne cherchez pas de coupables, cherchez les preuves que j'ai cachées sous le pont de Cedar Creek.",
-      "Tout ce que j'ai fait, je l'ai fait pour que Los Santos ne soit plus ce théâtre d'ombres.",
+      "Elena ne voit pas Los Santos comme une ville, mais comme un flux constant de données. Tant qu'elle sera aux commandes du flux, elle sera en sécurité. La partie d'échecs ne fait que commencer.",
     ],
-    finaleQuote:
-      '"La vérité finit toujours par refaire surface, peu importe la profondeur à laquelle on l\'enterre."',
+    finaleQuote: '"Échec et mat. Avant même que vous ayez bougé votre premier pion."',
   },
 
-  family: [
-    { name: 'Natalia Volkov', relation: 'Mère', status: 'alive' },
-    { name: 'Sergueï Volkov', relation: 'Père', status: 'dead' },
-    { id: 'larry_pils', name: 'Larry Pils', relation: 'Contact Suspect', status: 'alive' },
-  ],
-
-  footer: 'DOSSIER RP — ELENA VOLKOV · LOS SANTOS · REF: EV-332-LS · STATUT: DISPARUE',
+  footer: 'DOSSIER RP — ELENA VOLKOV · LOS SANTOS · REF: 26-EV-03 · STATUT: ACTIF · v2.1',
 }

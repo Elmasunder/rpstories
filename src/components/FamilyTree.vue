@@ -79,12 +79,12 @@ const getStatusColor = (status: string) => {
             ]"
           >
             <!-- Header Relation -->
-            <div class="flex justify-between items-center mb-4">
-              <span class="font-mono text-[9px] tracking-[3px] uppercase text-accent font-bold">
+            <div class="flex justify-between items-start mb-4 h-8">
+              <span class="font-mono text-[9px] tracking-[3px] uppercase text-accent font-bold leading-tight">
                 {{ member.relation }}
               </span>
               <span
-                class="size-1 rounded-full bg-accent animate-pulse shadow-[0_0_8px_rgba(var(--accent-rgb),1)]"
+                class="size-1 rounded-full bg-accent animate-pulse shadow-[0_0_8px_rgba(var(--accent-rgb),1)] mt-1"
               ></span>
             </div>
 

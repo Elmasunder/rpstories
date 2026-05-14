@@ -16,10 +16,19 @@ const route = useRoute()
 const char = computed(() => characters[route.params.id as string])
 
 const charColors = computed(() => {
-  if (!char.value || char.value.cover.status === 'dead') {
+  if (!char.value || char.value.cover.status === 'dead' || char.value.cover.status === 'disparu') {
     return { accent: '', accent2: '', accentRgb: '', accent2Rgb: '' }
   }
-  return getCharColors(char.value.id)
+  
+  // On récupère l'index de la fiche dans la liste triée pour que la couleur corresponde au Hub
+  const sortedChars = Object.values(characters).sort((a, b) => {
+    if (a.cover.status === 'alive' && b.cover.status !== 'alive') return -1
+    if (a.cover.status !== 'alive' && b.cover.status === 'alive') return 1
+    return 0
+  })
+  
+  const charIndex = sortedChars.findIndex(c => c.id === char.value?.id)
+  return getCharColors(char.value.id, charIndex)
 })
 
 const fixPath = (path: string) => {
@@ -30,7 +39,7 @@ const fixPath = (path: string) => {
 
 const updateAtmosphere = () => {
   if (char.value) {
-    document.title = `${char.value.cover.firstName} ${char.value.cover.lastName} | RP/Stories`
+    document.title = char.value.pageTitle || `${char.value.cover.firstName} ${char.value.cover.lastName} | RP/Stories`
     
     // Application des couleurs via le Store Global
     if (char.value.cover.status === 'dead' || char.value.cover.status === 'disparu') {
@@ -51,8 +60,10 @@ const handleImgError = (event: Event) => {
   if (target) target.style.display = 'none'
 }
 
+// Appel immédiat pour éviter le flash de couleur par défaut
+updateAtmosphere()
+
 onMounted(() => {
-  updateAtmosphere()
   window.scrollTo(0, 0)
 })
 
