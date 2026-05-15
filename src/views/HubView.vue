@@ -5,6 +5,7 @@ import { getCharColors } from '@/utils/colors.ts'
 import { uiState } from '@/store/ui.ts'
 import HubCard from '@/components/HubCard.vue'
 import CreateCard from '@/components/CreateCard.vue'
+import FriendListBtn from '@/components/FriendListBtn.vue'
 
 const charList = computed(() => {
   return Object.values(characters).sort((a, b) => {
@@ -134,6 +135,9 @@ onUnmounted(() => {
         </div>
       </button>
     </Transition>
+
+    <!-- Friend List Button (placeholder) -->
+    <FriendListBtn />
 
     <!-- Footer -->
     <footer class="relative z-10 py-12 border-t border-white/5 bg-black/20">

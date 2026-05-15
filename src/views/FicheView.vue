@@ -11,6 +11,7 @@ import ChapterHeader from '@/components/ChapterHeader.vue'
 import SkillGroup from '@/components/SkillGroup.vue'
 import FamilyTree from '@/components/FamilyTree.vue'
 import TheNavbar from '@/components/TheNavbar.vue'
+import FriendListBtn from '@/components/FriendListBtn.vue'
 
 const route = useRoute()
 const char = computed(() => characters[route.params.id as string])
@@ -348,6 +349,9 @@ watch(char, updateAtmosphere)
     </main>
 
     <footer class="mt-20 py-10 px-8 border-t border-border text-center font-mono text-[10px] text-muted tracking-widest uppercase" v-html="char.footer"></footer>
+
+    <!-- Friend List Button (placeholder) -->
+    <FriendListBtn />
   </div>
 
   <div v-else class="min-h-screen bg-bg flex flex-col items-center justify-center text-center p-10">
