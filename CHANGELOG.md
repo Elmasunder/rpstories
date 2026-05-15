@@ -4,6 +4,27 @@ Ce document répertorie l'ensemble des modifications apportées au projet **RPSt
 
 ---
 
+## [v2.2.1] — Ghost Protocol Polish & UI/UX Enhancements
+
+_15 Mai 2026_
+
+### 🕸️ Networking & Friend List
+- **Modale Interactive** : Évolution du `FriendListBtn.vue` d'un simple placeholder vers un mockup complet et fonctionnel de la Friend List.
+- **UI/UX Cyberpunk** : Panneau flottant avec effet blur, bruit photographique (noise) et adaptation dynamique de la couleur du titre selon le contexte (Hub ou Profil).
+- **Logique de Navigation** : Affichage épuré des contacts (Nom + Codename) avec un bouton "View Hub" au survol.
+- **Fermeture Naturelle** : Mise en place d'un événement `@mouseleave` avec un "pont invisible" pour refermer la modale de façon fluide sans overlay plein écran bloquant.
+
+### 💀 Design System "Ghost Protocol"
+- **Tampon FBI (HubCard)** : Remplacement de la simple pastille de statut par un impressionnant tampon rouge "DECEASED" incliné et texturé, directement apposé sur les photos des profils décédés.
+- **Photographic Noise (FicheView)** : Application d'un effet de grain photographique (noise) global sur le header, dont l'intensité est dramatiquement augmentée (`opacity-20`) pour les personnages décédés afin de renforcer l'aspect dossier usé.
+- **Restructuration du Header** : Le statut critique (DECEASED // CK) s'affiche désormais harmonieusement sur la même ligne (inline) que les métadonnées principales du personnage.
+
+### ✨ Engagement & Conversion
+- **Scroll Hint (FicheView)** : Ajout d'un indicateur interactif engageant ("SCROLL DOWN") en haut à droite du header, guidant l'utilisateur et s'adaptant à la couleur accent de la fiche.
+- **Tunnel Marketing (Family Tree)** : Intégration astucieuse d'un bloc "Invite un Allié" double-largeur (`col-span-2`) au sein de l'arbre généalogique pour encourager la création de compte et l'interconnexion des joueurs.
+
+---
+
 ## [v2.2.0] — Admin ID Standardization, Mobile-First UI & Networking Placeholder
 
 _15 Mai 2026_
