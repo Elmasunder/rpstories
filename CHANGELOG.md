@@ -1,6 +1,60 @@
 # RPStories — Changelog & Évolutions 🚀
 
-Ce document répertorie l'ensemble des modifications apportées au projet **RPStories** (Design System v2.1).
+Ce document répertorie l'ensemble des modifications apportées au projet **RPStories** (Design System v2.2).
+
+---
+
+## [v2.2.0] — Admin ID Standardization, Mobile-First UI & Networking Placeholder
+
+_15 Mai 2026_
+
+### 🆔 Standardisation Administrative
+
+- **Format d'ID AAAA-II-XX** : Adoption d'un standard rigoureux pour tous les identifiants de dossiers.
+  - Amari Davis → `2026-AD-01` · Larry Pils → `2026-LP-02` · Elena Volkov → `2026-EV-03`
+  - Marcus Thorne → `2026-MT-04` · Isabella Sterling → `2026-IS-05`
+- **Cohérence totale** : `eyebrow`, `cover.ref` et `footer` synchronisés sur chaque dossier.
+- **Domaines serveurs mis à jour** : Marcus → `flashland.fr` · Isabella → `nova-city.fr`
+- **Normalisation des photos** : Renommage `izzy1/2/3` → `isabella1/2/3.webp`
+
+### 💀 Lore & Continuité Narrative
+
+- **CK d'Isabella Sterling propagé** : Statut `dead` répercuté dans les réseaux d'entourage de tous les personnages liés (Amari, Elena, Larry, Marcus).
+- **Label Hub** : Passage de `INACTIF / CK` → `DEAD / CK` pour un impact visuel renforcé.
+
+### 📱 Responsive Design (Mobile-First)
+
+- **HubView** : Paddings adaptatifs (`px-4 md:px-8`), grille fluide (`gap-4 md:gap-8`), typographie responsive (`text-4xl sm:text-6xl md:text-8xl lg:text-9xl`).
+- **HubCard & CreateCard** : Hauteur d'image (`h-48 sm:h-64`) et padding (`p-4 sm:p-6`) adaptatifs.
+- **FicheView** : Header (`px-4 sm:px-12`), main (`px-4 sm:px-12`), grille identité (`pl-0 md:pl-8`).
+- **TheNavbar** : Padding responsive, boutons Login/SignUp masqués sur mobile, remplacement par une icône hamburger (`sm:hidden`).
+
+### ⚡ Mobile FAB — Ghost Protocol Edition
+
+- **Floating Action Button** : Bouton "New Archive" exclusif mobile (`sm:hidden`) en style Ghost Protocol.
+- **Intersection Observer** : Masquage automatique du FAB quand la `CreateCard` entre dans le viewport.
+- **Vue Transition** : Animation `fab-fade` (slide + fade) à l'apparition/disparition.
+- **Scan Effect** : Balayage lumineux au toucher (`group-active:animate-scan`).
+
+### 🌐 FriendListBtn — Networking Placeholder
+
+- **Nouveau composant** `FriendListBtn.vue` : Placeholder visuel pour le futur système de friend list (liaison joueurs via Family Tree).
+- **Interaction** : Cercle discret (`size-12`) → pilule expansive (`w-44`) au hover.
+- **Design** : Icône portrait SVG · label "FRIEND LIST" · badge "// soon" flottant.
+- **Visibilité** : Desktop uniquement (`hidden sm:block`) · Mobile via menu hamburger (à venir).
+- **Discrétion** : `opacity-20` au repos, `opacity-100` au hover — ne perturbe pas la lecture des fiches.
+- **Intégré** dans `HubView.vue` et `FicheView.vue`.
+
+### 🔧 Tailwind v4 & Build
+
+- **`@theme` compliance** : `--animate-scan` enregistré dans le bloc `@theme`, `@keyframes scan` déplacé dans `@theme` (convention v4 native).
+- **Vue Transition CSS** : `.fab-fade-enter-active / leave-to` ajoutés dans `@layer utilities`.
+- **`zod` installé** : Dépendance manquante résolue (`npm install zod`).
+
+### 🐛 Correctifs TypeScript
+
+- `character.schema.ts` : Typage explicite `(s: string)` sur les `.transform()` Zod → résolution de `TS7006`.
+- `FriendListBtn.vue` : Suppression de `friendCount` déclaré mais non utilisé → `@todo` conservé en commentaire.
 
 ---
 
@@ -70,4 +124,4 @@ _12 Mai 2026_
 
 ---
 
-_Dernière mise à jour : 14 Mai 2026_ 🏛️✨
+_Dernière mise à jour : 15 Mai 2026_ 🏛️✨

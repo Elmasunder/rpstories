@@ -7,10 +7,8 @@
  * Sur mobile : masqué — sera accessible via le menu hamburger.
  *
  * @todo Implémenter la logique d'ouverture de la friend list
- * @todo Connecter au store utilisateur pour le compteur réel
+ * @todo Connecter au store utilisateur pour le compteur (friendCount)
  */
-
-const friendCount = 0
 </script>
 
 <template>
