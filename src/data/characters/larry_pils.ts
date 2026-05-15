@@ -58,8 +58,22 @@ export const larry_pils: Character = {
       ],
     ],
     profile: {
-      qualités: [`Méthodique`, `Protecteur`, `Froid`, `Technicien hors pair`, `Loyal`, `Pragmatique`],
-      défauts: [`Alcoolique mondain`, `Paranoïaque`, `Violent si provoqué`, `Méfiance maladive`, `Solitaire`, `Rancunier`],
+      qualités: [
+        `Méthodique`,
+        `Protecteur`,
+        `Froid`,
+        `Technicien hors pair`,
+        `Loyal`,
+        `Pragmatique`,
+      ],
+      défauts: [
+        `Alcoolique mondain`,
+        `Paranoïaque`,
+        `Violent si provoqué`,
+        `Méfiance maladive`,
+        `Solitaire`,
+        `Rancunier`,
+      ],
     },
     infoPlus: {
       icon: `🔧`,
@@ -73,7 +87,7 @@ export const larry_pils: Character = {
     label: `Histoire`,
     titleLines: [`Les`, `origines`, `text-accent-alt`],
     photo: {
-      url: `assets/larry_pils/larry2.webp`,
+      url: `assets/larry_pils/larry4.webp`,
       alt: `Liberty City Industrial`,
       caption: `// Liberty City — Les vieux docks`,
     },
@@ -93,7 +107,7 @@ export const larry_pils: Character = {
     label: `Histoire`,
     titleLines: [`La vie`, `d'adulte`, `text-accent`],
     photo: {
-      url: `assets/larry_pils/larry3.webp`,
+      url: `assets/larry_pils/larry5.webp`,
       alt: `Docks de Los Santos`,
       caption: `// Los Santos — Entrepôt 42, Docks`,
     },
@@ -154,19 +168,19 @@ export const larry_pils: Character = {
         `Sécuriser les dernières affaires de Jason à Little Seoul.`,
         `Réparer intégralement le Bison pour les prochaines missions.`,
         `Maintenir le profil bas sur les Docks de Cypress Flats.`,
-        `Recruter un second de confiance pour la gestion de l'entrepôt.`
+        `Recruter un second de confiance pour la gestion de l'entrepôt.`,
       ],
       mediumTerm: [
         `Acquérir l'entrepôt adjacent pour étendre sa capacité de stockage.`,
         `Étendre son réseau logistique jusqu'à Paleto Bay via des relais discrets.`,
         `Identifier les responsables de la trahison de Jason Pils.`,
-        `Devenir le pivot logistique indispensable du syndicat local.`
+        `Devenir le pivot logistique indispensable du syndicat local.`,
       ],
       longTerm: [
         `Construire un héritage Pils qui dure après lui dans l'ombre.`,
         `Prendre sa retraite loin du chaos de Los Santos.`,
         `Ne jamais finir comme son cousin Jay.`,
-        `Laisser une trace indélébile dans les fondations criminelles de la ville.`
+        `Laisser une trace indélébile dans les fondations criminelles de la ville.`,
       ],
     },
     finaleStory: [
@@ -183,9 +197,18 @@ export const larry_pils: Character = {
 
   family: [
     { id: `elena_volkov`, name: `Elena Volkov`, relation: `Partenaire Technique`, status: `alive` },
-    { id: `isabella_sterling`, name: `Isabella Sterling`, relation: `Fournisseur Hardware`, status: `dead` },
-    { id: `amari_davis`, name: `Amari Davis`, relation: `Client / Contact Voie Grise`, status: `alive` },
+    {
+      id: `isabella_sterling`,
+      name: `Isabella Sterling`,
+      relation: `Fournisseur Hardware`,
+      status: `dead`,
+    },
+    {
+      id: `amari_davis`,
+      name: `Amari Davis`,
+      relation: `Client / Contact Voie Grise`,
+      status: `alive`,
+    },
   ],
-  footer:
-    `DOSSIER RP — LARRY PILS · LOS SANTOS · LIBERTY CITY (LC) → LS · 34 ANS · REF: 2026-LP-02<br>Document créé par RPStories — Five M · Personnage fictif · v2.1`,
+  footer: `DOSSIER RP — LARRY PILS · LOS SANTOS · LIBERTY CITY (LC) → LS · 34 ANS · REF: 2026-LP-02<br>Document créé par RPStories — Five M · Personnage fictif · v2.1`,
 }

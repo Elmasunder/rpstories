@@ -1,3 +1,5 @@
+![RPStories Banner](public/assets/docs/rpstories_banner.png)
+
 # RPStories 🏛️✨
 ### The Ultimate Immersive Character Archive for Roleplay Communities
 
@@ -8,14 +10,16 @@
 
 ---
 
-**RPStories** is a state-of-the-art web application designed to host and showcase immersive character dossiers for roleplay environments (FiveM, RedM, etc.). Built with a "story-first" philosophy, it transforms technical data into a refined, high-end visual experience.
+**RPStories** is a state-of-the-art web application designed to host and showcase immersive character dossiers for roleplay environments (FiveM, RedM, etc.). Built with a "story-first" philosophy, it transforms technical data into a refined, high-end visual experience inspired by top-tier classified intelligence databases.
 
 ## 🚀 Key Features
 
-- **Genealogy Hub**: A centralized portal to explore characters through their relationships and lineages.
+- **"Ghost Protocol" UI System**: A highly immersive, responsive interface featuring dynamic blurring, photographic noise overlays, and custom interactive scroll hints.
 - **Reactive Atmosphere Engine**: A dynamic UI system built on **Tailwind CSS v4** that synchronizes the entire site's atmosphere with the character's visual identity using CSS variables.
-- **Status-Aware Theming**: Automatic visual processing for **Missing** or **Deceased** characters, featuring grayscale filters, red-alert themes, and atmospheric noise overlays.
-- **Premium Aesthetics**: Focused on high-end typography (Outfit, JetBrains Mono), smooth transitions, and game-inspired UI elements.
+- **Status-Aware Theming**: Automatic visual processing for **Missing** or **Deceased** characters, featuring heavy visual degradation (intense film grain), red-alert FBI-style stamps, and dramatic grayscale shifts.
+- **Interactive Networking**: A built-in sleek Friend List mockup with fluid hover animations, designed for easy API integration to connect player networks.
+- **Genealogy & Growth Hacking**: Centralized family trees blending lore visualization with integrated marketing prompts to expand your RP community.
+- **Premium Aesthetics**: Focused on high-end typography (Outfit, JetBrains Mono), smooth transitions, custom minimalist scrollbars, and game-inspired UI elements.
 - **Template-Driven Architecture**: Easily add new characters by following the standardized documentation and automated data indexing.
 
 ## 🛠️ Tech Stack
