@@ -8,7 +8,9 @@ const props = defineProps<{
   index?: number
 }>()
 
-const charColors = getCharColors(props.char.id, props.index)
+// On s'assure que les couleurs sont calculées de manière réactive et stable
+const charColors = computed(() => getCharColors(props.char.id, props.index || 0))
+
 const currentImg = ref(0)
 const isDead = computed(() => {
   const status = props.char.cover.status?.toLowerCase()
@@ -21,7 +23,11 @@ const fixPath = (path: string) => {
   return `${import.meta.env.BASE_URL}${cleanPath}`
 }
 
-// Cycle d'images au survol (optionnel si on veut garder du dynamisme)
+const cleanRef = computed(() => {
+  const parts = props.char.cover.ref.split('<br>')
+  return parts[0].replace('DOSSIER REF: ', '')
+})
+
 let cycleInterval: ReturnType<typeof setInterval> | null = null
 const startCycle = () => {
   cycleInterval = setInterval(() => {
@@ -47,13 +53,13 @@ const stopCycle = () => {
       :style="
         !isDead
           ? {
+              '--accent': charColors.accent,
               '--color-accent': charColors.accent,
-              '--color-accent-alt': charColors.accent2,
               '--accent-rgb': charColors.accentRgb,
             }
           : {
+              '--accent': '#e74c3c',
               '--color-accent': '#e74c3c',
-              '--color-accent-alt': '#e74c3c',
               '--accent-rgb': '231, 76, 60',
             }
       "
@@ -64,7 +70,7 @@ const stopCycle = () => {
       @mouseleave="stopCycle"
     >
       <!-- Image Area -->
-      <div class="relative h-64 overflow-hidden noise-overlay">
+      <div class="relative h-48 sm:h-64 overflow-hidden noise-overlay">
         <div
           class="absolute inset-0 z-10 bg-gradient-to-t from-bg via-transparent to-transparent opacity-80"
         ></div>
@@ -84,7 +90,6 @@ const stopCycle = () => {
 
         <!-- Badges -->
         <div class="absolute inset-x-4 top-4 z-20 flex justify-between items-start">
-          <!-- Status Badge -->
           <div
             class="bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/10 flex items-center gap-2"
           >
@@ -97,7 +102,6 @@ const stopCycle = () => {
             }}</span>
           </div>
 
-          <!-- Server Logo Link -->
           <a
             v-if="char.cover.serverDomain && char.cover.serverDomain !== 'nom-du-serveur.fr'"
             :href="`https://${char.cover.serverDomain}`"
@@ -115,7 +119,7 @@ const stopCycle = () => {
       </div>
 
       <!-- Content Area -->
-      <div class="p-6 relative z-20 flex flex-col flex-grow">
+      <div class="p-4 sm:p-6 relative z-20 flex flex-col flex-grow">
         <div class="font-mono text-[9px] text-accent tracking-[3px] uppercase mb-1 opacity-70">
           {{ char.cover.eyebrow }}
         </div>
@@ -125,9 +129,23 @@ const stopCycle = () => {
           {{ char.cover.firstName }} <span class="text-accent">{{ char.cover.lastName }}</span>
         </h3>
 
-        <p class="font-mono text-[11px] text-muted leading-relaxed line-clamp-2 mb-6 h-8">
-          {{ char.cover.subtitle }}
-        </p>
+        <!-- Admin Meta Data -->
+        <div class="space-y-3 mb-6">
+          <div class="flex flex-col gap-0.5">
+            <span class="font-mono text-[8px] text-accent uppercase tracking-[2px] opacity-60">Dossier Reference</span>
+            <span class="font-mono text-[10px] text-white uppercase tracking-wider font-bold leading-relaxed">{{ cleanRef }}</span>
+          </div>
+          <div class="flex flex-col gap-0.5">
+            <span class="font-mono text-[8px] text-accent uppercase tracking-[2px] opacity-60">Statut</span>
+            <span class="font-mono text-[10px] text-white uppercase tracking-wider font-bold">
+              {{ isDead ? 'DEAD / CK' : 'ACTIF · EN SERVICE' }}
+            </span>
+          </div>
+          <div class="flex flex-col gap-0.5">
+            <span class="font-mono text-[8px] text-accent uppercase tracking-[2px] opacity-60">Usage</span>
+            <span class="font-mono text-[10px] text-white uppercase tracking-wider font-bold">ROLEPLAY EXCLUSIF</span>
+          </div>
+        </div>
 
         <div class="mt-auto flex justify-between items-center pt-4 border-t border-white/5">
           <span class="font-mono text-[10px] text-accent font-bold uppercase tracking-widest"

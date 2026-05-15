@@ -31,6 +31,7 @@
   /* ANIMATIONS */
   --animate-fade-in: fade-in 0.8s ease-out;
   --animate-glow: glow 2s infinite alternate;
+  --animate-scan: scan 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 
   /* 2025-2026 PREMIUM TRAMES (Native Tailwind v4) */
   --background-image-dots-premium: radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px);
@@ -45,6 +46,10 @@
   @keyframes glow {
     from { filter: drop-shadow(0 0 2px var(--accent)); }
     to { filter: drop-shadow(0 0 10px var(--accent)); }
+  }
+  @keyframes scan {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(100%); }
   }
 }
 
@@ -129,4 +134,17 @@
     transform: translateY(-10px);
   }
 
+}
+
+/* Vue Transition : FAB Ghost Protocol */
+@layer utilities {
+  .fab-fade-enter-active,
+  .fab-fade-leave-active {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  .fab-fade-enter-from,
+  .fab-fade-leave-to {
+    opacity: 0;
+    transform: translateY(12px) scale(0.95);
+  }
 }

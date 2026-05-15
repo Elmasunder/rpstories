@@ -91,7 +91,7 @@ watch(char, updateAtmosphere)
       </div>
 
       <!-- Content -->
-      <div class="relative z-20 max-w-[1200px] mx-auto w-full px-12 pb-20">
+      <div class="relative z-20 max-w-[1200px] mx-auto w-full px-4 sm:px-12 pb-12 sm:pb-20">
         <div class="font-mono text-xs tracking-[5px] text-accent uppercase mb-3 opacity-80">
           {{ char.cover.eyebrow }}
         </div>
@@ -184,13 +184,13 @@ watch(char, updateAtmosphere)
       </div>
     </header>
 
-    <main class="relative z-10 max-w-[1080px] mx-auto px-8 md:px-12">
+    <main class="relative z-10 max-w-[1080px] mx-auto px-4 sm:px-12">
       <!-- CHAPITRE I : IDENTITÉ -->
       <section id="identite" class="py-10 scroll-mt-24 pt-14">
         <ChapterHeader :char="{ label: char.chapter1.label, titleLines: char.chapter1.titleLines }" />
 
         <!-- Section Identité -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 relative pl-8 overflow-hidden">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 relative pl-0 md:pl-8 overflow-hidden">
           <!-- Gradient Side Strip -->
           <div class="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-accent to-accent-alt opacity-80"></div>
           

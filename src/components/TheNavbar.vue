@@ -49,15 +49,15 @@ const scrollToSection = (id: string) => {
         : 'bg-transparent py-5 border-transparent'
     ]"
   >
-    <div class="max-w-[1400px] mx-auto px-8 flex items-center justify-between">
+    <div class="max-w-[1400px] mx-auto px-4 sm:px-8 flex items-center justify-between">
       <!-- GAUCHE : RETOUR HUB -->
       <div class="flex items-center justify-start flex-1">
         <RouterLink 
           to="/" 
-          class="flex items-center gap-3 font-mono text-[11px] text-white hover:text-accent transition-all group drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]"
+          class="flex items-center gap-2 sm:gap-3 font-mono text-[10px] sm:text-[11px] text-white hover:text-accent transition-all group drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]"
         >
           <span class="opacity-50 group-hover:translate-x-[-4px] transition-transform">←</span>
-          <span class="uppercase tracking-[3px] font-bold">Retour Hub</span>
+          <span class="uppercase tracking-[2px] sm:tracking-[3px] font-bold">Retour Hub</span>
         </RouterLink>
       </div>
 
@@ -74,13 +74,25 @@ const scrollToSection = (id: string) => {
         </button>
       </div>
 
-      <!-- DROITE : AUTH -->
-      <div class="flex items-center gap-8 flex-1 justify-end">
-        <button class="font-mono text-[11px] text-white/80 hover:text-white transition-colors uppercase tracking-[3px] drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]">
-          Login
-        </button>
-        <button class="font-mono text-[10px] bg-white text-black px-6 py-2.5 rounded-sm font-bold uppercase tracking-[2px] border border-transparent hover:border-accent transition-all shadow-[0_0_15px_rgba(255,255,255,0.3)] hover:shadow-[0_0_20px_var(--accent)] active:scale-95">
-          Sign Up
+      <!-- DROITE : AUTH / MOBILE MENU -->
+      <div class="flex items-center flex-1 justify-end">
+        <!-- Desktop Buttons -->
+        <div class="hidden sm:flex items-center gap-4 sm:gap-8">
+          <button class="font-mono text-[11px] text-white/80 hover:text-white transition-colors uppercase tracking-[3px] drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]">
+            Login
+          </button>
+          <button class="font-mono text-[10px] bg-white text-black px-6 py-2.5 rounded-sm font-bold uppercase tracking-[2px] border border-transparent hover:border-accent transition-all shadow-[0_0_15px_rgba(255,255,255,0.3)] hover:shadow-[0_0_20px_var(--accent)] active:scale-95">
+            Sign Up
+          </button>
+        </div>
+
+        <!-- Mobile Hamburger -->
+        <button class="sm:hidden p-2 text-white/60 hover:text-white transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
         </button>
       </div>
     </div>

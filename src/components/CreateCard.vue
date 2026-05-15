@@ -11,7 +11,7 @@
       class="flex flex-col h-full bg-panel border-2 border-dashed border-white/10 rounded-lg overflow-hidden transition-all duration-500 hover:border-accent hover:bg-accent/5 hover:shadow-[0_20px_50px_rgba(0,0,0,0.3),0_0_20px_rgba(var(--accent-rgb),0.2)]"
     >
       <!-- Image Placeholder Area -->
-      <div class="relative h-64 flex items-center justify-center bg-black/20 overflow-hidden">
+      <div class="relative h-48 sm:h-64 flex items-center justify-center bg-black/20 overflow-hidden">
         <!-- Background Patterns -->
         <div class="absolute inset-0 opacity-20 group-hover:opacity-40 transition-opacity">
           <div class="absolute inset-0 bg-dots-premium bg-[size:16px_16px]"></div>
@@ -51,7 +51,7 @@
       </div>
 
       <!-- Content Area -->
-      <div class="p-6 relative z-20 flex flex-col flex-grow">
+      <div class="p-4 sm:p-6 relative z-20 flex flex-col flex-grow">
         <div class="font-mono text-[9px] text-accent/50 tracking-[3px] uppercase mb-1 opacity-70">
           Add story
         </div>

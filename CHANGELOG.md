@@ -4,22 +4,26 @@ Ce document répertorie l'ensemble des modifications apportées au projet **RPSt
 
 ---
 
-## [v2.1.0] — Intégration Sociale & Identité Serveur
+## [v2.1.0] — Standardisation, Optimisation & Algorithme Chromatique
 
 _14 Mai 2026_
 
 ### ✨ Nouvelles Fonctionnalités
 
-- **Community Link (Discord)** : Ajout d'un bouton Discord stylisé sur les fiches personnages. Intègre l'icône officielle via un tracé SVG optimisé et des effets de survol premium (glow flou).
-- **Portal Link** : Restauration du logo serveur dynamique (via Favicon Google) redirigeant vers le domaine du serveur.
-- **Project Tracking** : Initialisation de ce fichier `CHANGELOG.md` pour un suivi rigoureux des évolutions.
-- **Template Normalisé** : Mise à jour de `_template.ts.example` incluant les nouveaux champs `serverDomain` et `discordUrl` pour faciliter la création de futurs dossiers.
+- **Standardisation Narrative** : Harmonisation complète des chapitres, titres et structures de données sur tous les dossiers (Amari, Larry, Elena, Marcus).
+- **Chromatic Scattering Algorithm** : Nouvel algorithme de génération de couleurs bi-ton avec décalage de 50% (paires de contraste) et dispersion par nombres premiers pour éviter les doublons visuels sur le Hub.
+- **Image Optimization Engine v2** : Refonte totale du script `optimize-images.ts` pour supporter les environnements Windows sans blocage de fichiers (EBUSY), incluant le renommage automatique en WebP.
+- **Zod Schema (v0.1)** : Introduction du premier contrat de validation de données pour sécuriser la structure des dossiers et préparer le futur tunnel de création.
+- **Community Link (Discord)** : Ajout d'un bouton Discord stylisé avec effets de glow premium et tracé SVG optimisé.
+- **Portal Link** : Restauration du logo serveur dynamique via Favicon Google.
 
 ### 🐛 Correctifs & Optimisations
 
-- **Pixel Perfect SVG** : Correction du tracé corrompu du logo Discord et suppression des rognages sur les bords.
-- **TypeScript & Tailwind** : Résolution d'un conflit de typage sur `hubColors.white` dans le Hub, remplacé par des classes Tailwind natives pour une meilleure cohérence.
-- **Affichage Conditionnel** : Les logos de réseaux sociaux et de serveur ne s'affichent désormais que si les données associées sont renseignées et valides.
+- **FamilyTree Alignment** : Fixation de la hauteur des en-têtes de relation (`h-8`) pour garantir un alignement horizontal parfait malgré les textes multi-lignes.
+- **HubCard Reactivity** : Passage des couleurs en `computed` et synchronisation totale entre le Hub et la vue Fiche via le calcul d'index.
+- **Palette Cleanup** : Exclusion stricte du Rouge/Rose pour les personnages vivants, réservés désormais au statut "Décédé / Disparu".
+- **Pixel Perfect SVG** : Correction du tracé du logo Discord.
+- **TypeScript Strict** : Suppression des types `any` résiduels et renforcement des interfaces `Character`.
 
 ---
 
