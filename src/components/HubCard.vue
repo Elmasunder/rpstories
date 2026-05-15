@@ -88,9 +88,17 @@ const stopCycle = () => {
           alt=""
         />
 
+        <!-- FBI DECEASED STAMP -->
+        <div v-if="isDead" class="absolute inset-0 z-15 flex items-center justify-center pointer-events-none overflow-hidden">
+          <div class="transform -rotate-[15deg] border-[3px] border-dead text-dead px-4 py-1.5 font-mono font-black text-3xl tracking-[8px] uppercase opacity-80 mix-blend-plus-lighter shadow-[0_0_20px_rgba(231,76,60,0.3)] bg-black/20 backdrop-blur-[1px]">
+            DECEASED
+          </div>
+        </div>
+
         <!-- Badges -->
         <div class="absolute inset-x-4 top-4 z-20 flex justify-between items-start">
           <div
+            v-if="!isDead"
             class="bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/10 flex items-center gap-2"
           >
             <span
@@ -101,6 +109,8 @@ const stopCycle = () => {
               char.cover.status
             }}</span>
           </div>
+          <!-- Spacer to keep the portal link on the right if badge is hidden -->
+          <div v-else class="w-20"></div>
 
           <a
             v-if="char.cover.serverDomain && char.cover.serverDomain !== 'nom-du-serveur.fr'"
