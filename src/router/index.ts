@@ -13,6 +13,11 @@ const router = createRouter({
       name: 'fiche',
       component: () => import('../views/FicheView.vue'),
     },
+    {
+      path: '/create',
+      name: 'create',
+      component: () => import('../views/CreateView.vue'),
+    },
   ],
   scrollBehavior() {
     return { top: 0 }

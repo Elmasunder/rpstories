@@ -50,7 +50,6 @@ export const isabella_sterling: Character = {
         { key: `Signe particulier`, value: `Tatouage binaire (Nuque)`, class: `text-accent` },
         { key: `Père`, value: `Inconnu`, class: `text-muted` },
         { key: `Mère`, value: `Elizabeth Sterling`, class: `text-accent-alt` },
-        { key: `Famille proche`, value: `Aucune` },
         { key: `Passé`, value: `Ex-Analyste GCHQ` },
         { key: `Passion(s)`, value: `Cyber-sécurité · Cryptage` },
         { key: `Véhicule`, value: `Custom Deck (Handmade)`, class: `text-accent` },

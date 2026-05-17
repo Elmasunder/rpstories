@@ -50,7 +50,6 @@ export const elena_volkov: Character = {
         { key: `Signe particulier`, value: `Tatouage discret nuque`, class: `text-accent` },
         { key: `Père`, value: `Yuri Volkov (Inconnu)`, class: `text-muted` },
         { key: `Mère`, value: `Svetlana Volkov (Inconnu)`, class: `text-muted` },
-        { key: `Famille proche`, value: `Aucune` },
         { key: `Passé`, value: `Ex-Analyste de données` },
         { key: `Passion(s)`, value: `Échecs & Cyber-sécurité` },
         { key: `Véhicule`, value: `Neon`, class: `text-accent` },

@@ -54,7 +54,6 @@ export const template_id: Character = {
         { key: `Signe particulier`, value: `Détail`, class: `text-accent` },
         { key: `Père`, value: `Nom`, class: `text-muted` },
         { key: `Mère`, value: `Nom`, class: `text-accent-alt` },
-        { key: `Famille proche`, value: `Aucune` },
         { key: `Passé`, value: `Détail` },
         { key: `Passion(s)`, value: `Passion · Détail` },
         { key: `Véhicule`, value: `Modèle`, class: `text-accent` },

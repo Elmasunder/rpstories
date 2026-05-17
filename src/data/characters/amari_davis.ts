@@ -50,7 +50,6 @@ export const amari_davis: Character = {
         { key: `Signe particulier`, value: `Corps quasi-entièrement tatoué`, class: `text-accent` },
         { key: `Père`, value: `Inconnu`, class: `text-muted` },
         { key: `Mère`, value: `Décédée (OD fentanyl, 2018)`, class: `text-accent-alt` },
-        { key: `Famille proche`, value: `Aucune` },
         { key: `Passé`, value: `Foyers de l'État (8–17 ans)` },
         { key: `Passion(s)`, value: `Motocross · Rodéo Urbain` },
         { key: `Véhicule`, value: `Sanchez — Dernier Modèle`, class: `text-accent` },

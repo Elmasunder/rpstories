@@ -50,7 +50,6 @@ export const marcus_thorne: Character = {
         { key: `Signe particulier`, value: `Carrure imposante`, class: `text-accent` },
         { key: `Père`, value: `Arthur Thorne (Décédé)`, class: `text-muted` },
         { key: `Mère`, value: `Elizabeth Thorne`, class: `text-muted` },
-        { key: `Famille proche`, value: `Aucune` },
         { key: `Passé`, value: `Ancien Officier de Police (MET)` },
         { key: `Passion(s)`, value: `Boxe Anglaise & Horlogerie` },
         { key: `Véhicule`, value: `Granger 3600LX`, class: `text-accent` },

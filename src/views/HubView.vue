@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { characters } from '@/data/index.ts'
 import { getCharColors } from '@/utils/colors.ts'
 import { uiState } from '@/store/ui.ts'
@@ -14,6 +15,8 @@ const charList = computed(() => {
     return 0
   })
 })
+
+const router = useRouter()
 
 // Logique pour masquer le FAB quand la CreateCard est visible
 const createCardRef = ref<InstanceType<typeof CreateCard> | null>(null)
@@ -111,7 +114,19 @@ onUnmounted(() => {
     <main class="relative z-10 max-w-[1400px] mx-auto px-4 md:px-8 pb-16 md:pb-32">
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8">
         <HubCard v-for="(char, idx) in charList" :key="char.id" :char="char" :index="idx" />
-        <CreateCard ref="createCardRef" @create="console.log('Action: Créer un personnage')" />
+        <CreateCard
+          ref="createCardRef"
+          @create="
+            router.push({
+              name: 'create',
+              query: {
+                accent: hubColors.accent,
+                accent2: hubColors.accent2,
+                accentRgb: hubColors.accentRgb,
+              },
+            })
+          "
+        />
       </div>
     </main>
 
@@ -120,7 +135,16 @@ onUnmounted(() => {
       <button
         v-if="!isCreateCardVisible"
         class="sm:hidden fixed bottom-8 right-6 z-50 flex items-center gap-4 pl-6 pr-2 py-2 rounded-full bg-[#050505]/90 backdrop-blur-2xl border border-white/5 text-white/40 shadow-2xl active:scale-95 transition-all group overflow-hidden"
-        @click="console.log('Action: Créer un personnage')"
+        @click="
+          router.push({
+            name: 'create',
+            query: {
+              accent: hubColors.accent,
+              accent2: hubColors.accent2,
+              accentRgb: hubColors.accentRgb,
+            },
+          })
+        "
       >
         <!-- Scanning Light Effect -->
         <div

@@ -50,7 +50,6 @@ export const larry_pils: Character = {
         { key: `Signe particulier`, value: `Cicatrice arcade gauche`, class: `text-accent` },
         { key: `Père`, value: `Viktor Pils (Inconnu)`, class: `text-muted` },
         { key: `Mère`, value: `Elena Pils (Inconnu)`, class: `text-muted` },
-        { key: `Famille proche`, value: `Jason Pils (Cousin, Décédé)`, class: `text-dead` },
         { key: `Passé`, value: `Ancien de l'Armée (Logistique)` },
         { key: `Passion(s)`, value: `Mécanique de précision` },
         { key: `Véhicule`, value: `Bison — Noir Mat`, class: `text-accent` },
