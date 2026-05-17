@@ -6,17 +6,17 @@ const router = createRouter({
     {
       path: '/',
       name: 'hub',
-      component: () => import('../views/HubView.vue')
+      component: () => import('../views/HubView.vue'),
     },
     {
       path: '/fiche/:id',
       name: 'fiche',
-      component: () => import('../views/FicheView.vue')
-    }
+      component: () => import('../views/FicheView.vue'),
+    },
   ],
   scrollBehavior() {
     return { top: 0 }
-  }
+  },
 })
 
 export default router

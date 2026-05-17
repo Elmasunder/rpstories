@@ -72,13 +72,13 @@ const stopCycle = () => {
       <!-- Image Area -->
       <div class="relative h-48 sm:h-64 overflow-hidden noise-overlay">
         <div
-          class="absolute inset-0 z-10 bg-gradient-to-t from-bg via-transparent to-transparent opacity-80"
+          class="absolute inset-0 z-10 bg-linear-to-t from-bg via-transparent to-transparent opacity-80"
         ></div>
         <img
           v-for="(img, idx) in char.cover.photos.slice(0, 3)"
           :key="img"
           :src="fixPath(img)"
-          class="absolute -inset-[1%] w-[102%] h-[102%] object-cover transition-all duration-700"
+          class="absolute inset-[-1%] w-[102%] h-[102%] object-cover transition-all duration-700"
           :class="[
             idx === currentImg ? 'opacity-100 scale-105' : 'opacity-0',
             isDead
@@ -89,8 +89,13 @@ const stopCycle = () => {
         />
 
         <!-- FBI DECEASED STAMP -->
-        <div v-if="isDead" class="absolute inset-0 z-15 flex items-center justify-center pointer-events-none overflow-hidden">
-          <div class="transform -rotate-[15deg] border-[3px] border-dead text-dead px-4 py-1.5 font-mono font-black text-3xl tracking-[8px] uppercase opacity-80 mix-blend-plus-lighter shadow-[0_0_20px_rgba(231,76,60,0.3)] bg-black/20 backdrop-blur-[1px]">
+        <div
+          v-if="isDead"
+          class="absolute inset-0 z-15 flex items-center justify-center pointer-events-none overflow-hidden"
+        >
+          <div
+            class="transform rotate-[-15deg] border-[3px] border-dead text-dead px-4 py-1.5 font-mono font-black text-3xl tracking-[8px] uppercase opacity-80 mix-blend-plus-lighter shadow-[0_0_20px_rgba(231,76,60,0.3)] bg-black/20 backdrop-blur-[1px]"
+          >
             DECEASED
           </div>
         </div>
@@ -129,7 +134,7 @@ const stopCycle = () => {
       </div>
 
       <!-- Content Area -->
-      <div class="p-4 sm:p-6 relative z-20 flex flex-col flex-grow">
+      <div class="p-4 sm:p-6 relative z-20 flex flex-col grow">
         <div class="font-mono text-[9px] text-accent tracking-[3px] uppercase mb-1 opacity-70">
           {{ char.cover.eyebrow }}
         </div>
@@ -142,18 +147,29 @@ const stopCycle = () => {
         <!-- Admin Meta Data -->
         <div class="space-y-3 mb-6">
           <div class="flex flex-col gap-0.5">
-            <span class="font-mono text-[8px] text-accent uppercase tracking-[2px] opacity-60">Dossier Reference</span>
-            <span class="font-mono text-[10px] text-white uppercase tracking-wider font-bold leading-relaxed">{{ cleanRef }}</span>
+            <span class="font-mono text-[8px] text-accent uppercase tracking-[2px] opacity-60"
+              >Dossier Reference</span
+            >
+            <span
+              class="font-mono text-[10px] text-white uppercase tracking-wider font-bold leading-relaxed"
+              >{{ cleanRef }}</span
+            >
           </div>
           <div class="flex flex-col gap-0.5">
-            <span class="font-mono text-[8px] text-accent uppercase tracking-[2px] opacity-60">Statut</span>
+            <span class="font-mono text-[8px] text-accent uppercase tracking-[2px] opacity-60"
+              >Statut</span
+            >
             <span class="font-mono text-[10px] text-white uppercase tracking-wider font-bold">
               {{ isDead ? 'DEAD / CK' : 'ACTIF · EN SERVICE' }}
             </span>
           </div>
           <div class="flex flex-col gap-0.5">
-            <span class="font-mono text-[8px] text-accent uppercase tracking-[2px] opacity-60">Usage</span>
-            <span class="font-mono text-[10px] text-white uppercase tracking-wider font-bold">ROLEPLAY EXCLUSIF</span>
+            <span class="font-mono text-[8px] text-accent uppercase tracking-[2px] opacity-60"
+              >Usage</span
+            >
+            <span class="font-mono text-[10px] text-white uppercase tracking-wider font-bold"
+              >ROLEPLAY EXCLUSIF</span
+            >
           </div>
         </div>
 

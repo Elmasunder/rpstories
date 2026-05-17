@@ -147,7 +147,7 @@ const getStatusColor = (status: string) => {
           >
             <!-- Fond gradient -->
             <div
-              class="absolute inset-0 bg-gradient-to-r from-accent/4 via-transparent to-transparent opacity-0 group-hover/invite:opacity-100 transition-opacity duration-700 pointer-events-none"
+              class="absolute inset-0 bg-linear-to-r from-accent/4 via-transparent to-transparent opacity-0 group-hover/invite:opacity-100 transition-opacity duration-700 pointer-events-none"
             ></div>
 
             <!-- GAUCHE : Texte -->
@@ -180,7 +180,7 @@ const getStatusColor = (status: string) => {
             ></div>
 
             <!-- DROITE : Icône + CTA -->
-            <div class="flex flex-col items-center gap-4 flex-shrink-0 relative z-10">
+            <div class="flex flex-col items-center gap-4 shrink-0 relative z-10">
               <!-- Icône -->
               <div
                 class="size-14 rounded-full border-2 border-dashed border-white/10 flex items-center justify-center text-white/15 group-hover/invite:border-accent/30 group-hover/invite:text-accent/50 group-hover/invite:bg-accent/5 transition-all duration-500"

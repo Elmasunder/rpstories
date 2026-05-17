@@ -154,19 +154,19 @@ export const amari_davis: Character = {
         `Trouver un squat ou une planque stable à Los Santos.`,
         `Récupérer la Sanchez du dépôt de Cypress Flats.`,
         `Se faire une idée du terrain : qui fait quoi, quels entrepôts sont actifs.`,
-        `Trouver un premier contact local pour écouler des véhicules récupérés.`
+        `Trouver un premier contact local pour écouler des véhicules récupérés.`,
       ],
       mediumTerm: [
         `Développer une routine stable entre jobs légaux et activités grises.`,
         `Se rendre indispensable dans le groupe à travers ses compétences.`,
         `Commencer à creuser discrètement des pistes sur son père biologique.`,
-        `S'entraîner à contrôler l'impulsivité sur la moto.`
+        `S'entraîner à contrôler l'impulsivité sur la moto.`,
       ],
       longTerm: [
         `Devenir une référence sur le vol de véhicules à Los Santos.`,
         `Construire quelque chose qui porte son nom pour prouver qu'il existe.`,
         `Éviter les fins classiques : ni la cage, ni l'oubli.`,
-        `Établir un réseau de garages discrets à travers San Andreas.`
+        `Établir un réseau de garages discrets à travers San Andreas.`,
       ],
     },
     finaleStory: [
@@ -183,9 +183,18 @@ export const amari_davis: Character = {
 
   family: [
     { name: `Elena Davis`, relation: `Mère`, status: `dead` },
-    { id: `isabella_sterling`, name: `Isabella Sterling`, relation: `Mentor / Static`, status: `dead` },
-    { id: `elena_volkov`, name: `Elena Volkov`, relation: `Associée Renseignement`, status: `alive` },
+    {
+      id: `isabella_sterling`,
+      name: `Isabella Sterling`,
+      relation: `Mentor / Static`,
+      status: `dead`,
+    },
+    {
+      id: `elena_volkov`,
+      name: `Elena Volkov`,
+      relation: `Associée Renseignement`,
+      status: `alive`,
+    },
   ],
-  footer:
-    `DOSSIER RP — AMARI "LOCKER" DAVIS · LOS SANTOS · NORTHWOOD (LC) → LS · 24 ANS · REF: 2026-AD-01<br>Document créé par RPStories — Five M · Personnage fictif · v2.0`,
+  footer: `DOSSIER RP — AMARI "LOCKER" DAVIS · LOS SANTOS · NORTHWOOD (LC) → LS · 24 ANS · REF: 2026-AD-01<br>Document créé par RPStories — Five M · Personnage fictif · v2.0`,
 }

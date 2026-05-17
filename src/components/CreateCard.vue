@@ -11,11 +11,13 @@
       class="flex flex-col h-full bg-panel border-2 border-dashed border-white/10 rounded-lg overflow-hidden transition-all duration-500 hover:border-accent hover:bg-accent/5 hover:shadow-[0_20px_50px_rgba(0,0,0,0.3),0_0_20px_rgba(var(--accent-rgb),0.2)]"
     >
       <!-- Image Placeholder Area -->
-      <div class="relative h-48 sm:h-64 flex items-center justify-center bg-black/20 overflow-hidden">
+      <div
+        class="relative h-48 sm:h-64 flex items-center justify-center bg-black/20 overflow-hidden"
+      >
         <!-- Background Patterns -->
         <div class="absolute inset-0 opacity-20 group-hover:opacity-40 transition-opacity">
-          <div class="absolute inset-0 bg-dots-premium bg-[size:16px_16px]"></div>
-          <div class="absolute inset-0 bg-grid-premium bg-[size:40px_40px]"></div>
+          <div class="absolute inset-0 bg-dots-premium bg-size-[16px_16px]"></div>
+          <div class="absolute inset-0 bg-grid-premium bg-size-[40px_40px]"></div>
         </div>
 
         <!-- Add Icon -->
@@ -51,7 +53,7 @@
       </div>
 
       <!-- Content Area -->
-      <div class="p-4 sm:p-6 relative z-20 flex flex-col flex-grow">
+      <div class="p-4 sm:p-6 relative z-20 flex flex-col grow">
         <div class="font-mono text-[9px] text-accent/50 tracking-[3px] uppercase mb-1 opacity-70">
           Add story
         </div>
@@ -61,12 +63,17 @@
           Créer un <span class="text-accent/50 group-hover:text-accent">Personnage</span>
         </h3>
 
-        <p class="font-mono text-[11px] text-muted/50 leading-relaxed line-clamp-2 mb-6 h-8 group-hover:text-muted transition-colors">
-          Initialisez une nouvelle archive dans la base de données. Définissez votre identité, votre passé et vos capacités.
+        <p
+          class="font-mono text-[11px] text-muted/50 leading-relaxed line-clamp-2 mb-6 h-8 group-hover:text-muted transition-colors"
+        >
+          Initialisez une nouvelle archive dans la base de données. Définissez votre identité, votre
+          passé et vos capacités.
         </p>
 
         <div class="mt-auto flex justify-between items-center pt-4 border-t border-white/5">
-          <span class="font-mono text-[10px] text-accent/50 group-hover:text-accent font-bold uppercase tracking-widest transition-colors">
+          <span
+            class="font-mono text-[10px] text-accent/50 group-hover:text-accent font-bold uppercase tracking-widest transition-colors"
+          >
             Lancer le protocole
           </span>
           <span
@@ -91,4 +98,3 @@
     </div>
   </button>
 </template>
-

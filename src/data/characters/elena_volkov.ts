@@ -154,19 +154,19 @@ export const elena_volkov: Character = {
         `Sécuriser sa position à Vinewood Hills.`,
         `Améliorer son infrastructure proxy via des relais satellites.`,
         `Évaluer les conséquences de la disparition d'Isabella Sterling (Static).`,
-        `Recruter un homme de main de confiance pour le travail de terrain.`
+        `Recruter un homme de main de confiance pour le travail de terrain.`,
       ],
       mediumTerm: [
         `Infiltrer les serveurs centraux du FIB local pour purger ses dossiers russes.`,
         `Lancer sa propre plateforme de communication chiffrée sur le Dark Web.`,
         `Acheter une villa sécurisée avec une salle de serveurs isolée.`,
-        `Prendre le contrôle d'un réseau de botnets local.`
+        `Prendre le contrôle d'un réseau de botnets local.`,
       ],
       longTerm: [
         `Devenir la reine incontestée du renseignement sur la côte Ouest.`,
         `Prendre le contrôle des données sensibles de la mairie de Los Santos.`,
         `Disparaître définitivement en simulant sa propre mort numérique.`,
-        `Établir un héritage numérique qui lui survivra.`
+        `Établir un héritage numérique qui lui survivra.`,
       ],
     },
     finaleStory: [
@@ -184,8 +184,12 @@ export const elena_volkov: Character = {
   family: [
     { id: `amari_davis`, name: `Amari Davis`, relation: `Associé`, status: `alive` },
     { id: `larry_pils`, name: `Larry Pils`, relation: `Contact Technique`, status: `alive` },
-    { id: `isabella_sterling`, name: `Isabella Sterling`, relation: `Consœur / Rivalité`, status: `dead` },
+    {
+      id: `isabella_sterling`,
+      name: `Isabella Sterling`,
+      relation: `Consœur / Rivalité`,
+      status: `dead`,
+    },
   ],
-  footer:
-    `DOSSIER RP — ELENA VOLKOV · LOS SANTOS · ST-PÉTERSBOURG (RU) → LS · 28 ANS · REF: 2026-EV-03<br>Document créé par RPStories — Five M · Personnage fictif · v2.1`,
+  footer: `DOSSIER RP — ELENA VOLKOV · LOS SANTOS · ST-PÉTERSBOURG (RU) → LS · 28 ANS · REF: 2026-EV-03<br>Document créé par RPStories — Five M · Personnage fictif · v2.1`,
 }

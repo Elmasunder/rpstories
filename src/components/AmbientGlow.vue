@@ -4,7 +4,7 @@
     :style="{
       '--mx': `${mouse.x}px`,
       '--my': `${mouse.y}px`,
-      'opacity': glowOpacity
+      opacity: glowOpacity,
     }"
   ></div>
 </template>
@@ -31,11 +31,11 @@ const handleScroll = () => {
 const glowOpacity = computed(() => {
   // Sur le Hub, on laisse toujours (ou on peut ajuster)
   if (route.name === 'hub') return 1
-  
+
   // Sur la fiche, on n'affiche que sous la ligne de flottaison (100vh)
   const threshold = window.innerHeight * 0.8 // On commence à apparaître un peu avant
   if (scrollY.value < threshold) return 0
-  
+
   // Apparition progressive
   return Math.min((scrollY.value - threshold) / 200, 1)
 })
@@ -63,7 +63,9 @@ onUnmounted(() => {
     rgba(v-bind('uiState.activeAccentRgb'), 0.05),
     transparent 100%
   );
-  transition: background 1.2s ease, opacity 0.8s ease-in-out;
+  transition:
+    background 1.2s ease,
+    opacity 0.8s ease-in-out;
 }
 
 /* On utilise un filtre de flou pour adoucir encore plus si nécessaire */

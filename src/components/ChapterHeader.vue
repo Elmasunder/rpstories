@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 
 const props = defineProps({
-  char: { type: Object, required: true }
+  char: { type: Object, required: true },
 })
 
 const titleHTML = computed(() => {
@@ -15,14 +15,17 @@ const titleHTML = computed(() => {
 
 <template>
   <div class="mb-10 group">
-    <div class="font-mono text-[10px] text-accent tracking-[5px] uppercase mb-2 flex items-center gap-4">
+    <div
+      class="font-mono text-[10px] text-accent tracking-[5px] uppercase mb-2 flex items-center gap-4"
+    >
       <span class="flex-none">{{ char.label }}</span>
-      <div class="flex-1 h-px bg-gradient-to-r from-accent/40 to-transparent"></div>
+      <div class="flex-1 h-px bg-linear-to-r from-accent/40 to-transparent"></div>
     </div>
-    
-    <h1 class="font-display font-extrabold text-4xl md:text-5xl uppercase leading-[0.95] tracking-tighter text-white" 
-        v-html="titleHTML">
-    </h1>
+
+    <h1
+      class="font-display font-extrabold text-4xl md:text-5xl uppercase leading-[0.95] tracking-tighter text-white"
+      v-html="titleHTML"
+    ></h1>
   </div>
 </template>
 

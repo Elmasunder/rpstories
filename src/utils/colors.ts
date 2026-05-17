@@ -36,7 +36,7 @@ export function getCharColors(id: string, index: number = 0) {
   // On utilise des multiplicateurs (nombres premiers) pour mieux disperser les couleurs
   const scatterHash = Math.abs(hash * 31)
   const idx1 = (scatterHash + index * 7) % charPalette.length
-  
+
   // On force la deuxième couleur à être à l'opposé dans la palette pour un contraste max
   const idx2 = (idx1 + Math.floor(charPalette.length / 2)) % charPalette.length
 

@@ -16,7 +16,7 @@ const charList = computed(() => {
 })
 
 // Logique pour masquer le FAB quand la CreateCard est visible
-const createCardRef = ref<any>(null)
+const createCardRef = ref<InstanceType<typeof CreateCard> | null>(null)
 const isCreateCardVisible = ref(false)
 let observer: IntersectionObserver | null = null
 
@@ -24,11 +24,14 @@ const setupObserver = () => {
   const el = createCardRef.value?.$el || createCardRef.value
   if (!el) return
 
-  observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      isCreateCardVisible.value = entry.isIntersecting
-    })
-  }, { threshold: 0.1 })
+  observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        isCreateCardVisible.value = entry.isIntersecting
+      })
+    },
+    { threshold: 0.1 },
+  )
 
   observer.observe(el)
 }
@@ -50,7 +53,9 @@ onUnmounted(() => {
 <template>
   <div class="min-h-screen selection:bg-accent selection:text-white">
     <!-- Header -->
-    <header class="relative z-10 pt-20 md:pt-32 px-4 md:px-8 pb-12 md:pb-20 text-center overflow-hidden">
+    <header
+      class="relative z-10 pt-20 md:pt-32 px-4 md:px-8 pb-12 md:pb-20 text-center overflow-hidden"
+    >
       <!-- Background Effects & Trames -->
       <div class="absolute inset-0 -z-10 pointer-events-none select-none">
         <!-- Main Aura -->
@@ -60,17 +65,19 @@ onUnmounted(() => {
 
         <!-- Micro Dots Trame -->
         <div
-          class="absolute inset-0 bg-dots-premium bg-[size:32px_32px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_80%)] opacity-60"
+          class="absolute inset-0 bg-dots-premium bg-size-[32px_32px] mask-[radial-gradient(ellipse_at_center,black,transparent_80%)] opacity-60"
         ></div>
 
         <!-- Large Tech Grid -->
         <div
-          class="absolute inset-0 bg-grid-premium bg-[size:100px_100px] [mask-image:linear-gradient(to_bottom,black,transparent)] opacity-40"
+          class="absolute inset-0 bg-grid-premium bg-size-[100px_100px] mask-[linear-gradient(to_bottom,black,transparent)] opacity-40"
         ></div>
       </div>
 
       <div class="max-w-[800px] mx-auto animate-fade-in">
-        <div class="font-mono text-[9px] md:text-[10px] tracking-[3px] md:tracking-[6px] uppercase mb-4 font-bold text-accent">
+        <div
+          class="font-mono text-[9px] md:text-[10px] tracking-[3px] md:tracking-[6px] uppercase mb-4 font-bold text-accent"
+        >
           [ PLATFORME — v1.0 ]
         </div>
 
@@ -91,8 +98,10 @@ onUnmounted(() => {
           *RP/STORIES centralise vos parcours pour devenir le standard de votre identité numérique.
           <br />
           <br />
-          <span class="font-bold text-[9px] md:text-[10px] tracking-[3px] md:tracking-[8px] text-white"
-            >COMPATIBLE <span :style="{ color: hubColors.accent }">FIVEM</span> & <span :style="{ color: hubColors.accent }">REDM</span></span
+          <span
+            class="font-bold text-[9px] md:text-[10px] tracking-[3px] md:tracking-[8px] text-white"
+            >COMPATIBLE <span :style="{ color: hubColors.accent }">FIVEM</span> &
+            <span :style="{ color: hubColors.accent }">REDM</span></span
           >
         </p>
       </div>
@@ -114,11 +123,18 @@ onUnmounted(() => {
         @click="console.log('Action: Créer un personnage')"
       >
         <!-- Scanning Light Effect -->
-        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-accent/10 to-transparent -translate-x-full group-active:animate-scan pointer-events-none"></div>
+        <div
+          class="absolute inset-0 bg-linear-to-r from-transparent via-accent/10 to-transparent -translate-x-full group-active:animate-scan pointer-events-none"
+        ></div>
 
-        <span class="font-mono text-[9px] tracking-[4px] uppercase group-active:text-white transition-colors relative z-10">New Archive</span>
-        
-        <div class="size-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/30 group-active:bg-accent group-active:text-black group-active:border-accent transition-all duration-500 relative z-10">
+        <span
+          class="font-mono text-[9px] tracking-[4px] uppercase group-active:text-white transition-colors relative z-10"
+          >New Archive</span
+        >
+
+        <div
+          class="size-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/30 group-active:bg-accent group-active:text-black group-active:border-accent transition-all duration-500 relative z-10"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="size-4"

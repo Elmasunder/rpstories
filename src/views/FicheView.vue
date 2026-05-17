@@ -93,7 +93,7 @@ const scrollDown = () => {
     <header class="relative z-10 h-screen flex flex-col justify-end overflow-hidden">
       <!-- Background & Photos -->
       <div class="absolute inset-0 z-0">
-        <div class="absolute inset-0 bg-gradient-to-t from-bg via-bg/70 to-transparent z-10"></div>
+        <div class="absolute inset-0 bg-linear-to-t from-bg via-bg/70 to-transparent z-10"></div>
         <div class="grid grid-cols-3 h-full">
           <div
             v-for="photo in char.cover.photos.slice(0, 3)"
@@ -102,10 +102,10 @@ const scrollDown = () => {
             :style="{ backgroundImage: `url('${fixPath(photo)}')` }"
           ></div>
         </div>
-        
+
         <!-- GLOBAL NOISE OVERLAY (z-15, under text z-20) -->
-        <div 
-          class="absolute inset-0 z-15 pointer-events-none mix-blend-overlay transition-opacity duration-700" 
+        <div
+          class="absolute inset-0 z-15 pointer-events-none mix-blend-overlay transition-opacity duration-700"
           :class="char.cover.status === 'dead' ? 'opacity-20' : 'opacity-5'"
           style="background-image: url('https://www.ui-layouts.com/noise.gif')"
         ></div>
@@ -223,7 +223,7 @@ const scrollDown = () => {
               >Scroll</span
             >
             <div class="flex flex-col items-center">
-              <div class="w-px h-6 bg-gradient-to-b from-transparent to-accent/40"></div>
+              <div class="w-px h-6 bg-linear-to-b from-transparent to-accent/40"></div>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="size-4 text-accent animate-bounce mt-1"
@@ -292,7 +292,7 @@ const scrollDown = () => {
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 relative pl-0 md:pl-8 overflow-hidden">
           <!-- Gradient Side Strip -->
           <div
-            class="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-accent to-accent-alt opacity-80"
+            class="absolute top-0 left-0 w-1 h-full bg-linear-to-b from-accent to-accent-alt opacity-80"
           ></div>
 
           <dl
@@ -321,11 +321,11 @@ const scrollDown = () => {
         </div>
 
         <div class="flex items-center gap-4 my-8">
-          <div class="flex-1 h-px bg-gradient-to-r from-accent to-transparent opacity-30"></div>
+          <div class="flex-1 h-px bg-linear-to-r from-accent to-transparent opacity-30"></div>
           <div class="font-mono text-[10px] text-accent tracking-[4px] uppercase">
             Profil Psychologique
           </div>
-          <div class="flex-1 h-px bg-gradient-to-l from-accent to-transparent opacity-30"></div>
+          <div class="flex-1 h-px bg-linear-to-l from-accent to-transparent opacity-30"></div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-10">
@@ -379,7 +379,7 @@ const scrollDown = () => {
           >
             <!-- Gradient Side Strip -->
             <div
-              class="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-accent to-accent-alt opacity-80"
+              class="absolute top-0 left-0 w-1 h-full bg-linear-to-b from-accent to-accent-alt opacity-80"
             ></div>
 
             <aside
@@ -391,7 +391,7 @@ const scrollDown = () => {
               >
                 <img
                   :src="fixPath(char.chapter2.photo.url)"
-                  class="w-full h-full object-cover saturate-[0.6] contrast-125 brightness-75 transition-all duration-700 group-hover:opacity-100 transition-all duration-700"
+                  class="w-full h-full object-cover saturate-[0.6] contrast-125 brightness-75 transition-all duration-700 group-hover:opacity-100"
                   :alt="char.chapter2.photo.alt"
                   @error="handleImgError"
                 />
@@ -427,7 +427,7 @@ const scrollDown = () => {
           >
             <!-- Gradient Side Strip -->
             <div
-              class="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-accent to-accent-alt opacity-80"
+              class="absolute top-0 left-0 w-1 h-full bg-linear-to-b from-accent to-accent-alt opacity-80"
             ></div>
 
             <aside
@@ -439,7 +439,7 @@ const scrollDown = () => {
               >
                 <img
                   :src="fixPath(char.chapter3.photo.url)"
-                  class="w-full h-full object-cover saturate-[0.6] contrast-125 brightness-75 transition-all duration-700 group-hover:opacity-100 transition-all duration-700"
+                  class="w-full h-full object-cover saturate-[0.6] contrast-125 brightness-75 transition-all duration-700 group-hover:opacity-100"
                   :alt="char.chapter3.photo.alt"
                   @error="handleImgError"
                 />
@@ -476,7 +476,7 @@ const scrollDown = () => {
         >
           <!-- Gradient Side Strip -->
           <div
-            class="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-accent to-accent-alt opacity-80"
+            class="absolute top-0 left-0 w-1 h-full bg-linear-to-b from-accent to-accent-alt opacity-80"
           ></div>
 
           <aside
@@ -488,7 +488,7 @@ const scrollDown = () => {
             >
               <img
                 :src="fixPath(char.chapter4.photo.url)"
-                class="w-full h-full object-cover saturate-[0.6] contrast-125 brightness-75 transition-all duration-700 group-hover:opacity-100 transition-all duration-700"
+                class="w-full h-full object-cover saturate-[0.6] contrast-125 brightness-75 transition-all duration-700 group-hover:opacity-100"
                 :alt="char.chapter4.photo.alt"
                 @error="handleImgError"
               />
