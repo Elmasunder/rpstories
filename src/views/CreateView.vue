@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { characters } from '@/data/index.ts'
 import { uiState } from '@/store/ui.ts'
 import { getCharColors } from '@/utils/colors.ts'
 import TheNavbar from '@/components/TheNavbar.vue'
 import { CharacterSchema } from '@/types/character.schema'
 import type { Character } from '@/types/character'
+import { supabase } from '@/utils/supabase'
+import { authState } from '@/store/auth'
+import type { DbCharacter } from '@/utils/mappers'
 
 const router = useRouter()
 const route = useRoute()
@@ -14,8 +16,136 @@ const route = useRoute()
 // On génère une couleur d'accent pour le tunnel
 const createColors = getCharColors('create-tunnel')
 
+const isEditMode = ref(false)
+const characterId = ref<number | null>(null)
+const isLoadingEditData = ref(false)
+
+const fetchCharacterForEdit = async (id: number) => {
+  try {
+    isLoadingEditData.value = true
+    const { data, error } = await supabase
+      .from('characters')
+      .select('*')
+      .eq('id', id)
+      .single()
+
+    if (error) throw error
+    if (data) {
+      if (data.owner_id !== authState.user?.id) {
+        uiState.showToast('Erreur', 'Vous n\'êtes pas le propriétaire de ce dossier', 'error')
+        router.push({ name: 'hub' })
+        return
+      }
+      
+      formData.value.firstName = data.first_name || ''
+      formData.value.lastName = data.last_name || ''
+      formData.value.status = data.status || 'alive'
+      formData.value.serverDomain = data.server_domain || ''
+      formData.value.discordUrl = data.discord_url || ''
+      formData.value.reference = (data.ref || '').split('<br>')[0] || data.ref || ''
+      formData.value.alias = data.alias || ''
+      
+      const panels = (data.chapter1?.identityPanels || []) as Array<Array<{ key: string; value: string; class?: string }>>
+      const findValue = (key: string) => {
+        for (const panel of panels) {
+          const found = panel.find((item) => item.key.toLowerCase().trim() === key.toLowerCase().trim())
+          if (found) return found.value
+        }
+        return ''
+      }
+
+      // Convert "12 / 10 / 1998" to "1998-10-12" for type="date" inputs
+      const rawBirthDate = findValue('Date de naissance') || ''
+      if (rawBirthDate.includes('/')) {
+        const parts = rawBirthDate.split('/').map(p => p.trim())
+        if (parts.length === 3) {
+          formData.value.birthDate = `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`
+        } else {
+          formData.value.birthDate = rawBirthDate
+        }
+      } else {
+        formData.value.birthDate = rawBirthDate
+      }
+
+      formData.value.birthPlace = findValue('Lieu de naissance') || ''
+      formData.value.currentCity = findValue('Ville actuelle') || ''
+      formData.value.origins = findValue('Origine(s)') || data.origines || ''
+
+      // Strip " cm" and " kg" units so validators don't complain or double them
+      const rawHeight = findValue('Taille') || data.taille || ''
+      formData.value.height = rawHeight.replace(/\s*cm$/, '').trim()
+
+      const rawWeight = findValue('Poids') || data.poids || ''
+      formData.value.weight = rawWeight.replace(/\s*kg$/, '').trim()
+
+      formData.value.specialSign = findValue('Signe particulier') || ''
+      formData.value.father = findValue('Père') || ''
+      formData.value.mother = findValue('Mère') || ''
+      formData.value.past = findValue('Passé') || ''
+      formData.value.passions = findValue('Passion(s)') || ''
+      formData.value.vehicle = findValue('Véhicule') || data.vehicule_ref || ''
+      formData.value.specialty = findValue('Spécialité') || ''
+
+      // Strip quotes from alias if present
+      if (formData.value.alias) {
+        formData.value.alias = formData.value.alias.replace(/^"|"$/g, '')
+      } else {
+        const rawAlias = findValue('Surnom') || ''
+        formData.value.alias = rawAlias.replace(/^"|"$/g, '')
+      }
+
+      formData.value.qualities = (data.chapter1?.profile?.qualités || []).join(', ')
+      formData.value.flaws = (data.chapter1?.profile?.défauts || []).join(', ')
+      formData.value.dossierNote = data.chapter1?.infoPlus?.text || ''
+
+      formData.value.origins_story = (data.chapter2?.story1 || []).join('\n')
+      formData.value.adult_story = (data.chapter3?.story1 || []).join('\n')
+      formData.value.aptitudes_story = (data.chapter4?.story1 || []).join('\n')
+
+      const socialGrp = data.chapter4?.skillsGroups?.find((g: { title: string }) => g.title.includes('sociales'))
+      if (socialGrp && socialGrp.skills) {
+        formData.value.skills_social = socialGrp.skills.map((s: { name: string; percent: number }) => ({ name: s.name, percent: s.percent }))
+      }
+      const techGrp = data.chapter4?.skillsGroups?.find((g: { title: string }) => g.title.includes('technique'))
+      if (techGrp && techGrp.skills) {
+        formData.value.skills_tech = techGrp.skills.map((s: { name: string; percent: number }) => ({ name: s.name, percent: s.percent }))
+      }
+
+      if (data.family && data.family.length > 0) {
+        formData.value.relations = data.family.map((r: { name: string; relation: string; status?: 'alive' | 'dead' }) => ({ name: r.name, relation: r.relation, status: r.status || 'alive' }))
+      } else {
+        formData.value.relations = [{ name: '', relation: '', status: 'alive' }]
+      }
+
+      if (data.chapter6?.objectives) {
+        const obj = data.chapter6.objectives
+        formData.value.objectives_short = [obj.shortTerm?.[0] || '', obj.shortTerm?.[1] || '', obj.shortTerm?.[2] || '', obj.shortTerm?.[3] || ''].filter((o, i) => o || i < 3)
+        formData.value.objectives_medium = [obj.mediumTerm?.[0] || '', obj.mediumTerm?.[1] || '', obj.mediumTerm?.[2] || '', obj.mediumTerm?.[3] || ''].filter((o, i) => o || i < 3)
+        formData.value.objectives_long = [obj.longTerm?.[0] || '', obj.longTerm?.[1] || '', obj.longTerm?.[2] || '', obj.longTerm?.[3] || ''].filter((o, i) => o || i < 3)
+      }
+
+      formData.value.photos = data.photos || []
+    }
+  } catch (e) {
+    console.error(e)
+    uiState.showToast('Erreur', 'Impossible de charger les données du dossier', 'error')
+    router.push({ name: 'hub' })
+  } finally {
+    isLoadingEditData.value = false
+  }
+}
+
 onMounted(() => {
-  document.title = 'RP/STORIES | Nouveau Dossier'
+  if (route.name === 'edit' && route.params.id) {
+    isEditMode.value = true
+    characterId.value = Number(route.params.id)
+    document.title = 'RP/STORIES | Modifier Dossier'
+    if (!isNaN(characterId.value)) {
+      fetchCharacterForEdit(characterId.value)
+    }
+  } else {
+    document.title = 'RP/STORIES | Nouveau Dossier'
+  }
 
   const accent = (route.query.accent as string) || createColors.accent
   const accent2 = (route.query.accent2 as string) || createColors.accent2
@@ -50,6 +180,9 @@ const formData = ref({
   passions: '',
   vehicle: '',
   specialty: '',
+  qualities: '',
+  flaws: '',
+  dossierNote: '',
   // Chapitres & Histoire
   origins_story: '',
   adult_story: '',
@@ -74,16 +207,17 @@ const formData = ref({
   objectives_medium: ['', '', ''],
   objectives_long: ['', '', ''],
   // Photos - Entre 3 et 6 photos
-  photos: ['', '', ''],
+  photos: [] as string[],
 })
 
 watch(
   () => [formData.value.firstName, formData.value.lastName],
   ([newFirst, newLast]) => {
+    if (isEditMode.value) return
     const p = newFirst ? newFirst.trim().charAt(0).toUpperCase() : 'X'
     const n = newLast ? newLast.trim().charAt(0).toUpperCase() : 'X'
-    const nextId = String(Object.keys(characters).length + 1).padStart(2, '0')
-    formData.value.reference = `DOSSIER REF: 2026-${p}${n}-${nextId}`
+    const randomId = String(Math.floor(Math.random() * 99) + 1).padStart(2, '0')
+    formData.value.reference = `DOSSIER REF: 2026-${p}${n}-${randomId}`
   },
 )
 
@@ -113,11 +247,11 @@ const calculateAge = (birthDateStr: string): string => {
 const mapFormToCharacter = (): Character => {
   const p = formData.value.firstName ? formData.value.firstName.trim().charAt(0).toUpperCase() : 'X'
   const n = formData.value.lastName ? formData.value.lastName.trim().charAt(0).toUpperCase() : 'X'
-  const nextId = String(Object.keys(characters).length + 1).padStart(2, '0')
-  const refCode = `2026-${p}${n}-${nextId}`
-  const p3Padded = nextId.padStart(4, '0')
+  const randomId = String(Math.floor(Math.random() * 99) + 1).padStart(2, '0')
+  const refCode = `2026-${p}${n}-${randomId}`
+  const p3Padded = randomId.padStart(4, '0')
 
-  const id = `${formData.value.firstName.toLowerCase().trim()}_${formData.value.lastName.toLowerCase().trim()}`
+  const id = isEditMode.value && characterId.value ? characterId.value : 0 // ID will be generated by Supabase if 0
   const age = calculateAge(formData.value.birthDate)
   const photos = formData.value.photos.filter((url) => url.trim() !== '')
 
@@ -168,13 +302,13 @@ const mapFormToCharacter = (): Character => {
         ],
       ],
       profile: {
-        qualités: ['Déterminé', 'Discret', 'Ingénieux'],
-        défauts: ['Méfiant', 'Paranoïaque'],
+        qualités: formData.value.qualities ? formData.value.qualities.split(',').map(s => s.trim()).filter(s => s) : ['Inconnu'],
+        défauts: formData.value.flaws ? formData.value.flaws.split(',').map(s => s.trim()).filter(s => s) : ['Inconnu'],
       },
       infoPlus: {
         icon: '📝',
         title: 'Note de Dossier',
-        text: `Fiche créée le ${new Date().toLocaleDateString('fr-FR')}.`,
+        text: formData.value.dossierNote.trim() || `Fiche créée le ${new Date().toLocaleDateString('fr-FR')}.`,
       },
     },
     chapter2: {
@@ -318,8 +452,9 @@ const validateStep = (step: number) => {
   }
   return ''
 }
+const isSubmitting = ref(false)
 
-const nextStep = () => {
+const nextStep = async () => {
   const error = validateStep(currentStep.value)
   if (error) {
     errorMsg.value = error
@@ -330,22 +465,81 @@ const nextStep = () => {
   if (currentStep.value < totalSteps) {
     currentStep.value++
   } else {
-    // Action finale : validation Zod globale
+    if (!authState.user) {
+      errorMsg.value = 'Vous devez être connecté pour archiver un dossier.'
+      return
+    }
+
+    // Action finale : validation Zod globale et insertion Supabase
     try {
+      isSubmitting.value = true
       const characterObj = mapFormToCharacter()
       const result = CharacterSchema.safeParse(characterObj)
+      
       if (!result.success) {
         const firstError = result.error.issues[0]
         errorMsg.value = `${firstError.path.join('.')}: ${firstError.message}`
         console.error('Erreur de validation Zod:', result.error)
+        isSubmitting.value = false
         return
       }
 
-      console.log('Données sauvegardées et validées:', result.data)
+      const dbObj: Omit<DbCharacter, 'id' | 'created_at' | 'updated_at'> = {
+        owner_id: authState.user.id,
+        privacy: 'public', // Par défaut public
+        first_name: characterObj.cover.firstName,
+        last_name: characterObj.cover.lastName,
+        alias: characterObj.cover.alias,
+        status: characterObj.cover.status,
+        server_domain: characterObj.cover.serverDomain,
+        discord_url: characterObj.cover.discordUrl || null,
+        eyebrow: characterObj.cover.eyebrow,
+        ref: characterObj.cover.ref,
+        photos: characterObj.cover.photos,
+        
+        age: parseInt(characterObj.cover.meta[0].value as string) || 0,
+        taille: characterObj.cover.meta[1].value,
+        poids: characterObj.cover.meta[2].value,
+        origines: characterObj.cover.meta[3].value,
+        vehicule_ref: characterObj.cover.meta[4].value,
+        
+        chapter1: characterObj.chapter1,
+        chapter2: characterObj.chapter2,
+        chapter3: characterObj.chapter3,
+        chapter4: characterObj.chapter4 || null,
+        chapter5: characterObj.chapter5 || null,
+        chapter6: characterObj.chapter6,
+        family: characterObj.family || null,
+        footer: characterObj.footer
+      }
+
+      let saveError
+      if (isEditMode.value && characterId.value) {
+        console.log('Début de la mise à jour (UPDATE) dans Supabase...', { id: characterId.value, dbObj })
+        const { error } = await supabase.from('characters').update(dbObj).eq('id', characterId.value)
+        console.log('Mise à jour terminée. Erreur:', error)
+        saveError = error
+      } else {
+        console.log('Début de la création (INSERT) dans Supabase...', dbObj)
+        const { error } = await supabase.from('characters').insert(dbObj)
+        console.log('Création terminée. Erreur:', error)
+        saveError = error
+      }
+      
+      if (saveError) {
+        console.error('Erreur retournée par Supabase:', saveError)
+        throw saveError
+      }
+
+      console.log('Données sauvegardées en BDD:', result.data)
+      uiState.showToast('Succès', 'Dossier archivé avec succès', 'success')
       router.push({ name: 'hub' })
     } catch (e) {
+      console.error(e)
       const msg = e instanceof Error ? e.message : String(e)
-      errorMsg.value = `Erreur lors de la validation : ${msg}`
+      errorMsg.value = `Erreur lors de la sauvegarde : ${msg}`
+    } finally {
+      isSubmitting.value = false
     }
   }
 }
@@ -357,6 +551,26 @@ const prevStep = () => {
   } else {
     router.push({ name: 'hub' })
   }
+}
+
+const goToStep = (step: number) => {
+  if (step === currentStep.value) return
+  if (step < currentStep.value) {
+    errorMsg.value = ''
+    currentStep.value = step
+    return
+  }
+  // Validation des étapes intermédiaires pour avancer
+  for (let s = currentStep.value; s < step; s++) {
+    const error = validateStep(s)
+    if (error) {
+      errorMsg.value = `Étape ${s} : ${error}`
+      currentStep.value = s
+      return
+    }
+  }
+  errorMsg.value = ''
+  currentStep.value = step
 }
 
 const addSkillSocial = () => {
@@ -418,15 +632,67 @@ const removeObjectiveLong = (index: number) => {
     formData.value.objectives_long.splice(index, 1)
   }
 }
-const addPhoto = () => {
-  if (formData.value.photos.length < 6) {
-    formData.value.photos.push('')
+const isDragging = ref(false)
+const fileInput = ref<HTMLInputElement | null>(null)
+const directUrlInput = ref('')
+
+const handleDragOver = () => {
+  isDragging.value = true
+}
+const handleDragLeave = () => {
+  isDragging.value = false
+}
+
+const triggerFileInput = () => {
+  fileInput.value?.click()
+}
+
+const processFiles = (files: FileList) => {
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i]
+    if (!file.type.startsWith('image/')) continue
+    if (formData.value.photos.length >= 6) {
+      uiState.showToast('Limite d\'images', 'Maximum 6 photos autorisées', 'error')
+      break
+    }
+
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      if (e.target?.result && typeof e.target.result === 'string') {
+        formData.value.photos.push(e.target.result)
+      }
+    }
+    reader.readAsDataURL(file)
   }
 }
-const removePhoto = (index: number) => {
-  if (formData.value.photos.length > 3) {
-    formData.value.photos.splice(index, 1)
+
+const handleDrop = (e: DragEvent) => {
+  isDragging.value = false
+  if (e.dataTransfer?.files) {
+    processFiles(e.dataTransfer.files)
   }
+}
+
+const handleFileChange = (e: Event) => {
+  const target = e.target as HTMLInputElement
+  if (target.files) {
+    processFiles(target.files)
+  }
+}
+
+const addDirectUrl = () => {
+  const url = directUrlInput.value.trim()
+  if (!url) return
+  if (formData.value.photos.length >= 6) {
+    uiState.showToast('Limite d\'images', 'Maximum 6 photos autorisées', 'error')
+    return
+  }
+  formData.value.photos.push(url)
+  directUrlInput.value = ''
+}
+
+const removePhoto = (index: number) => {
+  formData.value.photos.splice(index, 1)
 }
 </script>
 
@@ -453,20 +719,26 @@ const removePhoto = (index: number) => {
         >
           <div>
             <div class="font-mono text-[10px] tracking-[4px] text-accent uppercase mb-3 font-bold">
-              // CRÉATION PERSONNAGE //
+              {{ isEditMode ? '// MODIFICATION PERSONNAGE //' : '// CRÉATION PERSONNAGE //' }}
             </div>
             <h1
               class="font-display font-black text-4xl md:text-6xl uppercase tracking-tighter leading-none"
             >
-              Nouveau <span class="text-white/40">Dossier</span>
+              {{ isEditMode ? 'Modifier' : 'Nouveau' }} <span class="text-white/40">Dossier</span>
             </h1>
           </div>
 
           <!-- Stepper Indicator -->
           <div class="flex gap-3 justify-center">
-            <div v-for="step in totalSteps" :key="step" class="flex flex-col items-center gap-2">
+            <button
+              v-for="step in totalSteps"
+              :key="step"
+              @click="goToStep(step)"
+              class="flex flex-col items-center gap-2 group cursor-pointer focus:outline-none"
+              :title="`Aller à l'étape ${step}`"
+            >
               <div
-                class="w-12 h-1 rounded-full transition-all duration-500"
+                class="w-12 h-1 rounded-full transition-all duration-500 group-hover:bg-accent/50"
                 :class="
                   step <= currentStep
                     ? 'bg-accent shadow-[0_0_10px_rgba(var(--accent-rgb),0.5)]'
@@ -474,12 +746,12 @@ const removePhoto = (index: number) => {
                 "
               ></div>
               <span
-                class="font-mono text-[9px] font-bold tracking-widest transition-colors duration-500"
+                class="font-mono text-[9px] font-bold tracking-widest transition-colors duration-500 group-hover:text-accent"
                 :class="step <= currentStep ? 'text-accent' : 'text-white/20'"
               >
                 0{{ step }}
               </span>
-            </div>
+            </button>
           </div>
         </header>
 
@@ -637,7 +909,7 @@ const removePhoto = (index: number) => {
                     Profil Détaillé
                   </h2>
                   <p class="font-mono text-[11px] text-white/40">
-                    Remplissez les informations du dossier (15 champs).
+                    Remplissez les informations du dossier (18 champs).
                   </p>
                 </div>
 
@@ -824,6 +1096,52 @@ const removePhoto = (index: number) => {
                       placeholder="Infiltration / Hack"
                       class="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 font-display text-lg text-white placeholder-white/20 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/50 transition-all"
                     />
+                  </div>
+                  
+                  <div class="col-span-1 md:col-span-2 mt-4 border-t border-white/5 pt-6">
+                    <h3 class="font-display text-sm font-bold uppercase text-white/50 mb-4">Profil Psychologique</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div class="space-y-2">
+                        <label
+                          class="font-mono text-[10px] tracking-widest uppercase text-accent font-bold"
+                          >Qualités (Séparées par des virgules)</label
+                        >
+                        <input
+                          v-model="formData.qualities"
+                          type="text"
+                          placeholder="Déterminé, Discret, Ingénieux..."
+                          class="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 font-display text-lg text-white placeholder-white/20 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/50 transition-all"
+                        />
+                      </div>
+                      <div class="space-y-2">
+                        <label
+                          class="font-mono text-[10px] tracking-widest uppercase text-accent font-bold"
+                          >Défauts (Séparés par des virgules)</label
+                        >
+                        <input
+                          v-model="formData.flaws"
+                          type="text"
+                          placeholder="Méfiant, Paranoïaque..."
+                          class="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 font-display text-lg text-white placeholder-white/20 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/50 transition-all"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="col-span-1 md:col-span-2 mt-4 border-t border-white/5 pt-6">
+                    <h3 class="font-display text-sm font-bold uppercase text-white/50 mb-4">Note de Dossier</h3>
+                    <div class="space-y-2">
+                      <label
+                        class="font-mono text-[10px] tracking-widest uppercase text-accent font-bold"
+                        >Commentaire Libre (Optionnel)</label
+                      >
+                      <textarea
+                        v-model="formData.dossierNote"
+                        placeholder="Ex: Fiche créée le 20/05/2026. Suspect sous surveillance depuis l'incident du port."
+                        rows="2"
+                        class="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 font-display text-lg text-white placeholder-white/20 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/50 transition-all resize-none"
+                      ></textarea>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1268,54 +1586,148 @@ const removePhoto = (index: number) => {
                     Visuels
                   </h2>
                   <p class="font-mono text-[11px] text-white/40">
-                    Saisissez les liens des photos pour la bannière.
+                    Générez la bannière de profil en glissant vos fichiers ou en collant des URLs.
                     <span class="text-accent font-bold">(Minimum 3, Maximum 6 images)</span>
                   </p>
                 </div>
 
-                <div class="space-y-4">
-                  <div class="flex justify-between items-center">
-                    <h3 class="font-display text-lg font-bold uppercase">Photos de la Bannière</h3>
-                    <button
-                      @click="addPhoto"
-                      :disabled="formData.photos.length >= 6"
-                      class="font-mono text-[10px] font-bold uppercase transition-colors"
-                      :class="
-                        formData.photos.length >= 6
-                          ? 'text-white/20 cursor-not-allowed'
-                          : 'text-accent hover:text-white'
-                      "
+                <div class="space-y-6">
+                  <!-- Drag and Drop Slot -->
+                  <div
+                    @dragover.prevent="handleDragOver"
+                    @dragenter.prevent="handleDragOver"
+                    @dragleave.prevent="handleDragLeave"
+                    @drop.prevent="handleDrop"
+                    @click="triggerFileInput"
+                    :class="[
+                      'relative border-2 border-dashed rounded-xl p-8 text-center transition-all cursor-pointer flex flex-col items-center justify-center min-h-[220px]',
+                      isDragging
+                        ? 'border-accent bg-accent/5 shadow-[0_0_25px_rgba(var(--accent-rgb),0.1)] scale-[0.99]'
+                        : 'border-white/10 bg-black/20 hover:border-accent hover:bg-accent/5'
+                    ]"
+                  >
+                    <!-- Upload icon -->
+                    <div
+                      :class="[
+                        'size-14 rounded-full flex items-center justify-center mb-4 transition-all duration-300',
+                        isDragging ? 'bg-accent text-black scale-110 shadow-[0_0_15px_rgba(var(--accent-rgb),0.4)]' : 'bg-white/5 border border-white/10 text-white/40'
+                      ]"
                     >
-                      + Ajouter (Max 6)
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="size-6"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="17 8 12 3 7 8" />
+                        <line x1="12" y1="3" x2="12" y2="15" />
+                      </svg>
+                    </div>
+
+                    <p class="font-mono text-xs uppercase tracking-wider text-white/60 mb-2">
+                      Glissez-déposez vos images ici
+                    </p>
+                    <p class="font-mono text-[9px] text-white/30 uppercase tracking-[2px] mb-4">
+                      ou
+                    </p>
+                    <button
+                      type="button"
+                      class="px-4 py-2 font-mono text-[10px] bg-white text-black uppercase font-bold rounded-sm hover:bg-accent hover:shadow-[0_0_15px_rgba(var(--accent-rgb),0.3)] transition-all"
+                    >
+                      Parcourir les fichiers
                     </button>
+
+                    <input
+                      ref="fileInput"
+                      type="file"
+                      multiple
+                      accept="image/*"
+                      class="hidden"
+                      @change="handleFileChange"
+                    />
                   </div>
 
-                  <div class="grid grid-cols-1 gap-4">
-                    <div
-                      v-for="(_, index) in formData.photos"
-                      :key="index"
-                      class="flex gap-2 items-center bg-black/20 p-3 rounded-lg border border-white/5"
-                    >
-                      <span class="font-mono text-xs text-white/40">#0{{ index + 1 }}</span>
+                  <!-- Direct URL Input -->
+                  <div class="bg-black/20 p-4 rounded-xl border border-white/5 space-y-2">
+                    <label class="block font-mono text-[9px] text-accent uppercase tracking-[2px] font-bold">
+                      Ajouter via URL directe ou chemin d'asset local (ex: assets/amari_davis/amari1.webp)
+                    </label>
+                    <div class="flex gap-2">
                       <input
-                        v-model="formData.photos[index]"
+                        v-model="directUrlInput"
                         type="text"
-                        placeholder="Ex: assets/amari_davis/amari1.webp ou URL d'image"
-                        class="w-full bg-black/40 border border-white/10 rounded px-3 py-2 font-mono text-xs text-white focus:outline-none focus:border-accent"
+                        placeholder="Collez une URL d'image ou un chemin et appuyez sur Entrée"
+                        class="grow bg-black/40 border border-white/10 rounded px-3 py-2 font-mono text-xs text-white focus:outline-none focus:border-accent"
+                        @keydown.enter.prevent="addDirectUrl"
                       />
                       <button
-                        @click="removePhoto(index)"
-                        class="text-white/30 hover:text-dead transition-colors p-1"
-                        :disabled="formData.photos.length <= 3"
-                        :class="formData.photos.length <= 3 ? 'opacity-20 cursor-not-allowed' : ''"
+                        type="button"
+                        @click="addDirectUrl"
+                        class="px-4 bg-accent text-black font-mono text-[10px] uppercase font-bold rounded-sm hover:shadow-[0_0_15px_rgba(var(--accent-rgb),0.3)] transition-all cursor-pointer"
                       >
-                        ✕
+                        Ajouter
                       </button>
                     </div>
                   </div>
-                  <p class="font-mono text-[9px] text-white/30">
-                    Ces photos (entre 3 et 6) généreront le carrousel/bannière du profil de la fiche personnage.
-                  </p>
+
+                  <!-- Gallery / Previews -->
+                  <div v-if="formData.photos.length > 0" class="space-y-4">
+                    <div class="flex justify-between items-center border-b border-white/5 pb-2">
+                      <h4 class="font-display text-xs uppercase tracking-wider text-white/50 font-bold">
+                        Images Sélectionnées ({{ formData.photos.length }} / 6)
+                      </h4>
+                      <span
+                        v-if="formData.photos.length < 3"
+                        class="font-mono text-[9px] text-[#e74c3c] uppercase tracking-wider animate-pulse font-bold"
+                      >
+                        ! Minimum 3 photos requises
+                      </span>
+                    </div>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                      <div
+                        v-for="(photo, index) in formData.photos"
+                        :key="index"
+                        class="relative group rounded-xl overflow-hidden aspect-video bg-black/40 border border-white/10"
+                      >
+                        <img
+                          :src="photo"
+                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                        <!-- Overlay & Delete button -->
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-between p-2">
+                          <span class="font-mono text-[8px] text-white/40">#0{{ index + 1 }}</span>
+                          <button
+                            type="button"
+                            @click="removePhoto(index)"
+                            class="self-center bg-[#e74c3c] hover:bg-white hover:text-black text-white p-2 rounded-full hover:shadow-[0_0_15px_rgba(231,76,60,0.5)] transition-all"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              class="size-4"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2.5"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            >
+                              <polyline points="3 6 5 6 21 6" />
+                              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                              <line x1="10" y1="11" x2="10" y2="17" />
+                              <line x1="14" y1="11" x2="14" y2="17" />
+                            </svg>
+                          </button>
+                          <div class="w-full"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </transition>
@@ -1347,9 +1759,10 @@ const removePhoto = (index: number) => {
 
               <button
                 @click="nextStep"
-                class="bg-white text-black font-mono text-[10px] tracking-[3px] uppercase font-bold px-8 py-3 rounded-lg hover:bg-accent hover:shadow-[0_0_20px_rgba(var(--accent-rgb),0.4)] transition-all flex items-center gap-2"
+                :disabled="isSubmitting"
+                class="bg-white text-black font-mono text-[10px] tracking-[3px] uppercase font-bold px-8 py-3 rounded-lg hover:bg-accent hover:shadow-[0_0_20px_rgba(var(--accent-rgb),0.4)] transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {{ currentStep === totalSteps ? 'Terminer' : 'Suivant' }} →
+                {{ currentStep === totalSteps ? (isSubmitting ? 'Traitement...' : 'Terminer') : 'Suivant' }} →
               </button>
             </div>
           </div>

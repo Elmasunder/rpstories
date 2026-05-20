@@ -114,9 +114,7 @@ const Chapter6Schema = z.object({
 
 // 8. SCHEMA GLOBAL : CHARACTER
 export const CharacterSchema = z.object({
-  id: z
-    .string()
-    .regex(/^[a-z_]+$/, "L'ID doit être en minuscule avec des underscores (ex: jean_dupont)"),
+  id: z.number(),
   pageTitle: z.string(),
   cover: CharacterCoverSchema,
   chapter1: Chapter1Schema,
@@ -128,7 +126,7 @@ export const CharacterSchema = z.object({
   family: z
     .array(
       z.object({
-        id: z.string().optional(),
+        id: z.union([z.string(), z.number()]).optional(),
         name: z.string(),
         relation: z.string(),
         status: StatusSchema,

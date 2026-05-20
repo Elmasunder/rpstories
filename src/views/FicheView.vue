@@ -2,9 +2,11 @@
 /**
  * FICHEVIEW - MOTEUR DE RENDU DES DOSSIERS (Version Utility-First)
  */
-import { computed, onMounted, watch } from 'vue'
-import { useRoute } from 'vue-router'
-import { characters } from '@/data/index.ts'
+import { computed, onMounted, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { supabase } from '@/utils/supabase'
+import { mapDbCharacterToFrontend } from '@/utils/mappers'
+import type { Character } from '@/types/character'
 import { getCharColors } from '@/utils/colors.ts'
 import { uiState } from '@/store/ui.ts'
 import { authState } from '@/store/auth'
@@ -15,30 +17,19 @@ import TheNavbar from '@/components/TheNavbar.vue'
 import FriendListBtn from '@/components/FriendListBtn.vue'
 
 const route = useRoute()
-const char = computed(() => {
-  const c = characters[route.params.id as string]
-  // Fallback temporary mock owner_id for local characters in dev (optional helper)
-  if (c && !('owner_id' in c)) {
-    // Add owner_id to c dynamically for dev testing if they exist in character list
-    // (We will map actual database characters in Phase 4)
-  }
-  return c
-})
+const router = useRouter()
+
+const char = ref<Character | null>(null)
+const isLoading = ref(true)
+const accessError = ref(false)
 
 const charColors = computed(() => {
   if (!char.value || char.value.cover.status === 'dead') {
     return { accent: '', accent2: '', accentRgb: '', accent2Rgb: '' }
   }
 
-  // On récupère l'index de la fiche dans la liste triée pour que la couleur corresponde au Hub
-  const sortedChars = Object.values(characters).sort((a, b) => {
-    if (a.cover.status === 'alive' && b.cover.status !== 'alive') return -1
-    if (a.cover.status !== 'alive' && b.cover.status === 'alive') return 1
-    return 0
-  })
-
-  const charIndex = sortedChars.findIndex((c) => c.id === char.value?.id)
-  return getCharColors(char.value.id, charIndex)
+  // Utilisation de l'ID comme seule graine pour garantir une couleur stable
+  return getCharColors(char.value.id)
 })
 
 const fixPath = (path: string) => {
@@ -82,6 +73,51 @@ const updateAtmosphere = () => {
         `Dossier RP de ${char.value.cover.firstName} "${char.value.cover.alias}" ${char.value.cover.lastName} sur le serveur ${char.value.cover.serverDomain}.`,
       )
     }
+  } else if (accessError.value) {
+    document.title = 'ACCÈS REFUSÉ | RP/STORIES'
+    uiState.setColors('#e74c3c', '#962d22', '231, 76, 60') // Rouge erreur
+  }
+}
+
+const fetchCharacter = async () => {
+  try {
+    isLoading.value = true
+    accessError.value = false
+    char.value = null
+    
+    // Attendre l'initialisation de l'auth pour s'assurer que les RLS fonctionnent bien
+    if (!authState.initialized) {
+      await authState.initialize()
+    }
+
+    const charId = Number(route.params.id)
+    if (isNaN(charId)) {
+      accessError.value = true
+      updateAtmosphere()
+      return
+    }
+
+    const { data, error } = await supabase
+      .from('characters')
+      .select('*')
+      .eq('id', charId)
+      .single()
+
+    if (error || !data) {
+      console.error('Fetch character failed. Error:', error, 'Data:', data)
+      accessError.value = true
+      updateAtmosphere()
+      return
+    }
+
+    char.value = mapDbCharacterToFrontend(data)
+    updateAtmosphere()
+  } catch (e) {
+    console.error('Erreur lors du chargement de la fiche:', e)
+    accessError.value = true
+    updateAtmosphere()
+  } finally {
+    isLoading.value = false
   }
 }
 
@@ -90,15 +126,14 @@ const handleImgError = (event: Event) => {
   if (target) target.style.display = 'none'
 }
 
-// Appel immédiat pour éviter le flash de couleur par défaut
-updateAtmosphere()
-
 onMounted(() => {
   window.scrollTo(0, 0)
+  fetchCharacter()
 })
 
-// On ne réinitialise plus les couleurs ici pour éviter le flash violet pendant la transition de sortie
-watch(char, updateAtmosphere)
+watch(() => route.params.id, () => {
+  fetchCharacter()
+})
 
 const scrollDown = () => {
   window.scrollBy({ top: window.innerHeight * 0.8, behavior: 'smooth' })
@@ -106,11 +141,37 @@ const scrollDown = () => {
 </script>
 
 <template>
-  <div v-if="char" class="relative min-h-screen text-white">
+  <div class="relative min-h-screen text-white">
     <TheNavbar />
 
+    <!-- LOADING STATE -->
+    <div v-if="isLoading" class="min-h-screen flex items-center justify-center">
+      <div class="size-10 border-2 border-accent border-t-transparent rounded-full animate-spin"></div>
+    </div>
+
+    <!-- ERROR / 403 STATE -->
+    <div v-else-if="accessError" class="min-h-screen flex flex-col items-center justify-center p-6 text-center animate-fade-in">
+      <div class="max-w-xl bg-dead/10 border border-dead/30 backdrop-blur-md rounded-2xl p-8 sm:p-12 shadow-[0_0_50px_rgba(231,76,60,0.15)] relative overflow-hidden">
+        <!-- Glitch effect pseudo-element -->
+        <div class="absolute inset-0 bg-dead/5 opacity-50 mix-blend-overlay pointer-events-none" style="background-image: url('https://www.ui-layouts.com/noise.gif')"></div>
+        
+        <h1 class="font-mono text-4xl sm:text-6xl font-black text-dead uppercase tracking-widest mb-4 drop-shadow-[0_0_15px_rgba(231,76,60,0.8)]">Code 403</h1>
+        <div class="font-mono text-xs sm:text-sm text-white/70 uppercase tracking-widest leading-relaxed mb-8">
+          Accès Compromis<br><br>
+          <span class="opacity-70 text-[10px]">Le dossier demandé est soit inexistant, soit restreint par les politiques de confidentialité de son auteur.</span>
+        </div>
+        <button
+          @click="router.push({ name: 'hub' })"
+          class="relative z-10 font-mono text-[10px] bg-dead text-black px-8 py-3.5 rounded-sm font-bold uppercase tracking-[3px] hover:shadow-[0_0_30px_rgba(231,76,60,0.6)] hover:bg-white transition-all cursor-pointer inline-block"
+        >
+          Retour au Hub
+        </button>
+      </div>
+    </div>
+
     <!-- SECTION 1 : COVER -->
-    <header class="relative z-10 h-screen flex flex-col justify-end overflow-hidden">
+    <template v-else-if="char">
+      <header class="relative z-10 h-screen flex flex-col justify-end overflow-hidden">
       <!-- Background & Photos -->
       <div class="absolute inset-0 z-0">
         <div class="absolute inset-0 bg-linear-to-t from-bg via-bg/70 to-transparent z-10"></div>
@@ -288,6 +349,39 @@ const scrollDown = () => {
                 </span>
               </div>
             </button>
+
+            <!-- Edit Character Button (Owner only) -->
+            <router-link
+              v-if="authState.user && char?.owner_id && authState.user.id === char.owner_id"
+              :to="{ name: 'edit', params: { id: char.id } }"
+              class="flex items-center gap-3 group/edit cursor-pointer"
+            >
+              <div
+                class="size-8 bg-white/5 backdrop-blur-md rounded-lg border border-white/10 group-hover/edit:border-accent/50 group-hover/edit:bg-accent/10 flex items-center justify-center transition-all"
+              >
+                <!-- Pencil / Edit Icon -->
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="size-4 text-white/60 group-hover/edit:text-accent transition-colors"
+                >
+                  <path d="M12 20h9" />
+                  <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
+                </svg>
+              </div>
+              <div class="flex flex-col">
+                <span class="font-mono text-[9px] text-muted uppercase tracking-[2px]">Gestion</span>
+                <span
+                  class="font-mono text-[10px] text-white/80 group-hover/edit:text-accent transition-colors"
+                >
+                  Modifier le dossier
+                </span>
+              </div>
+            </router-link>
           </div>
 
           <!-- SCROLL HINT — Tout à droite -->
@@ -480,14 +574,14 @@ const scrollDown = () => {
               </figure>
             </aside>
             <div
-              class="prose prose-invert max-w-none font-display text-[15px] leading-relaxed text-white/80 space-y-4"
+              class="prose prose-invert break-words max-w-none font-display text-[15px] leading-relaxed text-white/80 space-y-4"
             >
               <p v-for="(p, i) in char.chapter2.story1" :key="i">{{ p }}</p>
               <p v-for="(p, i) in char.chapter2.story2" :key="i">{{ p }}</p>
             </div>
             <blockquote
               v-if="char.chapter2.quote"
-              class="border-l-2 border-accent-alt pl-6 my-10 font-display font-black text-xl text-accent uppercase tracking-tighter leading-[1.1] shadow-accent/20 drop-shadow-sm"
+              class="border-l-2 border-accent-alt pl-6 my-10 font-display font-black text-xl text-accent uppercase tracking-tighter leading-[1.1] shadow-accent/20 drop-shadow-sm break-words"
             >
               "{{ char.chapter2.quote }}"
             </blockquote>
@@ -528,14 +622,14 @@ const scrollDown = () => {
               </figure>
             </aside>
             <div
-              class="prose prose-invert max-w-none font-display text-[15px] leading-relaxed text-white/80 space-y-4"
+              class="prose prose-invert break-words max-w-none font-display text-[15px] leading-relaxed text-white/80 space-y-4"
             >
               <p v-for="(p, i) in char.chapter3.story1" :key="i">{{ p }}</p>
               <p v-for="(p, i) in char.chapter3.story2" :key="i" v-html="p"></p>
             </div>
             <blockquote
               v-if="char.chapter3.quote"
-              class="border-l-2 border-accent-alt pl-6 my-10 font-display font-black text-xl text-accent uppercase tracking-tighter leading-[1.1] shadow-accent/20 drop-shadow-sm"
+              class="border-l-2 border-accent-alt pl-6 my-10 font-display font-black text-xl text-accent uppercase tracking-tighter leading-[1.1] shadow-accent/20 drop-shadow-sm break-words"
             >
               "{{ char.chapter3.quote }}"
             </blockquote>
@@ -577,7 +671,7 @@ const scrollDown = () => {
             </figure>
           </aside>
           <div
-            class="prose prose-invert max-w-none font-display text-[15px] leading-relaxed text-white/80"
+            class="prose prose-invert break-words max-w-none font-display text-[15px] leading-relaxed text-white/80"
           >
             <p v-for="(p, i) in char.chapter4.story1" :key="i">{{ p }}</p>
           </div>
@@ -649,7 +743,7 @@ const scrollDown = () => {
             <p v-for="(p, i) in char.chapter6.finaleStory" :key="i">{{ p }}</p>
           </div>
           <blockquote
-            class="border-l-2 border-accent-alt pl-6 mt-8 font-display font-black text-xl text-accent uppercase tracking-tighter leading-[1.1] shadow-accent/20 drop-shadow-sm"
+            class="border-l-2 border-accent-alt pl-6 mt-8 font-display font-black text-xl text-accent uppercase tracking-tighter leading-[1.1] shadow-accent/20 drop-shadow-sm break-words"
           >
             "{{ char.chapter6.finaleQuote }}"
           </blockquote>
@@ -664,14 +758,6 @@ const scrollDown = () => {
 
     <!-- Friend List Button (placeholder) -->
     <FriendListBtn />
-  </div>
-
-  <div v-else class="min-h-screen bg-bg flex flex-col items-center justify-center text-center p-10">
-    <h1 class="font-display font-black text-4xl mb-6">Dossier Introuvable</h1>
-    <RouterLink
-      to="/"
-      class="font-mono text-accent hover:underline text-sm tracking-widest uppercase"
-      >← Revenir au Hub Central</RouterLink
-    >
+    </template>
   </div>
 </template>

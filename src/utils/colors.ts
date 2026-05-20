@@ -27,10 +27,11 @@ export const charPalette = [
   '#16a34a', // 21: Forest Green (Opposé de 10)
 ]
 
-export function getCharColors(id: string, index: number = 0) {
+export function getCharColors(id: string | number, index: number = 0) {
+  const strId = String(id)
   let hash = 0
-  for (let i = 0; i < id.length; i++) {
-    hash = id.charCodeAt(i) + ((hash << 5) - hash)
+  for (let i = 0; i < strId.length; i++) {
+    hash = strId.charCodeAt(i) + ((hash << 5) - hash)
   }
 
   // On utilise des multiplicateurs (nombres premiers) pour mieux disperser les couleurs

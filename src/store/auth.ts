@@ -176,13 +176,15 @@ export const authState = reactive({
   },
 
   async signOut() {
-    const { error } = await supabase.auth.signOut()
-    if (error) {
-      console.error('Error logging out:', error.message)
-      throw error
-    }
+    // Clear local state immediately so UI updates instantly and isn't blocked by a hanging network call
     this.user = null
     this.profile = null
     this.followingIds = []
+
+    try {
+      await supabase.auth.signOut()
+    } catch (error) {
+      console.error('Error logging out from Supabase auth session:', error)
+    }
   }
 })

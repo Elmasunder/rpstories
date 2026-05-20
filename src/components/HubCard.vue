@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import type { Character } from '@/types/character'
 import { getCharColors } from '@/utils/colors.ts'
+import { authState } from '@/store/auth'
 
 const props = defineProps<{
   char: Character
@@ -10,6 +12,14 @@ const props = defineProps<{
 
 // On s'assure que les couleurs sont calculées de manière réactive et stable
 const charColors = computed(() => getCharColors(props.char.id, props.index || 0))
+const router = useRouter()
+const isOwner = computed(() => authState.user?.id === props.char.owner_id)
+
+const goToEdit = (e: Event) => {
+  e.preventDefault()
+  e.stopPropagation()
+  router.push({ name: 'edit', params: { id: props.char.id } })
+}
 
 const currentImg = ref(0)
 const isDead = computed(() => {
@@ -117,19 +127,42 @@ const stopCycle = () => {
           <!-- Spacer to keep the portal link on the right if badge is hidden -->
           <div v-else class="w-20"></div>
 
-          <a
-            v-if="char.cover.serverDomain && char.cover.serverDomain !== 'nom-du-serveur.fr'"
-            :href="`https://${char.cover.serverDomain}`"
-            target="_blank"
-            class="size-8 bg-black/60 backdrop-blur-md rounded-full border border-white/10 p-1.5 hover:bg-accent/20 hover:border-accent/50 transition-all group/logo"
-            @click.stop
-          >
-            <img
-              :src="`https://www.google.com/s2/favicons?domain=${char.cover.serverDomain}&sz=64`"
-              class="w-full h-full object-contain filter grayscale group-hover/logo:grayscale-0 transition-all"
-              :alt="char.cover.serverDomain"
-            />
-          </a>
+          <div class="flex items-center gap-2">
+            <!-- Edit Picto (Owner only) -->
+            <button
+              v-if="isOwner"
+              @click="goToEdit"
+              class="size-8 bg-black/60 backdrop-blur-md rounded-full border border-white/10 p-1.5 hover:bg-accent/20 hover:border-accent/50 transition-all group/edit cursor-pointer"
+              title="Modifier ce dossier"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="w-full h-full text-white/60 group-hover/edit:text-accent transition-colors"
+              >
+                <path d="M12 20h9" />
+                <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
+              </svg>
+            </button>
+
+            <a
+              v-if="char.cover.serverDomain && char.cover.serverDomain !== 'nom-du-serveur.fr'"
+              :href="`https://${char.cover.serverDomain}`"
+              target="_blank"
+              class="size-8 bg-black/60 backdrop-blur-md rounded-full border border-white/10 p-1.5 hover:bg-accent/20 hover:border-accent/50 transition-all group/logo"
+              @click.stop
+            >
+              <img
+                :src="`https://www.google.com/s2/favicons?domain=${char.cover.serverDomain}&sz=64`"
+                class="w-full h-full object-contain filter grayscale group-hover/logo:grayscale-0 transition-all"
+                :alt="char.cover.serverDomain"
+              />
+            </a>
+          </div>
         </div>
       </div>
 

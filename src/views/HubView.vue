@@ -1,23 +1,86 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { characters } from '@/data/index.ts'
+import { supabase } from '@/utils/supabase'
+import { mapDbCharacterToFrontend } from '@/utils/mappers'
+import type { Character } from '@/types/character'
+import { authState } from '@/store/auth'
 import { getCharColors } from '@/utils/colors.ts'
 import { uiState } from '@/store/ui.ts'
 import HubCard from '@/components/HubCard.vue'
 import CreateCard from '@/components/CreateCard.vue'
-import FriendListBtn from '@/components/FriendListBtn.vue'
 import TheNavbar from '@/components/TheNavbar.vue'
 
-const charList = computed(() => {
-  return Object.values(characters).sort((a, b) => {
-    if (a.cover.status === 'alive' && b.cover.status !== 'alive') return -1
-    if (a.cover.status !== 'alive' && b.cover.status === 'alive') return 1
-    return 0
-  })
+const router = useRouter()
+
+// État des données
+const charList = ref<Character[]>([])
+const isLoading = ref(true)
+const activeTab = ref<'public' | 'my_fiches' | 'followed'>('public')
+
+const fetchCharacters = async () => {
+  try {
+    isLoading.value = true
+    charList.value = []
+
+    let query = supabase.from('characters').select('*')
+
+    if (activeTab.value === 'public') {
+      query = query.eq('privacy', 'public')
+    } else if (activeTab.value === 'my_fiches') {
+      if (!authState.user) return
+      query = query.eq('owner_id', authState.user.id)
+    } else if (activeTab.value === 'followed') {
+      if (!authState.user || authState.followingIds.length === 0) {
+        charList.value = []
+        return
+      }
+      query = query.in('owner_id', authState.followingIds)
+    }
+
+    const { data, error } = await query
+
+    if (error) throw error
+
+    if (data) {
+      charList.value = data.map(mapDbCharacterToFrontend).sort((a, b) => {
+        if (a.cover.status === 'alive' && b.cover.status !== 'alive') return -1
+        if (a.cover.status !== 'alive' && b.cover.status === 'alive') return 1
+        return 0
+      })
+    }
+  } catch (err) {
+    console.error('Erreur lors du chargement des fiches:', err)
+  } finally {
+    isLoading.value = false
+  }
+}
+
+
+watch(activeTab, () => {
+  fetchCharacters()
+  // Re-setup or disconnect observer based on the active tab since CreateCard is conditionally rendered
+  setTimeout(() => {
+    if (activeTab.value === 'my_fiches') {
+      setupObserver()
+    } else if (observer) {
+      observer.disconnect()
+      observer = null
+      isCreateCardVisible.value = false
+    }
+  }, 100)
 })
 
-const router = useRouter()
+watch(() => authState.user, (newUser) => {
+  if (!newUser && activeTab.value !== 'public') {
+    activeTab.value = 'public' // triggers activeTab watcher
+  } else if (newUser && activeTab.value === 'public') {
+    activeTab.value = 'my_fiches' // triggers activeTab watcher
+  } else {
+    // Tab didn't change, trigger fetch manually
+    fetchCharacters()
+  }
+})
 
 // Logique pour masquer le FAB quand la CreateCard est visible
 const createCardRef = ref<InstanceType<typeof CreateCard> | null>(null)
@@ -25,6 +88,9 @@ const isCreateCardVisible = ref(false)
 let observer: IntersectionObserver | null = null
 
 const setupObserver = () => {
+  if (observer) {
+    observer.disconnect()
+  }
   const el = createCardRef.value?.$el || createCardRef.value
   if (!el) return
 
@@ -46,7 +112,16 @@ const hubColors = getCharColors('hub-' + Date.now())
 onMounted(() => {
   document.title = 'RP/STORIES | Hub'
   uiState.setColors(hubColors.accent, hubColors.accent2, hubColors.accentRgb)
-  setupObserver()
+  
+  if (authState.user && activeTab.value !== 'my_fiches') {
+    activeTab.value = 'my_fiches' // triggers activeTab watcher
+  } else {
+    fetchCharacters()
+  }
+
+  setTimeout(() => {
+    setupObserver()
+  }, 100)
 })
 
 onUnmounted(() => {
@@ -114,8 +189,48 @@ onUnmounted(() => {
 
     <!-- Main Grid -->
     <main class="relative z-10 max-w-[1400px] mx-auto px-4 md:px-8 pb-16 md:pb-32">
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8">
+      <!-- Tab Switcher -->
+      <div class="flex flex-wrap items-center justify-center gap-4 mb-10 max-w-[800px] mx-auto border-b border-white/5 pb-6">
+        <button
+          @click="activeTab = 'public'"
+          class="font-mono text-[10px] tracking-[2px] uppercase px-4 py-2 rounded-lg transition-all cursor-pointer font-bold"
+          :class="activeTab === 'public' ? 'bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.2)]' : 'text-white/40 hover:text-white hover:bg-white/5'"
+        >
+          // Archives Publiques
+        </button>
+
+        <button
+          v-if="authState.user"
+          @click="activeTab = 'my_fiches'"
+          class="font-mono text-[10px] tracking-[2px] uppercase px-4 py-2 rounded-lg transition-all cursor-pointer font-bold"
+          :class="activeTab === 'my_fiches' ? 'bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.2)]' : 'text-white/40 hover:text-white hover:bg-white/5'"
+        >
+          // Mes Dossiers
+        </button>
+
+        <button
+          v-if="authState.user"
+          @click="activeTab = 'followed'"
+          class="font-mono text-[10px] tracking-[2px] uppercase px-4 py-2 rounded-lg transition-all cursor-pointer font-bold"
+          :class="activeTab === 'followed' ? 'bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.2)]' : 'text-white/40 hover:text-white hover:bg-white/5'"
+        >
+          // Suivis
+        </button>
+      </div>
+
+      <div v-if="isLoading" class="py-20 flex justify-center items-center">
+        <div class="size-10 border-2 border-accent border-t-transparent rounded-full animate-spin"></div>
+      </div>
+      
+      <div v-else-if="charList.length === 0 && activeTab !== 'my_fiches'" class="py-20 text-center flex flex-col items-center">
+        <div class="font-mono text-[10px] text-accent tracking-[3px] uppercase font-bold mb-2">0 RÉSULTAT</div>
+        <div class="text-white/40 text-sm max-w-md">Aucun dossier ne correspond à votre niveau d'accréditation ou aucune fiche n'a encore été archivée.</div>
+      </div>
+
+      <div v-else :class="charList.length === 0 ? 'flex justify-center py-10' : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8'">
         <CreateCard
+          v-if="activeTab === 'my_fiches'"
+          :class="charList.length === 0 ? 'w-full max-w-[310px]' : ''"
           ref="createCardRef"
           @create="
             router.push({

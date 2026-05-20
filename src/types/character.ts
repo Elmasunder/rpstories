@@ -100,14 +100,16 @@ export interface CharacterLocation {
 }
 
 export interface FamilyMember {
-  id?: string // ID pour faire un lien vers une autre fiche si elle existe
+  id?: string | number // ID pour faire un lien vers une autre fiche si elle existe
   name: string
   relation: string
   status: 'alive' | 'dead'
 }
 
 export interface Character {
-  id: string
+  id: number
+  owner_id?: string
+  privacy?: 'public' | 'followers' | 'private'
   pageTitle: string
   location?: CharacterLocation // Si tu réactives la carte un jour
   cover: CharacterCover
@@ -119,5 +121,4 @@ export interface Character {
   chapter6: Chapter6 // Les objectifs et conclusion
   family?: FamilyMember[] // Optionnel : Arbre généalogique / Proches
   footer: string
-  owner_id?: string // Identifiant de l'utilisateur propriétaire
 }

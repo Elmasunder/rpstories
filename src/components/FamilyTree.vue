@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { FamilyMember } from '@/types/character'
-import { characters } from '@/data/index'
 import ChapterHeader from '@/components/ChapterHeader.vue'
 
 defineProps<{
@@ -11,10 +10,8 @@ defineProps<{
 
 const PLACEHOLDER_PATH = `${import.meta.env.BASE_URL}assets/placeholder_user.webp`
 
-const getMemberPhoto = (member: FamilyMember) => {
-  if (member.id && characters[member.id]) {
-    return characters[member.id].cover.photos[0]
-  }
+const getMemberPhoto = () => {
+  // En attendant une future table d'avatars pour les membres de famille, on retourne le placeholder
   return PLACEHOLDER_PATH
 }
 
@@ -71,8 +68,7 @@ const getStatusColor = (status: string) => {
             :to="member.id ? { name: 'fiche', params: { id: member.id } } : undefined"
             class="block bg-panel backdrop-blur-md border border-white/10 p-5 rounded-lg transition-all duration-300 hover:-translate-y-1 hover:border-accent hover:bg-panel-hover overflow-hidden relative"
             :style="
-              member.id &&
-              characters[member.id]?.cover?.status === 'dead'
+              member.status === 'dead'
                 ? {
                     '--color-accent': '#e74c3c',
                     '--accent-rgb': '231, 76, 60',
@@ -99,9 +95,9 @@ const getStatusColor = (status: string) => {
 
             <!-- Member Info -->
             <div class="flex justify-between items-center gap-4 mb-4">
-              <div class="flex-1">
+              <div class="flex-1 min-w-0">
                 <div
-                  class="font-display text-lg font-extrabold text-white tracking-tight leading-tight group-hover:text-accent transition-colors"
+                  class="font-display text-lg font-extrabold text-white tracking-tight leading-tight group-hover:text-accent transition-colors break-words line-clamp-2"
                 >
                   {{ member.name }}
                 </div>
@@ -110,7 +106,7 @@ const getStatusColor = (status: string) => {
                 class="size-14 rounded-full border-2 border-accent/30 overflow-hidden bg-black shadow-lg flex-none transition-transform group-hover:scale-110 duration-500"
               >
                 <img
-                  :src="getMemberPhoto(member)"
+                  :src="getMemberPhoto()"
                   class="size-full object-cover transition-all"
                   :class="{ 'grayscale brightness-75': member.status !== 'alive' }"
                   :alt="member.name"
