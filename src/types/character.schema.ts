@@ -6,7 +6,7 @@ import { z } from 'zod'
  */
 
 // 1. Statuts autorisés
-const StatusSchema = z.enum(['alive', 'dead', 'disparu', 'missing', 'unknown'])
+const StatusSchema = z.enum(['alive', 'dead'])
 
 // 2. Éléments de base (Metadata, Items)
 const MetaItemSchema = z.object({
@@ -37,11 +37,9 @@ const CharacterCoverSchema = z.object({
     .min(2)
     .transform((s: string) => s.toUpperCase()),
   alias: z.string().min(1),
-  subtitle: z.string().min(5),
-  destination: z.string(),
   meta: z.array(MetaItemSchema).length(5, 'Il faut exactement 5 champs méta (Âge, Taille, etc.)'),
   ref: z.string().includes('DOSSIER REF:'),
-  photos: z.array(z.string()).min(1),
+  photos: z.array(z.string()).min(3).max(6, 'Il faut entre 3 et 6 photos'),
 })
 
 // 4. Chapitre I : IDENTITÉ
@@ -94,7 +92,7 @@ const Chapter4Schema = z.object({
     .array(
       z.object({
         title: z.string(),
-        skills: z.array(SkillItemSchema).min(3),
+        skills: z.array(SkillItemSchema).min(4),
       }),
     )
     .length(2, "Il faut un groupe d'aptitudes sociales et un groupe technique"),
@@ -106,9 +104,9 @@ const Chapter6Schema = z.object({
   label: z.string(),
   titleLines: z.array(z.string()),
   objectives: z.object({
-    shortTerm: z.array(z.string()).min(2),
-    mediumTerm: z.array(z.string()).min(2),
-    longTerm: z.array(z.string()).min(2),
+    shortTerm: z.array(z.string()).min(3),
+    mediumTerm: z.array(z.string()).min(3),
+    longTerm: z.array(z.string()).min(3),
   }),
   finaleStory: z.array(z.string()).min(1),
   finaleQuote: z.string(),

@@ -13,8 +13,6 @@ export const isabella_sterling: Character = {
     firstName: `ISABELLA`,
     lastName: `STERLING`,
     alias: `Static`,
-    subtitle: `29 ans — Islington, Londres →`,
-    destination: `Los Santos`,
     meta: [
       { key: `Âge`, value: `29` },
       { key: `Taille`, value: `172 cm` },

@@ -9,9 +9,9 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   base: '/rpstories/',
   plugins: [
+    tailwindcss(),
     vue(),
     vueDevTools(),
-    tailwindcss(),
   ],
   build: {
     rollupOptions: {

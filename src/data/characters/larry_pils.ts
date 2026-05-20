@@ -13,8 +13,6 @@ export const larry_pils: Character = {
     firstName: `LARRY`,
     lastName: `PILS`,
     alias: `Old Larry`,
-    subtitle: `34 ans — Industrial District, Los Santos →`,
-    destination: `Los Santos`,
     meta: [
       { key: `Âge`, value: `34` },
       { key: `Taille`, value: `185 cm` },

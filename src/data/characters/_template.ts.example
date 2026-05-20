@@ -17,8 +17,6 @@ export const template_id: Character = {
     firstName: `PRÉNOM`,
     lastName: `NOM`,
     alias: `Alias`,
-    subtitle: `XX ans — Origine, Ville →`,
-    destination: `Los Santos`,
     meta: [
       { key: `Âge`, value: `XX` },
       { key: `Taille`, value: `XXX cm` },

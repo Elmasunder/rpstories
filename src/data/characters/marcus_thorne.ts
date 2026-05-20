@@ -13,8 +13,6 @@ export const marcus_thorne: Character = {
     firstName: `MARCUS`,
     lastName: `THORNE`,
     alias: `The Shield`,
-    subtitle: `38 ans — Rockford Hills, Los Santos →`,
-    destination: `Los Santos`,
     meta: [
       { key: `Âge`, value: `38` },
       { key: `Taille`, value: `192 cm` },

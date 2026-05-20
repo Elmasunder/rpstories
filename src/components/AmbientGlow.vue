@@ -29,15 +29,15 @@ const handleScroll = () => {
 
 // Calcul de l'opacité selon le scroll et la page
 const glowOpacity = computed(() => {
-  // Sur le Hub, on laisse toujours (ou on peut ajuster)
-  if (route.name === 'hub') return 1
-
   // Sur la fiche, on n'affiche que sous la ligne de flottaison (100vh)
-  const threshold = window.innerHeight * 0.8 // On commence à apparaître un peu avant
-  if (scrollY.value < threshold) return 0
+  if (route.name === 'fiche') {
+    const threshold = window.innerHeight * 0.8 // On commence à apparaître un peu avant
+    if (scrollY.value < threshold) return 0
+    return Math.min((scrollY.value - threshold) / 200, 1) // Apparition progressive
+  }
 
-  // Apparition progressive
-  return Math.min((scrollY.value - threshold) / 200, 1)
+  // Actif par défaut sur toutes les autres pages (Hub, Login, Create...)
+  return 1
 })
 
 onMounted(() => {

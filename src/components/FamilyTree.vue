@@ -72,8 +72,7 @@ const getStatusColor = (status: string) => {
             class="block bg-panel backdrop-blur-md border border-white/10 p-5 rounded-lg transition-all duration-300 hover:-translate-y-1 hover:border-accent hover:bg-panel-hover overflow-hidden relative"
             :style="
               member.id &&
-              (characters[member.id]?.cover?.status === 'dead' ||
-                characters[member.id]?.cover?.status === 'disparu')
+              characters[member.id]?.cover?.status === 'dead'
                 ? {
                     '--color-accent': '#e74c3c',
                     '--accent-rgb': '231, 76, 60',

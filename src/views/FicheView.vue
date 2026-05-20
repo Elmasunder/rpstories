@@ -7,6 +7,7 @@ import { useRoute } from 'vue-router'
 import { characters } from '@/data/index.ts'
 import { getCharColors } from '@/utils/colors.ts'
 import { uiState } from '@/store/ui.ts'
+import { authState } from '@/store/auth'
 import ChapterHeader from '@/components/ChapterHeader.vue'
 import SkillGroup from '@/components/SkillGroup.vue'
 import FamilyTree from '@/components/FamilyTree.vue'
@@ -14,10 +15,18 @@ import TheNavbar from '@/components/TheNavbar.vue'
 import FriendListBtn from '@/components/FriendListBtn.vue'
 
 const route = useRoute()
-const char = computed(() => characters[route.params.id as string])
+const char = computed(() => {
+  const c = characters[route.params.id as string]
+  // Fallback temporary mock owner_id for local characters in dev (optional helper)
+  if (c && !('owner_id' in c)) {
+    // Add owner_id to c dynamically for dev testing if they exist in character list
+    // (We will map actual database characters in Phase 4)
+  }
+  return c
+})
 
 const charColors = computed(() => {
-  if (!char.value || char.value.cover.status === 'dead' || char.value.cover.status === 'disparu') {
+  if (!char.value || char.value.cover.status === 'dead') {
     return { accent: '', accent2: '', accentRgb: '', accent2Rgb: '' }
   }
 
@@ -38,6 +47,17 @@ const fixPath = (path: string) => {
   return `${import.meta.env.BASE_URL}${cleanPath}`
 }
 
+const toggleFollow = async () => {
+  const ownerId = char.value?.owner_id
+  if (!ownerId) return
+
+  if (authState.isFollowing(ownerId)) {
+    await authState.unfollowUser(ownerId)
+  } else {
+    await authState.followUser(ownerId)
+  }
+}
+
 const updateAtmosphere = () => {
   if (char.value) {
     document.title =
@@ -45,7 +65,7 @@ const updateAtmosphere = () => {
       `${char.value.cover.firstName} ${char.value.cover.lastName} | RP/Stories`
 
     // Application des couleurs via le Store Global
-    if (char.value.cover.status === 'dead' || char.value.cover.status === 'disparu') {
+    if (char.value.cover.status === 'dead') {
       uiState.setColors('#e74c3c', '#e74c3c', '231, 76, 60')
     } else {
       uiState.setColors(
@@ -59,7 +79,7 @@ const updateAtmosphere = () => {
     if (metaDesc) {
       metaDesc.setAttribute(
         'content',
-        `Dossier RP de ${char.value.cover.firstName} ${char.value.cover.lastName} : ${char.value.cover.subtitle} sur ${char.value.cover.destination}.`,
+        `Dossier RP de ${char.value.cover.firstName} "${char.value.cover.alias}" ${char.value.cover.lastName} sur le serveur ${char.value.cover.serverDomain}.`,
       )
     }
   }
@@ -211,6 +231,63 @@ const scrollDown = () => {
                 >
               </div>
             </a>
+
+            <!-- Follow Player Button -->
+            <button
+              v-if="authState.user && char?.owner_id && authState.user.id !== char.owner_id"
+              @click="toggleFollow"
+              class="flex items-center gap-3 group/follow cursor-pointer"
+            >
+              <div
+                class="size-8 bg-white/5 backdrop-blur-md rounded-lg border flex items-center justify-center transition-all"
+                :class="
+                  authState.isFollowing(char.owner_id)
+                    ? 'border-accent/40 bg-accent/10 group-hover/follow:border-dead/50 group-hover/follow:bg-dead/10'
+                    : 'border-white/10 group-hover/follow:border-accent/50 group-hover/follow:bg-accent/10'
+                "
+              >
+                <!-- Bell / Plus Icon -->
+                <svg
+                  v-if="authState.isFollowing(char.owner_id)"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="size-4 text-accent group-hover/follow:text-dead transition-colors"
+                >
+                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                  <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                </svg>
+                <svg
+                  v-else
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="size-4 text-white/60 group-hover/follow:text-accent transition-colors"
+                >
+                  <line x1="12" y1="5" x2="12" y2="19" />
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+              </div>
+              <div class="flex flex-col">
+                <span class="font-mono text-[9px] text-muted uppercase tracking-[2px]">Abonnement</span>
+                <span
+                  class="font-mono text-[10px] text-white/80 transition-colors"
+                  :class="
+                    authState.isFollowing(char.owner_id)
+                      ? 'group-hover/follow:text-dead'
+                      : 'group-hover/follow:text-accent'
+                  "
+                >
+                  {{ authState.isFollowing(char.owner_id) ? 'Suivi' : 'Suivre Joueur' }}
+                </span>
+              </div>
+            </button>
           </div>
 
           <!-- SCROLL HINT — Tout à droite -->

@@ -5,6 +5,8 @@ import { characters } from '@/data/index.ts'
 import { uiState } from '@/store/ui.ts'
 import { getCharColors } from '@/utils/colors.ts'
 import TheNavbar from '@/components/TheNavbar.vue'
+import { CharacterSchema } from '@/types/character.schema'
+import type { Character } from '@/types/character'
 
 const router = useRouter()
 const route = useRoute()
@@ -31,6 +33,7 @@ const formData = ref({
   lastName: '',
   status: 'alive',
   serverDomain: '',
+  discordUrl: '',
   reference: 'DOSSIER REF: 2026-AR-01', // Format fixe
   // Tableau d'informations
   alias: '',
@@ -51,21 +54,27 @@ const formData = ref({
   origins_story: '',
   adult_story: '',
   aptitudes_story: '',
-  // Compétences (Pourcentages)
+  // Compétences (Pourcentages) - 4 compétences requises par défaut
   skills_social: [
     { name: 'Analyse comportementale', percent: 50 },
     { name: 'Discrétion & Infiltration', percent: 50 },
+    { name: 'Sang-froid (Under Pressure)', percent: 50 },
+    { name: 'Persuasion & Charisme', percent: 50 },
   ],
   skills_tech: [
     { name: 'Lockpicking Avancé', percent: 50 },
     { name: 'Bypass de Sécurité', percent: 50 },
+    { name: 'Piratage de Systèmes', percent: 50 },
+    { name: 'Combat au Corps à Corps', percent: 50 },
   ],
   // Relations
   relations: [{ name: '', relation: '', status: 'alive' }],
-  // Objectifs (Un par ligne demandé)
-  objectives_short: [''],
-  objectives_medium: [''],
-  objectives_long: [''],
+  // Objectifs - 3 objectifs requis par défaut
+  objectives_short: ['', '', ''],
+  objectives_medium: ['', '', ''],
+  objectives_long: ['', '', ''],
+  // Photos - Entre 3 et 6 photos
+  photos: ['', '', ''],
 })
 
 watch(
@@ -80,6 +89,142 @@ watch(
 
 const errorMsg = ref('')
 
+const calculateAge = (birthDateStr: string): string => {
+  let birthDate: Date
+  if (birthDateStr.includes('-')) {
+    birthDate = new Date(birthDateStr)
+  } else if (birthDateStr.includes('/')) {
+    const parts = birthDateStr.split('/')
+    birthDate = new Date(Number(parts[2]), Number(parts[1]) - 1, Number(parts[0]))
+  } else {
+    return 'XX'
+  }
+
+  if (isNaN(birthDate.getTime())) return 'XX'
+  const today = new Date()
+  let age = today.getFullYear() - birthDate.getFullYear()
+  const m = today.getMonth() - birthDate.getMonth()
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    age--
+  }
+  return String(age)
+}
+
+const mapFormToCharacter = (): Character => {
+  const p = formData.value.firstName ? formData.value.firstName.trim().charAt(0).toUpperCase() : 'X'
+  const n = formData.value.lastName ? formData.value.lastName.trim().charAt(0).toUpperCase() : 'X'
+  const nextId = String(Object.keys(characters).length + 1).padStart(2, '0')
+  const refCode = `2026-${p}${n}-${nextId}`
+  const p3Padded = nextId.padStart(4, '0')
+
+  const id = `${formData.value.firstName.toLowerCase().trim()}_${formData.value.lastName.toLowerCase().trim()}`
+  const age = calculateAge(formData.value.birthDate)
+  const photos = formData.value.photos.filter((url) => url.trim() !== '')
+
+  return {
+    id,
+    pageTitle: `Dossier RP – ${formData.value.firstName} ${formData.value.lastName}`,
+    cover: {
+      status: formData.value.status as 'alive' | 'dead',
+      serverDomain: formData.value.serverDomain.trim(),
+      discordUrl: formData.value.discordUrl ? formData.value.discordUrl.trim() : undefined,
+      eyebrow: `// DOSSIER RP #2026${p}${n}${p3Padded}`,
+      firstName: formData.value.firstName.trim().toUpperCase(),
+      lastName: formData.value.lastName.trim().toUpperCase(),
+      alias: formData.value.alias.trim(),
+      meta: [
+        { key: 'Âge', value: age },
+        { key: 'Taille', value: formData.value.height.trim().includes('cm') ? formData.value.height.trim() : `${formData.value.height.trim()} cm` },
+        { key: 'Poids', value: formData.value.weight.trim().includes('kg') ? formData.value.weight.trim() : `${formData.value.weight.trim()} kg` },
+        { key: 'Origines', value: formData.value.origins.trim() },
+        { key: 'Véhicule de réf', value: formData.value.vehicle.trim() },
+      ],
+      ref: `DOSSIER REF: ${refCode}<br>STATUT: ACTIF · EN SERVICE<br>USAGE: ROLEPLAY EXCLUSIF`,
+      photos,
+    },
+    chapter1: {
+      label: 'Présentation du personnage',
+      titleLines: ['Profil &', 'Identité'],
+      identityPanels: [
+        [
+          { key: 'Nom', value: formData.value.lastName.trim() },
+          { key: 'Prénom', value: formData.value.firstName.trim() },
+          { key: 'Surnom', value: `"${formData.value.alias.trim()}"`, class: 'text-accent' },
+          { key: 'Date de naissance', value: formData.value.birthDate.split('-').reverse().join(' / ') },
+          { key: 'Lieu de naissance', value: formData.value.birthPlace.trim() },
+          { key: 'Ville actuelle', value: formData.value.currentCity.trim(), class: 'text-accent-alt' },
+          { key: 'Origine(s)', value: formData.value.origins.trim() },
+          { key: 'Taille', value: formData.value.height.trim().includes('cm') ? formData.value.height.trim() : `${formData.value.height.trim()} cm` },
+          { key: 'Poids', value: formData.value.weight.trim().includes('kg') ? formData.value.weight.trim() : `${formData.value.weight.trim()} kg` },
+        ],
+        [
+          { key: 'Signe particulier', value: formData.value.specialSign.trim(), class: 'text-accent' },
+          { key: 'Père', value: formData.value.father.trim(), class: formData.value.father.toLowerCase().includes('inconnu') ? 'text-muted' : '' },
+          { key: 'Mère', value: formData.value.mother.trim(), class: formData.value.mother.toLowerCase().includes('inconnu') ? 'text-muted' : '' },
+          { key: 'Passé', value: formData.value.past.trim() },
+          { key: 'Passion(s)', value: formData.value.passions.trim() },
+          { key: 'Véhicule', value: formData.value.vehicle.trim(), class: 'text-accent' },
+          { key: 'Spécialité', value: formData.value.specialty.trim(), class: 'text-accent' },
+        ],
+      ],
+      profile: {
+        qualités: ['Déterminé', 'Discret', 'Ingénieux'],
+        défauts: ['Méfiant', 'Paranoïaque'],
+      },
+      infoPlus: {
+        icon: '📝',
+        title: 'Note de Dossier',
+        text: `Fiche créée le ${new Date().toLocaleDateString('fr-FR')}.`,
+      },
+    },
+    chapter2: {
+      label: 'Histoire',
+      titleLines: ['Les', 'origines', 'text-accent-alt'],
+      story1: [formData.value.origins_story.trim()],
+    },
+    chapter3: {
+      label: 'Histoire',
+      titleLines: ["La vie", "d'adulte", "text-accent"],
+      story1: [formData.value.adult_story.trim()],
+    },
+    chapter4: {
+      label: 'Aptitudes',
+      titleLines: ['Spécialités &', 'compétences', 'text-accent'],
+      story1: [formData.value.aptitudes_story.trim()],
+      skillsGroups: [
+        {
+          title: '// Aptitudes sociales',
+          skills: formData.value.skills_social.map((s) => ({ name: s.name.trim(), percent: s.percent })),
+        },
+        {
+          title: '// Expertise technique',
+          skills: formData.value.skills_tech.map((s) => ({ name: s.name.trim(), percent: s.percent })),
+        },
+      ],
+      callout: `// PROFIL : Spécialiste avec expertise en ${formData.value.specialty.trim()}. //`,
+    },
+    chapter6: {
+      label: 'Le futur',
+      titleLines: ['Objectifs &', 'ambitions', 'text-accent'],
+      objectives: {
+        shortTerm: formData.value.objectives_short.map((o) => o.trim()).filter(Boolean),
+        mediumTerm: formData.value.objectives_medium.map((o) => o.trim()).filter(Boolean),
+        longTerm: formData.value.objectives_long.map((o) => o.trim()).filter(Boolean),
+      },
+      finaleStory: [`Le dossier de ${formData.value.firstName} ${formData.value.lastName} reste actif et sous surveillance.`],
+      finaleQuote: `"${formData.value.alias.trim() || formData.value.firstName}. J'arrive à Los Santos."`,
+    },
+    family: formData.value.relations
+      .filter((r) => r.name.trim() !== '')
+      .map((r) => ({
+        name: r.name.trim(),
+        relation: r.relation.trim(),
+        status: r.status as 'alive' | 'dead',
+      })),
+    footer: `DOSSIER RP — ${formData.value.firstName.toUpperCase()} ${formData.value.lastName.toUpperCase()} · ${formData.value.currentCity.toUpperCase()} · REF: ${refCode}<br>Document créé par RPStories — Five M · Personnage fictif · v2.2`,
+  }
+}
+
 const validateStep = (step: number) => {
   errorMsg.value = ''
   if (step === 1) {
@@ -87,6 +232,9 @@ const validateStep = (step: number) => {
     if (!formData.value.lastName.trim()) return 'Le nom de famille est requis.'
     if (!formData.value.serverDomain.trim()) return 'Le domaine est requis.'
     if (!formData.value.status.trim()) return 'Le statut est requis.'
+    if (formData.value.discordUrl && !formData.value.discordUrl.startsWith('http')) {
+      return 'Le lien Discord doit être une URL valide (ex: https://...).'
+    }
   }
   if (step === 2) {
     const fields = [
@@ -113,11 +261,11 @@ const validateStep = (step: number) => {
     if (!dateRegex.test(formData.value.birthDate.trim()))
       return 'Sélectionnez une date de naissance valide.'
 
-    const heightRegex = /^\d{3}$|^\d\.\d{2}$/
+    const heightRegex = /^\d{3}$|^\d\.\d{2}$|^\d{3}\s*cm$/
     if (!heightRegex.test(formData.value.height.trim()))
       return 'La taille doit être un nombre (ex: 185 ou 1.85).'
 
-    const weightRegex = /^\d{2,3}$/
+    const weightRegex = /^\d{2,3}$|^\d{2,3}\s*kg$/
     if (!weightRegex.test(formData.value.weight.trim()))
       return 'Le poids doit être un nombre (ex: 75).'
   }
@@ -127,13 +275,13 @@ const validateStep = (step: number) => {
   }
   if (step === 4) {
     if (!formData.value.aptitudes_story.trim()) return 'La description des aptitudes est requise.'
-    if (formData.value.skills_social.length === 0)
-      return 'Au moins une aptitude sociale est requise.'
+    if (formData.value.skills_social.length < 4)
+      return 'Au moins 4 aptitudes sociales sont requises.'
     for (const skill of formData.value.skills_social) {
       if (!skill.name.trim()) return 'Toutes les aptitudes sociales doivent avoir un nom.'
     }
-    if (formData.value.skills_tech.length === 0)
-      return 'Au moins une expertise technique est requise.'
+    if (formData.value.skills_tech.length < 4)
+      return 'Au moins 4 expertises techniques sont requises.'
     for (const skill of formData.value.skills_tech) {
       if (!skill.name.trim()) return 'Toutes les expertises techniques doivent avoir un nom.'
     }
@@ -147,41 +295,58 @@ const validateStep = (step: number) => {
   }
   if (step === 6) {
     if (
-      formData.value.objectives_short.length === 0 ||
+      formData.value.objectives_short.length < 3 ||
       formData.value.objectives_short.some((o) => !o.trim())
     )
-      return 'Les objectifs à court terme doivent être remplis.'
+      return 'Au moins 3 objectifs à court terme remplis sont requis.'
     if (
-      formData.value.objectives_medium.length === 0 ||
+      formData.value.objectives_medium.length < 3 ||
       formData.value.objectives_medium.some((o) => !o.trim())
     )
-      return 'Les objectifs à moyen terme doivent être remplis.'
+      return 'Au moins 3 objectifs à moyen terme remplis sont requis.'
     if (
-      formData.value.objectives_long.length === 0 ||
+      formData.value.objectives_long.length < 3 ||
       formData.value.objectives_long.some((o) => !o.trim())
     )
-      return 'Les objectifs à long terme doivent être remplis.'
+      return 'Au moins 3 objectifs à long terme remplis sont requis.'
+  }
+  if (step === 7) {
+    const validPhotos = formData.value.photos.filter((p) => p.trim() !== '')
+    if (validPhotos.length < 3 || validPhotos.length > 6) {
+      return 'Vous devez fournir entre 3 et 6 URLs de photos pour la bannière.'
+    }
   }
   return ''
 }
 
 const nextStep = () => {
-  // Désactivé temporairement pour le développement
-  /*
   const error = validateStep(currentStep.value)
   if (error) {
     errorMsg.value = error
     return
   }
-  */
   errorMsg.value = ''
 
   if (currentStep.value < totalSteps) {
     currentStep.value++
   } else {
-    // Action finale (ex: Sauvegarder)
-    console.log('Données sauvegardées:', formData.value)
-    router.push({ name: 'hub' })
+    // Action finale : validation Zod globale
+    try {
+      const characterObj = mapFormToCharacter()
+      const result = CharacterSchema.safeParse(characterObj)
+      if (!result.success) {
+        const firstError = result.error.issues[0]
+        errorMsg.value = `${firstError.path.join('.')}: ${firstError.message}`
+        console.error('Erreur de validation Zod:', result.error)
+        return
+      }
+
+      console.log('Données sauvegardées et validées:', result.data)
+      router.push({ name: 'hub' })
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e)
+      errorMsg.value = `Erreur lors de la validation : ${msg}`
+    }
   }
 }
 
@@ -200,7 +365,9 @@ const addSkillSocial = () => {
   }
 }
 const removeSkillSocial = (index: number) => {
-  formData.value.skills_social.splice(index, 1)
+  if (formData.value.skills_social.length > 4) {
+    formData.value.skills_social.splice(index, 1)
+  }
 }
 const addSkillTech = () => {
   if (formData.value.skills_tech.length < 5) {
@@ -208,7 +375,9 @@ const addSkillTech = () => {
   }
 }
 const removeSkillTech = (index: number) => {
-  formData.value.skills_tech.splice(index, 1)
+  if (formData.value.skills_tech.length > 4) {
+    formData.value.skills_tech.splice(index, 1)
+  }
 }
 const addRelation = () => {
   if (formData.value.relations.length < 8) {
@@ -225,7 +394,9 @@ const addObjectiveShort = () => {
   }
 }
 const removeObjectiveShort = (index: number) => {
-  formData.value.objectives_short.splice(index, 1)
+  if (formData.value.objectives_short.length > 3) {
+    formData.value.objectives_short.splice(index, 1)
+  }
 }
 const addObjectiveMedium = () => {
   if (formData.value.objectives_medium.length < 4) {
@@ -233,7 +404,9 @@ const addObjectiveMedium = () => {
   }
 }
 const removeObjectiveMedium = (index: number) => {
-  formData.value.objectives_medium.splice(index, 1)
+  if (formData.value.objectives_medium.length > 3) {
+    formData.value.objectives_medium.splice(index, 1)
+  }
 }
 const addObjectiveLong = () => {
   if (formData.value.objectives_long.length < 4) {
@@ -241,7 +414,19 @@ const addObjectiveLong = () => {
   }
 }
 const removeObjectiveLong = (index: number) => {
-  formData.value.objectives_long.splice(index, 1)
+  if (formData.value.objectives_long.length > 3) {
+    formData.value.objectives_long.splice(index, 1)
+  }
+}
+const addPhoto = () => {
+  if (formData.value.photos.length < 6) {
+    formData.value.photos.push('')
+  }
+}
+const removePhoto = (index: number) => {
+  if (formData.value.photos.length > 3) {
+    formData.value.photos.splice(index, 1)
+  }
 }
 </script>
 
@@ -356,20 +541,37 @@ const removeObjectiveLong = (index: number) => {
                 </div>
 
                 <!-- Paramètres -->
-                <div class="space-y-2">
-                  <label
-                    class="font-mono text-[10px] tracking-widest uppercase text-accent font-bold"
-                    >Domaine du Serveur (URL)</label
-                  >
-                  <input
-                    v-model="formData.serverDomain"
-                    type="text"
-                    placeholder="Ex: rp-server.com"
-                    class="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 font-display text-lg text-white placeholder-white/20 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/50 transition-all"
-                  />
-                  <p class="font-mono text-[9px] text-white/30">
-                    L'icône du serveur sera automatiquement récupérée.
-                  </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div class="space-y-2">
+                    <label
+                      class="font-mono text-[10px] tracking-widest uppercase text-accent font-bold"
+                      >Domaine du Serveur (URL)</label
+                    >
+                    <input
+                      v-model="formData.serverDomain"
+                      type="text"
+                      placeholder="Ex: rp-server.com"
+                      class="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 font-display text-lg text-white placeholder-white/20 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/50 transition-all"
+                    />
+                    <p class="font-mono text-[9px] text-white/30">
+                      L'icône du serveur sera automatiquement récupérée.
+                    </p>
+                  </div>
+                  <div class="space-y-2">
+                    <label
+                      class="font-mono text-[10px] tracking-widest uppercase text-accent font-bold"
+                      >Lien Discord du Serveur (Optionnel)</label
+                    >
+                    <input
+                      v-model="formData.discordUrl"
+                      type="text"
+                      placeholder="Ex: https://discord.gg/invite"
+                      class="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-3 font-display text-lg text-white placeholder-white/20 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/50 transition-all"
+                    />
+                    <p class="font-mono text-[9px] text-white/30">
+                      Lien d'invitation vers le Discord du serveur.
+                    </p>
+                  </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -949,7 +1151,7 @@ const removeObjectiveLong = (index: number) => {
                       </button>
                     </div>
                     <div
-                      v-for="(obj, index) in formData.objectives_short"
+                      v-for="(_, index) in formData.objectives_short"
                       :key="index"
                       class="flex gap-2"
                     >
@@ -989,7 +1191,7 @@ const removeObjectiveLong = (index: number) => {
                       </button>
                     </div>
                     <div
-                      v-for="(obj, index) in formData.objectives_medium"
+                      v-for="(_, index) in formData.objectives_medium"
                       :key="index"
                       class="flex gap-2"
                     >
@@ -1029,7 +1231,7 @@ const removeObjectiveLong = (index: number) => {
                       </button>
                     </div>
                     <div
-                      v-for="(obj, index) in formData.objectives_long"
+                      v-for="(_, index) in formData.objectives_long"
                       :key="index"
                       class="flex gap-2"
                     >
@@ -1066,42 +1268,54 @@ const removeObjectiveLong = (index: number) => {
                     Visuels
                   </h2>
                   <p class="font-mono text-[11px] text-white/40">
-                    Uploadez les photos de couverture.
+                    Saisissez les liens des photos pour la bannière.
                     <span class="text-accent font-bold">(Minimum 3, Maximum 6 images)</span>
                   </p>
                 </div>
 
-                <div
-                  class="border-2 border-dashed border-white/10 rounded-xl bg-black/20 hover:bg-black/40 hover:border-accent/50 transition-all duration-300 p-12 flex flex-col items-center justify-center gap-4 cursor-pointer group"
-                >
-                  <div
-                    class="size-16 rounded-full bg-white/5 flex items-center justify-center text-white/30 group-hover:text-accent group-hover:scale-110 transition-all duration-500"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="size-8"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                <div class="space-y-4">
+                  <div class="flex justify-between items-center">
+                    <h3 class="font-display text-lg font-bold uppercase">Photos de la Bannière</h3>
+                    <button
+                      @click="addPhoto"
+                      :disabled="formData.photos.length >= 6"
+                      class="font-mono text-[10px] font-bold uppercase transition-colors"
+                      :class="
+                        formData.photos.length >= 6
+                          ? 'text-white/20 cursor-not-allowed'
+                          : 'text-accent hover:text-white'
+                      "
                     >
-                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                      <polyline points="17 8 12 3 7 8"></polyline>
-                      <line x1="12" y1="3" x2="12" y2="15"></line>
-                    </svg>
+                      + Ajouter (Max 6)
+                    </button>
                   </div>
-                  <div class="text-center">
+
+                  <div class="grid grid-cols-1 gap-4">
                     <div
-                      class="font-mono text-[10px] tracking-widest text-white/50 uppercase font-bold group-hover:text-accent transition-colors"
+                      v-for="(_, index) in formData.photos"
+                      :key="index"
+                      class="flex gap-2 items-center bg-black/20 p-3 rounded-lg border border-white/5"
                     >
-                      Glissez vos images ici
-                    </div>
-                    <div class="font-mono text-[9px] text-white/30 mt-1">
-                      PNG, JPG, WEBP jusqu'à 5MB (Min 3, Max 6)
+                      <span class="font-mono text-xs text-white/40">#0{{ index + 1 }}</span>
+                      <input
+                        v-model="formData.photos[index]"
+                        type="text"
+                        placeholder="Ex: assets/amari_davis/amari1.webp ou URL d'image"
+                        class="w-full bg-black/40 border border-white/10 rounded px-3 py-2 font-mono text-xs text-white focus:outline-none focus:border-accent"
+                      />
+                      <button
+                        @click="removePhoto(index)"
+                        class="text-white/30 hover:text-dead transition-colors p-1"
+                        :disabled="formData.photos.length <= 3"
+                        :class="formData.photos.length <= 3 ? 'opacity-20 cursor-not-allowed' : ''"
+                      >
+                        ✕
+                      </button>
                     </div>
                   </div>
+                  <p class="font-mono text-[9px] text-white/30">
+                    Ces photos (entre 3 et 6) généreront le carrousel/bannière du profil de la fiche personnage.
+                  </p>
                 </div>
               </div>
             </transition>

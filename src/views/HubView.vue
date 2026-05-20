@@ -7,6 +7,7 @@ import { uiState } from '@/store/ui.ts'
 import HubCard from '@/components/HubCard.vue'
 import CreateCard from '@/components/CreateCard.vue'
 import FriendListBtn from '@/components/FriendListBtn.vue'
+import TheNavbar from '@/components/TheNavbar.vue'
 
 const charList = computed(() => {
   return Object.values(characters).sort((a, b) => {
@@ -55,6 +56,7 @@ onUnmounted(() => {
 
 <template>
   <div class="min-h-screen selection:bg-accent selection:text-white">
+    <TheNavbar />
     <!-- Header -->
     <header
       class="relative z-10 pt-20 md:pt-32 px-4 md:px-8 pb-12 md:pb-20 text-center overflow-hidden"
@@ -113,7 +115,6 @@ onUnmounted(() => {
     <!-- Main Grid -->
     <main class="relative z-10 max-w-[1400px] mx-auto px-4 md:px-8 pb-16 md:pb-32">
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8">
-        <HubCard v-for="(char, idx) in charList" :key="char.id" :char="char" :index="idx" />
         <CreateCard
           ref="createCardRef"
           @create="
@@ -127,6 +128,7 @@ onUnmounted(() => {
             })
           "
         />
+        <HubCard v-for="(char, idx) in charList" :key="char.id" :char="char" :index="idx" />
       </div>
     </main>
 

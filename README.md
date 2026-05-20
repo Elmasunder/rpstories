@@ -1,6 +1,7 @@
-![RPStories Banner](public/assets/docs/rpstories_banner.png)
+![RPStories Banner](public/assets/docs/docs1.webp)
 
 # RPStories 🏛️✨
+
 ### The Ultimate Immersive Character Archive for Roleplay Communities
 
 [![Vue.js](https://img.shields.io/badge/vuejs-%2335495e.svg?style=flat-square&logo=vuedotjs&logoColor=%234FC08D)](https://vuejs.org/)
@@ -35,11 +36,13 @@
 ### Installation
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/Elmasunder/rpstories.git
    ```
 
 2. Install dependencies:
+
    ```bash
    npm install
    ```

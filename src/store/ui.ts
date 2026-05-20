@@ -11,6 +11,9 @@ export const uiState = reactive({
   activeAccentHex: '#833ddd',
   activeAccent2Hex: '#e48328',
 
+  // Toast global notifications
+  toast: null as { type: 'success' | 'error' | 'info'; title: string; message: string } | null,
+
   /**
    * Met à jour les couleurs globales du site
    */
@@ -31,5 +34,24 @@ export const uiState = reactive({
    */
   resetColors() {
     this.setColors('#833ddd', '#e48328', '131, 61, 221')
+  },
+
+  /**
+   * Déclenche un toast de notification
+   */
+  showToast(title: string, message: string, type: 'success' | 'error' | 'info' = 'info') {
+    this.toast = { type, title, message }
+    setTimeout(() => {
+      if (this.toast && this.toast.message === message) {
+        this.toast = null
+      }
+    }, 6000)
+  },
+
+  /**
+   * Masque manuellement le toast
+   */
+  dismissToast() {
+    this.toast = null
   },
 })

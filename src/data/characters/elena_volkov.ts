@@ -13,8 +13,6 @@ export const elena_volkov: Character = {
     firstName: `ELENA`,
     lastName: `VOLKOV`,
     alias: `The Ghost`,
-    subtitle: `28 ans — Saint-Pétersbourg, Russie →`,
-    destination: `Los Santos`,
     meta: [
       { key: `Âge`, value: `28` },
       { key: `Taille`, value: `172 cm` },

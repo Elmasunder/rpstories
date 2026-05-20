@@ -1,7 +1,11 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { authState } from '@/store/auth'
 
 const isScrolled = ref(false)
+const route = useRoute()
+const router = useRouter()
 
 const handleScroll = () => {
   isScrolled.value = window.scrollY > 50
@@ -14,6 +18,8 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
 })
+
+const isFicheView = computed(() => route.name === 'fiche')
 
 const menuItems = [
   { name: 'Identité', id: 'identite' },
@@ -38,6 +44,11 @@ const scrollToSection = (id: string) => {
     })
   }
 }
+
+const logout = async () => {
+  await authState.signOut()
+  router.push({ name: 'hub' })
+}
 </script>
 
 <template>
@@ -53,6 +64,7 @@ const scrollToSection = (id: string) => {
       <!-- GAUCHE : RETOUR HUB -->
       <div class="flex items-center justify-start flex-1">
         <RouterLink
+          v-if="route.name !== 'hub'"
           to="/"
           class="flex items-center gap-2 sm:gap-3 font-mono text-[10px] sm:text-[11px] text-white hover:text-accent transition-all group drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]"
         >
@@ -61,8 +73,8 @@ const scrollToSection = (id: string) => {
         </RouterLink>
       </div>
 
-      <!-- CENTRE : ANCRES -->
-      <div class="hidden lg:flex items-center gap-10 flex-1 justify-center">
+      <!-- CENTRE : ANCRES (seulement sur la fiche personnage) -->
+      <div v-if="isFicheView" class="hidden lg:flex items-center gap-10 flex-1 justify-center">
         <button
           v-for="item in menuItems"
           :key="item.name"
@@ -75,40 +87,51 @@ const scrollToSection = (id: string) => {
           ></span>
         </button>
       </div>
+      <div v-else class="hidden lg:block flex-1"></div>
 
-      <!-- DROITE : AUTH / MOBILE MENU -->
+      <!-- DROITE : AUTH -->
       <div class="flex items-center flex-1 justify-end">
-        <!-- Desktop Buttons -->
-        <div class="hidden sm:flex items-center gap-4 sm:gap-8">
+        <!-- Logged In State -->
+        <div v-if="authState.user" class="flex items-center gap-4">
+          <div class="flex items-center gap-2">
+            <img
+              v-if="authState.profile?.avatar_url"
+              :src="authState.profile.avatar_url"
+              class="size-7 rounded-full border border-white/20 object-cover"
+            />
+            <div
+              v-else
+              class="size-7 rounded-full bg-accent/20 border border-accent/40 flex items-center justify-center font-mono text-xs font-bold text-accent"
+            >
+              {{ authState.profile?.username?.charAt(0).toUpperCase() || 'U' }}
+            </div>
+            <span class="font-mono text-[9px] uppercase tracking-[2px] text-white/80 hidden sm:inline">
+              {{ authState.profile?.username }}
+            </span>
+          </div>
           <button
-            class="font-mono text-[11px] text-white/80 hover:text-white transition-colors uppercase tracking-[3px] drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]"
+            @click="logout"
+            class="font-mono text-[9px] border border-white/10 hover:border-dead hover:text-dead px-3 py-2 rounded-lg transition-all uppercase tracking-[2px] cursor-pointer"
           >
-            Login
-          </button>
-          <button
-            class="font-mono text-[10px] bg-white text-black px-6 py-2.5 rounded-sm font-bold uppercase tracking-[2px] border border-transparent hover:border-accent transition-all shadow-[0_0_15px_rgba(255,255,255,0.3)] hover:shadow-[0_0_20px_var(--accent)] active:scale-95"
-          >
-            Sign Up
+            Déconnexion
           </button>
         </div>
 
-        <!-- Mobile Hamburger -->
-        <button class="sm:hidden p-2 text-white/60 hover:text-white transition-colors">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="size-6"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+        <!-- Logged Out State -->
+        <div v-else class="flex items-center gap-4">
+          <RouterLink
+            to="/login?mode=register"
+            class="font-mono text-[10px] text-white/80 hover:text-white px-6 py-2.5 rounded-sm font-bold uppercase tracking-[2px] border border-white/10 hover:border-accent/40 hover:bg-white/5 transition-all active:scale-95"
           >
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
-        </button>
+            Inscription
+          </RouterLink>
+          <RouterLink
+            to="/login"
+            class="font-mono text-[10px] bg-white text-black px-6 py-2.5 rounded-sm font-bold uppercase tracking-[2px] border border-transparent transition-all shadow-[0_0_15px_rgba(255,255,255,0.3)] hover:shadow-[0_0_20px_var(--accent)] active:scale-95 hover:bg-white hover:text-black hover:opacity-90"
+          >
+            Connexion
+          </RouterLink>
+        </div>
       </div>
     </div>
   </nav>

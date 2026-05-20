@@ -13,8 +13,6 @@ export const amari_davis: Character = {
     firstName: `AMARI`,
     lastName: `DAVIS`,
     alias: `Locker`,
-    subtitle: `24 ans — Northwood, Liberty City →`,
-    destination: `Los Santos`,
     meta: [
       { key: `Âge`, value: `24` },
       { key: `Taille`, value: `186 cm` },
