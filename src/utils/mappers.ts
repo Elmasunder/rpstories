@@ -40,6 +40,7 @@ export function mapDbCharacterToFrontend(dbChar: DbCharacter): Character {
     id: dbChar.id,
     pageTitle: `Dossier RP – ${dbChar.first_name} ${dbChar.last_name}`,
     owner_id: dbChar.owner_id,
+    privacy: dbChar.privacy,
     cover: {
       status: dbChar.status,
       serverDomain: dbChar.server_domain,

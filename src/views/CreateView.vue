@@ -37,6 +37,7 @@ const fetchCharacterForEdit = async (id: number) => {
         return
       }
       
+      formData.value.privacy = data.privacy || 'public'
       formData.value.firstName = data.first_name || ''
       formData.value.lastName = data.last_name || ''
       formData.value.status = data.status || 'alive'
@@ -159,6 +160,7 @@ const currentStep = ref(1)
 const totalSteps = 7
 
 const formData = ref({
+  privacy: 'public' as 'public' | 'followers' | 'private',
   firstName: '',
   lastName: '',
   status: 'alive',
@@ -454,6 +456,85 @@ const validateStep = (step: number) => {
 }
 const isSubmitting = ref(false)
 
+const submitForm = async () => {
+  if (!authState.user) {
+    errorMsg.value = 'Vous devez être connecté pour archiver un dossier.'
+    return
+  }
+
+  // Action finale : validation Zod globale et insertion Supabase
+  try {
+    isSubmitting.value = true
+    const characterObj = mapFormToCharacter()
+    const result = CharacterSchema.safeParse(characterObj)
+    
+    if (!result.success) {
+      const firstError = result.error.issues[0]
+      errorMsg.value = `${firstError.path.join('.')}: ${firstError.message}`
+      console.error('Erreur de validation Zod:', result.error)
+      isSubmitting.value = false
+      return
+    }
+
+    const dbObj: Omit<DbCharacter, 'id' | 'created_at' | 'updated_at'> = {
+      owner_id: authState.user.id,
+      privacy: formData.value.privacy,
+      first_name: characterObj.cover.firstName,
+      last_name: characterObj.cover.lastName,
+      alias: characterObj.cover.alias,
+      status: characterObj.cover.status,
+      server_domain: characterObj.cover.serverDomain,
+      discord_url: characterObj.cover.discordUrl || null,
+      eyebrow: characterObj.cover.eyebrow,
+      ref: characterObj.cover.ref,
+      photos: characterObj.cover.photos,
+      
+      age: parseInt(characterObj.cover.meta[0].value as string) || 0,
+      taille: characterObj.cover.meta[1].value,
+      poids: characterObj.cover.meta[2].value,
+      origines: characterObj.cover.meta[3].value,
+      vehicule_ref: characterObj.cover.meta[4].value,
+      
+      chapter1: characterObj.chapter1,
+      chapter2: characterObj.chapter2,
+      chapter3: characterObj.chapter3,
+      chapter4: characterObj.chapter4 || null,
+      chapter5: characterObj.chapter5 || null,
+      chapter6: characterObj.chapter6,
+      family: characterObj.family || null,
+      footer: characterObj.footer
+    }
+
+    let saveError
+    if (isEditMode.value && characterId.value) {
+      console.log('Début de la mise à jour (UPDATE) dans Supabase...', { id: characterId.value, dbObj })
+      const { error } = await supabase.from('characters').update(dbObj).eq('id', characterId.value)
+      console.log('Mise à jour terminée. Erreur:', error)
+      saveError = error
+    } else {
+      console.log('Début de la création (INSERT) dans Supabase...', dbObj)
+      const { error } = await supabase.from('characters').insert(dbObj)
+      console.log('Création terminée. Erreur:', error)
+      saveError = error
+    }
+    
+    if (saveError) {
+      console.error('Erreur retournée par Supabase:', saveError)
+      throw saveError
+    }
+
+    console.log('Données sauvegardées en BDD:', result.data)
+    uiState.showToast('Succès', 'Dossier archivé avec succès', 'success')
+    router.push({ name: 'hub' })
+  } catch (e) {
+    console.error(e)
+    const msg = e instanceof Error ? e.message : String(e)
+    errorMsg.value = `Erreur lors de la sauvegarde : ${msg}`
+  } finally {
+    isSubmitting.value = false
+  }
+}
+
 const nextStep = async () => {
   const error = validateStep(currentStep.value)
   if (error) {
@@ -465,83 +546,23 @@ const nextStep = async () => {
   if (currentStep.value < totalSteps) {
     currentStep.value++
   } else {
-    if (!authState.user) {
-      errorMsg.value = 'Vous devez être connecté pour archiver un dossier.'
+    await submitForm()
+  }
+}
+
+const saveDirectly = async () => {
+  // En mode édition, valider toutes les étapes pour s'assurer que les données modifiées ou existantes sont correctes.
+  // Si une étape a une erreur, on y redirige pour que l'utilisateur corrige.
+  for (let s = 1; s <= totalSteps; s++) {
+    const error = validateStep(s)
+    if (error) {
+      errorMsg.value = `Étape ${s} : ${error}`
+      currentStep.value = s
       return
     }
-
-    // Action finale : validation Zod globale et insertion Supabase
-    try {
-      isSubmitting.value = true
-      const characterObj = mapFormToCharacter()
-      const result = CharacterSchema.safeParse(characterObj)
-      
-      if (!result.success) {
-        const firstError = result.error.issues[0]
-        errorMsg.value = `${firstError.path.join('.')}: ${firstError.message}`
-        console.error('Erreur de validation Zod:', result.error)
-        isSubmitting.value = false
-        return
-      }
-
-      const dbObj: Omit<DbCharacter, 'id' | 'created_at' | 'updated_at'> = {
-        owner_id: authState.user.id,
-        privacy: 'public', // Par défaut public
-        first_name: characterObj.cover.firstName,
-        last_name: characterObj.cover.lastName,
-        alias: characterObj.cover.alias,
-        status: characterObj.cover.status,
-        server_domain: characterObj.cover.serverDomain,
-        discord_url: characterObj.cover.discordUrl || null,
-        eyebrow: characterObj.cover.eyebrow,
-        ref: characterObj.cover.ref,
-        photos: characterObj.cover.photos,
-        
-        age: parseInt(characterObj.cover.meta[0].value as string) || 0,
-        taille: characterObj.cover.meta[1].value,
-        poids: characterObj.cover.meta[2].value,
-        origines: characterObj.cover.meta[3].value,
-        vehicule_ref: characterObj.cover.meta[4].value,
-        
-        chapter1: characterObj.chapter1,
-        chapter2: characterObj.chapter2,
-        chapter3: characterObj.chapter3,
-        chapter4: characterObj.chapter4 || null,
-        chapter5: characterObj.chapter5 || null,
-        chapter6: characterObj.chapter6,
-        family: characterObj.family || null,
-        footer: characterObj.footer
-      }
-
-      let saveError
-      if (isEditMode.value && characterId.value) {
-        console.log('Début de la mise à jour (UPDATE) dans Supabase...', { id: characterId.value, dbObj })
-        const { error } = await supabase.from('characters').update(dbObj).eq('id', characterId.value)
-        console.log('Mise à jour terminée. Erreur:', error)
-        saveError = error
-      } else {
-        console.log('Début de la création (INSERT) dans Supabase...', dbObj)
-        const { error } = await supabase.from('characters').insert(dbObj)
-        console.log('Création terminée. Erreur:', error)
-        saveError = error
-      }
-      
-      if (saveError) {
-        console.error('Erreur retournée par Supabase:', saveError)
-        throw saveError
-      }
-
-      console.log('Données sauvegardées en BDD:', result.data)
-      uiState.showToast('Succès', 'Dossier archivé avec succès', 'success')
-      router.push({ name: 'hub' })
-    } catch (e) {
-      console.error(e)
-      const msg = e instanceof Error ? e.message : String(e)
-      errorMsg.value = `Erreur lors de la sauvegarde : ${msg}`
-    } finally {
-      isSubmitting.value = false
-    }
   }
+  errorMsg.value = ''
+  await submitForm()
 }
 
 const prevStep = () => {
@@ -889,6 +910,57 @@ const removePhoto = (index: number) => {
                       readonly
                       class="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 font-mono text-sm text-white/50 cursor-not-allowed focus:outline-none transition-all"
                     />
+                  </div>
+                </div>
+
+                <!-- Confidentialité -->
+                <div class="space-y-3 pt-2 border-t border-white/5">
+                  <label class="font-mono text-[10px] tracking-widest uppercase text-accent font-bold">Confidentialité du Dossier</label>
+                  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Public -->
+                    <button
+                      type="button"
+                      @click="formData.privacy = 'public'"
+                      class="relative flex flex-col items-center justify-center p-4 rounded-xl border transition-all duration-300 overflow-hidden group cursor-pointer"
+                      :class="formData.privacy === 'public' ? 'bg-white/10 border-accent shadow-[0_0_15px_rgba(var(--accent-rgb),0.2)]' : 'bg-black/40 border-white/10 hover:border-white/30 hover:bg-white/5'"
+                    >
+                      <div class="absolute inset-0 bg-linear-to-b from-accent/20 to-transparent opacity-0 transition-opacity duration-300" :class="{'opacity-100': formData.privacy === 'public'}"></div>
+                      <div class="size-8 rounded-full mb-3 flex items-center justify-center transition-all duration-300 relative z-10" :class="formData.privacy === 'public' ? 'bg-accent text-black' : 'bg-white/10 text-white/50 group-hover:text-white group-hover:bg-white/20'">
+                        <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+                      </div>
+                      <span class="font-mono text-[11px] font-bold uppercase tracking-widest relative z-10" :class="formData.privacy === 'public' ? 'text-accent' : 'text-white/70 group-hover:text-white'">Public</span>
+                      <span class="font-mono text-[9px] text-white/40 mt-2 text-center relative z-10">Visible par tout le monde dans les archives</span>
+                    </button>
+
+                    <!-- Followers -->
+                    <button
+                      type="button"
+                      @click="formData.privacy = 'followers'"
+                      class="relative flex flex-col items-center justify-center p-4 rounded-xl border transition-all duration-300 overflow-hidden group cursor-pointer"
+                      :class="formData.privacy === 'followers' ? 'bg-[#3498db]/10 border-[#3498db] shadow-[0_0_15px_rgba(52,152,219,0.2)]' : 'bg-black/40 border-white/10 hover:border-white/30 hover:bg-white/5'"
+                    >
+                      <div class="absolute inset-0 bg-linear-to-b from-[#3498db]/20 to-transparent opacity-0 transition-opacity duration-300" :class="{'opacity-100': formData.privacy === 'followers'}"></div>
+                      <div class="size-8 rounded-full mb-3 flex items-center justify-center transition-all duration-300 relative z-10" :class="formData.privacy === 'followers' ? 'bg-[#3498db] text-black' : 'bg-white/10 text-white/50 group-hover:text-white group-hover:bg-white/20'">
+                        <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                      </div>
+                      <span class="font-mono text-[11px] font-bold uppercase tracking-widest relative z-10" :class="formData.privacy === 'followers' ? 'text-[#3498db]' : 'text-white/70 group-hover:text-white'">Abonnés</span>
+                      <span class="font-mono text-[9px] text-white/40 mt-2 text-center relative z-10">Visible uniquement par vos abonnés</span>
+                    </button>
+
+                    <!-- Private -->
+                    <button
+                      type="button"
+                      @click="formData.privacy = 'private'"
+                      class="relative flex flex-col items-center justify-center p-4 rounded-xl border transition-all duration-300 overflow-hidden group cursor-pointer"
+                      :class="formData.privacy === 'private' ? 'bg-[#e67e22]/10 border-[#e67e22] shadow-[0_0_15px_rgba(230,126,34,0.2)]' : 'bg-black/40 border-white/10 hover:border-white/30 hover:bg-white/5'"
+                    >
+                      <div class="absolute inset-0 bg-linear-to-b from-[#e67e22]/20 to-transparent opacity-0 transition-opacity duration-300" :class="{'opacity-100': formData.privacy === 'private'}"></div>
+                      <div class="size-8 rounded-full mb-3 flex items-center justify-center transition-all duration-300 relative z-10" :class="formData.privacy === 'private' ? 'bg-[#e67e22] text-black' : 'bg-white/10 text-white/50 group-hover:text-white group-hover:bg-white/20'">
+                        <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                      </div>
+                      <span class="font-mono text-[11px] font-bold uppercase tracking-widest relative z-10" :class="formData.privacy === 'private' ? 'text-[#e67e22]' : 'text-white/70 group-hover:text-white'">Privé</span>
+                      <span class="font-mono text-[9px] text-white/40 mt-2 text-center relative z-10">Uniquement visible sur votre Hub</span>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -1757,13 +1829,26 @@ const removePhoto = (index: number) => {
                 </div>
               </transition>
 
-              <button
-                @click="nextStep"
-                :disabled="isSubmitting"
-                class="bg-white text-black font-mono text-[10px] tracking-[3px] uppercase font-bold px-8 py-3 rounded-lg hover:bg-accent hover:shadow-[0_0_20px_rgba(var(--accent-rgb),0.4)] transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {{ currentStep === totalSteps ? (isSubmitting ? 'Traitement...' : 'Terminer') : 'Suivant' }} →
-              </button>
+              <div class="flex items-center gap-4">
+                <!-- Terminer directement (uniquement en mode édition et si ce n'est pas la dernière étape) -->
+                <button
+                  v-if="isEditMode && currentStep < totalSteps"
+                  @click="saveDirectly"
+                  :disabled="isSubmitting"
+                  class="border border-white/20 hover:border-accent text-white font-mono text-[10px] tracking-[3px] uppercase font-bold px-6 py-3 rounded-lg hover:bg-accent/10 hover:shadow-[0_0_15px_rgba(var(--accent-rgb),0.2)] transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                  title="Enregistrer les modifications et terminer directement"
+                >
+                  {{ isSubmitting ? 'Sauvegarde...' : 'Terminer' }} ⚡
+                </button>
+
+                <button
+                  @click="nextStep"
+                  :disabled="isSubmitting"
+                  class="bg-white text-black font-mono text-[10px] tracking-[3px] uppercase font-bold px-8 py-3 rounded-lg hover:bg-accent hover:shadow-[0_0_20px_rgba(var(--accent-rgb),0.4)] transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                >
+                  {{ currentStep === totalSteps ? (isSubmitting ? 'Traitement...' : 'Terminer') : 'Suivant' }} →
+                </button>
+              </div>
             </div>
           </div>
         </div>

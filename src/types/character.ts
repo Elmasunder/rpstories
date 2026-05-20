@@ -104,6 +104,7 @@ export interface FamilyMember {
   name: string
   relation: string
   status: 'alive' | 'dead'
+  photo?: string // URL de la photo réelle de la fiche liée
 }
 
 export interface Character {

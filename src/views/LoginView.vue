@@ -18,6 +18,7 @@ const password = ref('')
 const username = ref('')
 
 const loginColors = getCharColors('login-' + Date.now())
+const rememberMe = ref(true)
 
 // Sync mode with route query ?mode=register
 watch(
@@ -30,11 +31,18 @@ watch(
 
 // Redirect if already logged in, and set colors
 onMounted(() => {
+  const stored = localStorage.getItem('rpstories_remember_me')
+  rememberMe.value = stored !== 'false' // Default to true if not defined
+
   document.title = 'RP/STORIES | Connexion'
   uiState.setColors(loginColors.accent, loginColors.accent2, loginColors.accentRgb)
   if (authState.user) {
     router.push({ name: 'hub' })
   }
+})
+
+watch(rememberMe, (newVal) => {
+  localStorage.setItem('rpstories_remember_me', String(newVal))
 })
 
 const handleLogin = async (provider: 'discord' | 'google' | 'steam' | 'cfx') => {
@@ -178,16 +186,16 @@ const handleSubmit = async () => {
             />
           </div>
 
-          <!-- Email -->
+          <!-- Email / Username -->
           <div>
             <label class="font-mono text-[9px] text-white/40 uppercase tracking-[2px] block mb-1.5">
-              // E-mail
+              {{ isRegister ? "// E-mail" : "// E-mail ou Nom d'utilisateur" }}
             </label>
             <input
               v-model="email"
-              type="email"
+              :type="isRegister ? 'email' : 'text'"
               required
-              placeholder="email@example.com"
+              :placeholder="isRegister ? 'email@example.com' : 'email@example.com ou Nom d\'utilisateur'"
               class="w-full bg-white/5 border border-white/10 focus:border-accent focus:bg-white/10 rounded-xl px-4 py-3 text-xs font-mono tracking-wide placeholder-white/20 transition-all outline-none text-white"
             />
           </div>
@@ -204,6 +212,18 @@ const handleSubmit = async () => {
               placeholder="••••••••"
               class="w-full bg-white/5 border border-white/10 focus:border-accent focus:bg-white/10 rounded-xl px-4 py-3 text-xs font-mono tracking-wide placeholder-white/20 transition-all outline-none text-white"
             />
+          </div>
+
+          <!-- Remember Me Checkbox -->
+          <div v-if="!isRegister" class="flex items-center mt-2 mb-1">
+            <label class="flex items-center gap-2.5 font-mono text-[9px] text-white/40 hover:text-white/70 cursor-pointer select-none uppercase tracking-[1.5px] transition-colors">
+              <input
+                v-model="rememberMe"
+                type="checkbox"
+                class="appearance-none size-4 rounded-md border border-white/10 bg-white/5 checked:border-accent checked:bg-accent/20 cursor-pointer outline-none transition-all relative after:content-[''] after:absolute after:hidden checked:after:block after:left-[5px] after:top-[2px] after:w-[4px] after:h-[7px] after:border-white after:border-r-2 after:border-b-2 after:rotate-45"
+              />
+              Rester connecté
+            </label>
           </div>
 
           <!-- Submit Button -->

@@ -10,9 +10,17 @@ defineProps<{
 
 const PLACEHOLDER_PATH = `${import.meta.env.BASE_URL}assets/placeholder_user.webp`
 
-const getMemberPhoto = () => {
-  // En attendant une future table d'avatars pour les membres de famille, on retourne le placeholder
-  return PLACEHOLDER_PATH
+// Résout les chemins relatifs d'assets (même logique que dans FicheView)
+const fixPath = (path: string | undefined) => {
+  if (!path) return PLACEHOLDER_PATH
+  if (path.startsWith('http') || path.startsWith('data:')) return path
+  const cleanPath = path.startsWith('/') ? path.slice(1) : path
+  return `${import.meta.env.BASE_URL}${cleanPath}`
+}
+
+// Retourne la vraie photo du membre s'il en a une, sinon le placeholder
+const getMemberPhoto = (member: FamilyMember) => {
+  return member.photo ? fixPath(member.photo) : PLACEHOLDER_PATH
 }
 
 const handleImgError = (e: Event) => {
@@ -65,7 +73,7 @@ const getStatusColor = (status: string) => {
           <!-- Carte de relation -->
           <component
             :is="member.id ? 'router-link' : 'div'"
-            :to="member.id ? { name: 'fiche', params: { id: member.id } } : undefined"
+            :to="member.id ? { name: 'fiche', params: { id: member.id }, query: { status: member.status } } : undefined"
             class="block bg-panel backdrop-blur-md border border-white/10 p-5 rounded-lg transition-all duration-300 hover:-translate-y-1 hover:border-accent hover:bg-panel-hover overflow-hidden relative"
             :style="
               member.status === 'dead'
@@ -106,7 +114,7 @@ const getStatusColor = (status: string) => {
                 class="size-14 rounded-full border-2 border-accent/30 overflow-hidden bg-black shadow-lg flex-none transition-transform group-hover:scale-110 duration-500"
               >
                 <img
-                  :src="getMemberPhoto()"
+                  :src="getMemberPhoto(member)"
                   class="size-full object-cover transition-all"
                   :class="{ 'grayscale brightness-75': member.status !== 'alive' }"
                   :alt="member.name"

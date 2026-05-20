@@ -115,6 +115,8 @@ const Chapter6Schema = z.object({
 // 8. SCHEMA GLOBAL : CHARACTER
 export const CharacterSchema = z.object({
   id: z.number(),
+  owner_id: z.string().optional(),
+  privacy: z.enum(['public', 'followers', 'private']).optional(),
   pageTitle: z.string(),
   cover: CharacterCoverSchema,
   chapter1: Chapter1Schema,

@@ -19,6 +19,12 @@ import FriendListBtn from '@/components/FriendListBtn.vue'
 const route = useRoute()
 const router = useRouter()
 
+// Si on a le statut en paramètre de requête (query), on applique l'ambiance couleur immédiatement pour le loader
+const initialStatus = route.query.status as string
+if (initialStatus === 'dead' || initialStatus === 'disparu') {
+  uiState.setColors('#e74c3c', '#e74c3c', '231, 76, 60')
+}
+
 const char = ref<Character | null>(null)
 const isLoading = ref(true)
 const accessError = ref(false)
@@ -79,6 +85,9 @@ const updateAtmosphere = () => {
   }
 }
 
+// Normalise un nom pour comparaison insensible à la casse et aux espaces
+const normalizeName = (s: string) => s.toLowerCase().trim().replace(/\s+/g, ' ')
+
 const fetchCharacter = async () => {
   try {
     isLoading.value = true
@@ -97,20 +106,98 @@ const fetchCharacter = async () => {
       return
     }
 
-    const { data, error } = await supabase
-      .from('characters')
-      .select('*')
-      .eq('id', charId)
-      .single()
+    // Chargement du personnage principal ET snapshot léger de tous les persos (pour les relations)
+    const [mainResult, allResult] = await Promise.all([
+      supabase.from('characters').select('*').eq('id', charId).single(),
+      supabase.from('characters').select('id, first_name, last_name, alias, status, photos, family')
+    ])
 
-    if (error || !data) {
-      console.error('Fetch character failed. Error:', error, 'Data:', data)
+    if (mainResult.error || !mainResult.data) {
+      console.error('Fetch character failed. Error:', mainResult.error, 'Data:', mainResult.data)
       accessError.value = true
       updateAtmosphere()
       return
     }
 
-    char.value = mapDbCharacterToFrontend(data)
+    char.value = mapDbCharacterToFrontend(mainResult.data)
+
+    // ── Enrichissement des relations (bidirectionnel) ──────────────────────────
+    if (allResult.data && char.value) {
+      const allChars = allResult.data as Array<{
+        id: number
+        first_name: string
+        last_name: string
+        alias: string | null
+        status: string
+        photos: string[]
+        family: Array<{ name: string; relation: string; status?: string }> | null
+      }>
+
+      // Nom complet normalisé du personnage courant
+      const currentFullName = normalizeName(`${mainResult.data.first_name} ${mainResult.data.last_name}`)
+      const currentAlias = mainResult.data.alias ? normalizeName(mainResult.data.alias) : null
+
+      // Ensemble des noms déjà déclarés (pour éviter les doublons en sens inverse)
+      const declaredNames = new Set(
+        (char.value.family || []).map(m => normalizeName(m.name))
+      )
+
+      // 1. Enrichir les relations existantes avec les données réelles du perso lié
+      const enrichedFamily = (char.value.family || []).map(member => {
+        const memberNorm = normalizeName(member.name)
+        const match = allChars.find(c =>
+          normalizeName(`${c.first_name} ${c.last_name}`) === memberNorm ||
+          (c.alias && normalizeName(c.alias) === memberNorm)
+        )
+        if (match) {
+          return {
+            ...member,
+            id: match.id,
+            status: (match.status as 'alive' | 'dead') || member.status,
+            photo: match.photos?.[0] || undefined,
+          }
+        }
+        return member
+      })
+
+      // 2. Détecter les relations inverses (persos qui citent ce personnage)
+      for (const otherChar of allChars) {
+        if (otherChar.id === charId) continue // ignorer soi-même
+        if (!otherChar.family || otherChar.family.length === 0) continue
+
+        const mentionsMe = otherChar.family.some(m => {
+          const n = normalizeName(m.name)
+          return n === currentFullName || (currentAlias && n === currentAlias)
+        })
+
+        if (!mentionsMe) continue
+
+        const otherFullName = `${otherChar.first_name} ${otherChar.last_name}`
+        const otherNorm = normalizeName(otherFullName)
+
+        // N'ajouter que si pas déjà déclaré
+        if (!declaredNames.has(otherNorm)) {
+          // Trouver la relation que l'autre a déclarée envers nous
+          const theirRelation = otherChar.family.find(m => {
+            const n = normalizeName(m.name)
+            return n === currentFullName || (currentAlias && n === currentAlias)
+          })
+
+          enrichedFamily.push({
+            id: otherChar.id,
+            name: otherFullName,
+            relation: theirRelation?.relation || 'Lié à ce personnage',
+            status: (otherChar.status as 'alive' | 'dead') || 'alive',
+            photo: otherChar.photos?.[0] || undefined,
+          })
+          declaredNames.add(otherNorm)
+        }
+      }
+
+      char.value = { ...char.value, family: enrichedFamily }
+    }
+    // ──────────────────────────────────────────────────────────────────────────
+
     updateAtmosphere()
   } catch (e) {
     console.error('Erreur lors du chargement de la fiche:', e)
@@ -128,10 +215,19 @@ const handleImgError = (event: Event) => {
 
 onMounted(() => {
   window.scrollTo(0, 0)
+  // Double vérification au montage
+  const status = route.query.status as string
+  if (status === 'dead' || status === 'disparu') {
+    uiState.setColors('#e74c3c', '#e74c3c', '231, 76, 60')
+  }
   fetchCharacter()
 })
 
 watch(() => route.params.id, () => {
+  const status = route.query.status as string
+  if (status === 'dead' || status === 'disparu') {
+    uiState.setColors('#e74c3c', '#e74c3c', '231, 76, 60')
+  }
   fetchCharacter()
 })
 

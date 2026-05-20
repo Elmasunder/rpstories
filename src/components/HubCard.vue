@@ -55,7 +55,7 @@ const stopCycle = () => {
 
 <template>
   <router-link
-    :to="{ name: 'fiche', params: { id: char.id } }"
+    :to="{ name: 'fiche', params: { id: char.id }, query: { status: char.cover.status } }"
     class="group relative flex flex-col transition-all duration-500 hover:-translate-y-2"
   >
     <div
@@ -110,7 +110,7 @@ const stopCycle = () => {
           </div>
         </div>
 
-        <!-- Badges -->
+        <!-- Badges (Left status, Right privacy & edit) -->
         <div class="absolute inset-x-4 top-4 z-20 flex justify-between items-start">
           <div
             v-if="!isDead"
@@ -128,6 +128,32 @@ const stopCycle = () => {
           <div v-else class="w-20"></div>
 
           <div class="flex items-center gap-2">
+            <!-- Privacy Badge (Owner only) -->
+            <div
+              v-if="isOwner && char.privacy"
+              class="bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-full border flex items-center gap-1.5"
+              :class="{
+                'border-white/10': char.privacy === 'public',
+                'border-[#3498db]/40': char.privacy === 'followers',
+                'border-[#e67e22]/40': char.privacy === 'private',
+              }"
+            >
+              <!-- Public icon -->
+              <svg v-if="char.privacy === 'public'" class="size-3 text-white/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+              <!-- Followers icon -->
+              <svg v-else-if="char.privacy === 'followers'" class="size-3 text-[#3498db]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              <!-- Private icon -->
+              <svg v-else class="size-3 text-[#e67e22]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <span
+                class="font-mono text-[8px] tracking-widest uppercase font-bold"
+                :class="{
+                  'text-white/50': char.privacy === 'public',
+                  'text-[#3498db]': char.privacy === 'followers',
+                  'text-[#e67e22]': char.privacy === 'private',
+                }"
+              >{{ char.privacy === 'public' ? 'Public' : char.privacy === 'followers' ? 'Abonnés' : 'Privé' }}</span>
+            </div>
+
             <!-- Edit Picto (Owner only) -->
             <button
               v-if="isOwner"
@@ -148,22 +174,23 @@ const stopCycle = () => {
                 <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
               </svg>
             </button>
-
-            <a
-              v-if="char.cover.serverDomain && char.cover.serverDomain !== 'nom-du-serveur.fr'"
-              :href="`https://${char.cover.serverDomain}`"
-              target="_blank"
-              class="size-8 bg-black/60 backdrop-blur-md rounded-full border border-white/10 p-1.5 hover:bg-accent/20 hover:border-accent/50 transition-all group/logo"
-              @click.stop
-            >
-              <img
-                :src="`https://www.google.com/s2/favicons?domain=${char.cover.serverDomain}&sz=64`"
-                class="w-full h-full object-contain filter grayscale group-hover/logo:grayscale-0 transition-all"
-                :alt="char.cover.serverDomain"
-              />
-            </a>
           </div>
         </div>
+
+        <!-- Server Logo (Bottom right of the image) -->
+        <a
+          v-if="char.cover.serverDomain && char.cover.serverDomain !== 'nom-du-serveur.fr'"
+          :href="`https://${char.cover.serverDomain}`"
+          target="_blank"
+          class="absolute bottom-4 right-4 z-20 size-8 bg-black/60 backdrop-blur-md rounded-full border border-white/10 p-1.5 hover:bg-accent/20 hover:border-accent/50 transition-all group/logo"
+          @click.stop
+        >
+          <img
+            :src="`https://www.google.com/s2/favicons?domain=${char.cover.serverDomain}&sz=64`"
+            class="w-full h-full object-contain filter grayscale group-hover/logo:grayscale-0 transition-all"
+            :alt="char.cover.serverDomain"
+          />
+        </a>
       </div>
 
       <!-- Content Area -->

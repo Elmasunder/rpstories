@@ -155,3 +155,27 @@ CREATE POLICY "View characters based on privacy rules"
             )
         )
     );
+
+
+-- =====================================================================
+-- 6. SECURITY HELPER FUNCTIONS
+-- =====================================================================
+
+-- Resolve username to email address securely without exposing email to all profiles
+CREATE OR REPLACE FUNCTION public.get_email_by_username(p_username TEXT)
+RETURNS TEXT
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+DECLARE
+    v_email TEXT;
+BEGIN
+    SELECT u.email INTO v_email
+    FROM auth.users u
+    JOIN public.profiles p ON p.id = u.id
+    WHERE LOWER(p.username) = LOWER(p_username);
+    
+    RETURN v_email;
+END;
+$$;
+

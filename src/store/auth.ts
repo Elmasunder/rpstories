@@ -30,13 +30,18 @@ export const authState = reactive({
     // Listen to changes
     supabase.auth.onAuthStateChange(async (event, session) => {
       console.log('Auth State Change Event:', event)
-      this.user = session?.user ?? null
-      if (this.user) {
-        await this.fetchProfile(this.user.id)
-        await this.fetchFollowing()
-      } else {
-        this.profile = null
-        this.followingIds = []
+      const newUser = session?.user ?? null
+
+      // Guard to prevent redundant fetches and infinite loops when window focus is regained
+      if (newUser?.id !== this.user?.id) {
+        this.user = newUser
+        if (this.user) {
+          await this.fetchProfile(this.user.id)
+          await this.fetchFollowing()
+        } else {
+          this.profile = null
+          this.followingIds = []
+        }
       }
       this.loading = false
     })
@@ -125,9 +130,24 @@ export const authState = reactive({
     }
   },
 
-  async signInWithPassword(email: string, password: string) {
+  async signInWithPassword(emailOrUsername: string, password: string) {
+    let resolvedEmail = emailOrUsername.trim()
+
+    // If it doesn't contain '@', resolve it as a username to its corresponding email
+    if (!resolvedEmail.includes('@')) {
+      const { data: emailFromUsername, error: rpcError } = await supabase.rpc('get_email_by_username', {
+        p_username: resolvedEmail
+      })
+
+      if (rpcError || !emailFromUsername) {
+        console.error('Error resolving username:', rpcError?.message || 'No email returned')
+        throw new Error("Aucun utilisateur trouvé avec ce nom d'utilisateur.")
+      }
+      resolvedEmail = emailFromUsername
+    }
+
     const { data, error } = await supabase.auth.signInWithPassword({
-      email,
+      email: resolvedEmail,
       password
     })
     if (error) {

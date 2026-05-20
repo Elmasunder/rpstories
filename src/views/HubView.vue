@@ -10,6 +10,7 @@ import { uiState } from '@/store/ui.ts'
 import HubCard from '@/components/HubCard.vue'
 import CreateCard from '@/components/CreateCard.vue'
 import TheNavbar from '@/components/TheNavbar.vue'
+import FriendListBtn from '@/components/FriendListBtn.vue'
 
 const router = useRouter()
 
@@ -35,7 +36,7 @@ const fetchCharacters = async () => {
         charList.value = []
         return
       }
-      query = query.in('owner_id', authState.followingIds)
+      query = query.in('owner_id', authState.followingIds).neq('privacy', 'private')
     }
 
     const { data, error } = await query
