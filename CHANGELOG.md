@@ -4,6 +4,39 @@ Ce document répertorie l'ensemble des modifications apportées au projet **RPSt
 
 ---
 
+## [v3.0.0] — Supabase Database Integration, Authentication & Bidirectional Social Graph
+
+_20 Mai 2026_
+
+### 🗄️ Database & Storage Migration (Supabase)
+- **Persistent Storage** : Migration des données statiques locales vers une base de données relationnelle Supabase (`characters`).
+- **Data Mapping & Validation** : Adaptation des schémas de validation Zod (`character.schema.ts`) et mise en place d'un traducteur/mappeur (`mappers.ts`) pour transformer les lignes relationnelles SQL en objets typés TypeScript utilisables par le frontend.
+- **Upload direct** : Possibilité de téléverser des images en Base64 ou d'ajouter des liens directs lors de la création d'un dossier.
+- **Nettoyage Général** : Retrait complet des répertoires d'assets d'images locaux statiques (`amari_davis`, `marcus_thorne`, etc.) et des scripts obsolètes (`optimize-images.ts`, `create-test-char.ts`) au profit du stockage cloud et des flux DB. Retrait de l'étape de compression locale des commandes de build dans `package.json`.
+
+### 🔐 Authentification & Confidentialité (RLS)
+- **Gestion de Session** : Intégration de l'authentification Supabase (`authState`) pour connecter les utilisateurs et gérer les sessions de manière sécurisée.
+- **Droits d'Édition** : Les dossiers ne peuvent être modifiés que par leur propriétaire créateur (`isOwner`), sécurisé par des politiques d'accès de sécurité au niveau des lignes (RLS) en base de données.
+- **Options de Confidentialité** : Ajout d'un sélecteur de confidentialité à 3 niveaux dans le tunnel de création/édition d'un dossier :
+  - **Public** : Visible de tous dans les archives publiques.
+  - **Abonnés** : Visible uniquement par les abonnés.
+  - **Privé** : Visible exclusivement par son propriétaire dans l'onglet dédié de son Hub.
+- **Badge Administrateur** : Affichage d'un badge de confidentialité dynamique (Public/Abonnés/Privé) sur les cartes du Hub uniquement visibles par le propriétaire de la fiche.
+
+### 🕸️ Réseau Social & Relations Bidirectionnelles
+- **Résolution Croisée Bidirectionnelle** : Algorithme dynamique dans `FicheView.vue` permettant de lister l'entourage complet :
+  - **Sens direct** : Résolution et mise à jour automatique des fiches de l'entourage existant (vrai ID, statut actuel, photo de profil).
+  - **Sens inverse** : Liaison automatique par nom/alias (insensible à la casse) ; si le personnage A cite le personnage B, le personnage A apparaît automatiquement dans l'entourage de B.
+- **Visuels Réels** : Remplacement du placeholder générique par la vraie photo de galerie des membres de l'entourage liés.
+- **Bouton Friend List** : Activation de l'accès à la liste d'amis directement depuis le Hub principal par l'importation de `FriendListBtn.vue` dans le template global.
+
+### ⚡ Optimisations UX/UI
+- **Sauvegarde Rapide "Terminer"** : Ajout d'un bouton raccourci `Terminer ⚡` à chaque étape du tunnel de modification pour enregistrer instantanément les changements sans devoir parcourir tout le tunnel (avec vérification intelligente de la validité de tous les champs).
+- **Pré-indication Couleur Loader** : Transfert dynamique du statut de vie d'un personnage via les query params d'URL. Le spinner de transition s'affiche immédiatement dans la couleur thématique associée (ex: rouge vif pour un personnage décédé) dès la première milliseconde, sans attendre le retour de la requête Supabase.
+- **Ajustement de Cartes** : Repositionnement ergonomique des pictos de modification et de confidentialité dans les coins supérieurs de la carte, et du logo de serveur de jeu en bas à droite de l'image de couverture pour une meilleure harmonie visuelle.
+
+---
+
 ## [v2.2.1] — Ghost Protocol Polish & UI/UX Enhancements
 
 _15 Mai 2026_
@@ -145,4 +178,4 @@ _12 Mai 2026_
 
 ---
 
-_Dernière mise à jour : 15 Mai 2026_ 🏛️✨
+_Dernière mise à jour : 20 Mai 2026_ 🏛️✨

@@ -1727,13 +1727,13 @@ const removePhoto = (index: number) => {
                   <!-- Direct URL Input -->
                   <div class="bg-black/20 p-4 rounded-xl border border-white/5 space-y-2">
                     <label class="block font-mono text-[9px] text-accent uppercase tracking-[2px] font-bold">
-                      Ajouter via URL directe ou chemin d'asset local (ex: assets/amari_davis/amari1.webp)
+                      Ajouter via URL directe d'image (ex: https://images.unsplash.com/...)
                     </label>
                     <div class="flex gap-2">
                       <input
                         v-model="directUrlInput"
                         type="text"
-                        placeholder="Collez une URL d'image ou un chemin et appuyez sur Entrée"
+                        placeholder="Collez une URL d'image et appuyez sur Entrée"
                         class="grow bg-black/40 border border-white/10 rounded px-3 py-2 font-mono text-xs text-white focus:outline-none focus:border-accent"
                         @keydown.enter.prevent="addDirectUrl"
                       />
